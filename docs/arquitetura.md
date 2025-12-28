@@ -18,6 +18,7 @@ chama-devops/
 ├── app_accounts/           # Gestão de Identidade (User Model, Auth)
 ├── app_management/         # Domínio Administrativo (Projetos, Tópicos)
 ├── app_tickets/            # Domínio Operacional (Tickets, Comentários)
+├── app_reports/            # Dashboard e Métricas
 ├── templates/              # Templates HTML globais e por app
 ├── static/                 # Arquivos estáticos (CSS, JS, Imagens)
 ├── docs/                   # Documentação do projeto
@@ -41,6 +42,11 @@ O núcleo operacional do sistema.
 *   **Ticket**: A solicitação em si. Conecta Users, Projects e Topics.
 *   **Comment**: Comunicação dentro do ticket. Suporta comentários internos (apenas staff).
 *   **TicketAttachment**: Arquivos anexados aos tickets.
+
+#### 4. `app_reports`
+Responsável pela inteligência de dados e visualização.
+*   **Dashboard**: Visão gerencial com filtros por data, projeto e status.
+*   **Métricas**: Contagem de tickets, evolução temporal e distribuição por responsável.
 
 ## Decisões de Design
 

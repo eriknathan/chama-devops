@@ -16,6 +16,7 @@ O sistema atende a dois perfis principais de usuário:
 
 2.  **DevOps (Staff/Admin)**
     *   Visualiza a fila geral de tickets de todos os projetos.
+    *   Acessa o **Dashboard de Relatórios** para visualizar métricas, evolução de abertura de chamados e produtividade.
     *   Realiza a triagem (Aceitar/Atribuir tickets).
     *   Trabalha na resolução e atualiza o status (Em Andamento -> Finalizado).
     *   Utiliza comentários internos para documentação técnica.
