@@ -1,7 +1,7 @@
 services:
   web:
     build: .
-    command: sh -c "python manage.py collectstatic --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:8000 --reload"
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:8000 --reload"
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
@@ -30,7 +30,7 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     ports:
-      - "80:80"
+      - "5005:80"
     depends_on:
       - web
 
