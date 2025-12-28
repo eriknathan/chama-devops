@@ -21,6 +21,9 @@ Esta documentação foi criada para centralizar informações sobre a arquitetur
 5.  [Design System](design_system.md)
     *   Guia de estilos, cores, tipografia e componentes visuais utilizados na interface.
 
+6.  [Fluxos de Uso](fluxos_uso.md)
+    *   Diagramas visuais detalhando a jornada de uso para Solicitantes e DevOps.
+
 ---
 
 *Esta documentação reflete o estado atual do projeto (Versão 2.1).*
