@@ -25,8 +25,7 @@
             <div class="space-y-4">
                 {% for field in form %}
                 <div>
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{
-                        field.label }}</label>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ field.label }}</label>
                     {{ field }}
                     {% if field.help_text %}
                     <p class="mt-1 text-xs text-muted-foreground">{{ field.help_text|safe }}</p>
