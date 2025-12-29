@@ -1,6 +1,229 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br" class="h-full bg-slate-50">
+<html lang="pt-br" class="h-full dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ChamaDevOps{% endblock %}</title>
+    <!-- Alpine.js + Mask Plugin -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        :root {
+            /* Modo Claro */
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+
+            --primary: 24 95% 53%;
+            --primary-foreground: 0 0% 100%;
+
+            --secondary: 220 14% 96%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+
+            --muted: 220 14% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+
+            --accent: 24 95% 53%;
+            --accent-foreground: 0 0% 100%;
+
+            --destructive: 0 84% 60%;
+            --destructive-foreground: 210 40% 98%;
+
+            --border: 220 13% 91%;
+            --input: 220 13% 91%;
+            --ring: 24 95% 53%;
+
+            --radius: 0.75rem;
+
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+
+            --popover: 0 0% 100%;
+            --popover-foreground: 222.2 84% 4.9%;
+
+            /* AWS Custom Tokens */
+            --aws-orange: 24 95% 53%;
+            --aws-orange-light: 32 98% 60%;
+            --aws-dark: 222 47% 11%;
+            --aws-darker: 222 47% 6%;
+            --success: 142 76% 36%;
+            --warning: 38 92% 50%;
+            --info: 199 89% 48%;
+
+            /* Shadows Utils for CSS variables if needed, though mostly handled in Tailwind config */
+            --shadow-glow: 0 0 40px hsl(24 95% 53% / 0.15);
+            --shadow-card: 0 4px 24px -4px hsl(222 47% 11% / 0.1);
+        }
+
+        .dark {
+            --background: 222 47% 6%;
+            --foreground: 210 40% 98%;
+            --card: 222 47% 9%;
+            --secondary: 222 47% 14%;
+            --border: 222 30% 18%;
+            --input: 222 30% 18%;
+            --muted: 217 33% 17%;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        /* Utility Classes Customizadas */
+        .glass {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, hsl(var(--aws-orange)), hsl(var(--aws-orange-light)));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glow {
+            box-shadow: var(--shadow-glow);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(var(--destructive))",
+                            foreground: "hsl(var(--destructive-foreground))",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))",
+                        },
+                        popover: {
+                            DEFAULT: "hsl(var(--popover))",
+                            foreground: "hsl(var(--popover-foreground))",
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))",
+                        },
+                        // Status Colors
+                        status: {
+                            yellow: ({ opacityValue }) => `hsl(45 93% 47% / ${opacityValue || 1})`,
+                            blue: ({ opacityValue }) => `hsl(217 91% 60% / ${opacityValue || 1})`,
+                            orange: ({ opacityValue }) => `hsl(25 95% 53% / ${opacityValue || 1})`,
+                            red: ({ opacityValue }) => `hsl(0 84% 60% / ${opacityValue || 1})`,
+                            emerald: ({ opacityValue }) => `hsl(160 84% 39% / ${opacityValue || 1})`,
+                        },
+                        // AWS Custom Colors
+                        aws: {
+                            orange: "hsl(var(--aws-orange))",
+                            light: "hsl(var(--aws-orange-light))",
+                            dark: "hsl(var(--aws-dark))",
+                            darker: "hsl(var(--aws-darker))",
+                        },
+                        success: "hsl(var(--success))",
+                        warning: "hsl(var(--warning))",
+                        info: "hsl(var(--info))",
+                    },
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(135deg, hsl(var(--aws-orange)) 0%, hsl(var(--aws-orange-light)) 100%)',
+                        'gradient-dark': 'linear-gradient(180deg, hsl(var(--aws-dark)) 0%, hsl(var(--aws-darker)) 100%)',
+                        'gradient-card': 'linear-gradient(135deg, hsl(220 14% 98%) 0%, hsl(220 14% 96%) 100%)',
+                    },
+                    boxShadow: {
+                        'glow': '0 0 40px hsl(24 95% 53% / 0.15)',
+                        'glow-lg': '0 0 60px hsl(var(--aws-orange) / 0.25)',
+                        'card': '0 4px 24px -4px hsl(222 47% 11% / 0.1)',
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="h-full overflow-hidden flex flex-col bg-background">
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full transition-all duration-300">
+        <!-- Content Scrollable -->
+        <div class="flex-1 overflow-y-auto bg-background pt-16 md:pt-0">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="max-w-md mx-auto px-4 mt-6">
+                {% for message in messages %}
+                <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center shadow-sm"
+                    role="alert">
+                    <svg class="flex-shrink-0 w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span class="font-medium">{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+
+            <!-- Footer (Unified) -->
+            <footer class="py-8 text-center">
+                <p class="text-muted-foreground text-xs">
+                    &copy; {% now "Y" %} ChamaDevOps.
+                </p>
+            </footer>
+        </div>
+    </main>
+    <script>
+        // Initialize Lucide Icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+
+</html>
 
 <head>
     <meta charset="UTF-8">
