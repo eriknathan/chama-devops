@@ -5,8 +5,8 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Meus Tickets</h1>
-            <p class="mt-1 text-sm text-slate-500">
+            <h1 class="text-3xl font-bold text-foreground tracking-tight">Meus Tickets</h1>
+            <p class="mt-1 text-sm text-muted-foreground">
                 {{ tickets.count }} abertos <span class="mx-1">•</span>
                 {% with done_count=0 %}
                 {% for t in tickets %}{% if t.status == 'DONE' %}{% endif %}{% endfor %}
@@ -17,7 +17,7 @@
         </div>
         {% if not request.user.is_staff %}
         <a href="{% url 'ticket-add' %}"
-            class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-secondary hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all transform hover:scale-105">
+            class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-bold text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:scale-105">
             <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -27,19 +27,20 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-8">
+    <div class="bg-card p-4 rounded-xl shadow-sm border border-border mb-8">
         <form method="get" class="flex flex-col md:flex-row gap-4" id="filter-form">
             <!-- Search -->
             <div class="flex-grow">
                 <div class="relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
                     <input type="text" name="search" id="search" value="{{ request.GET.search|default:'' }}"
-                        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-slate-200 rounded-lg py-2.5 bg-slate-50"
+                        class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-input rounded-lg py-2.5 bg-background text-foreground placeholder:text-muted-foreground"
                         placeholder="Buscar tickets..." onchange="this.form.submit()">
                 </div>
             </div>
@@ -49,15 +50,16 @@
                 <!-- Status Filter -->
                 <div class="relative min-w-[140px]">
                     <select name="status" onchange="this.form.submit()"
-                        class="bg-white border border-slate-200 rounded-lg pl-3 pr-8 py-2.5 text-slate-600 sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full appearance-none cursor-pointer">
+                        class="bg-background border border-input rounded-lg pl-3 pr-8 py-2.5 text-foreground sm:text-sm focus:ring-primary focus:border-primary block w-full appearance-none cursor-pointer">
                         <option value="">Status: Todos</option>
                         {% for code, label in status_choices %}
-                        <option value="{{ code }}" {% if request.GET.status == code %}selected{% endif %}>{{ label }}
+                        <option value="{{ code }}" {% if request.GET.status==code %}selected{% endif %}>{{ label }}
                         </option>
                         {% endfor %}
                     </select>
                     <!-- Custom Arrow -->
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+                    <div
+                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
                             </path>
@@ -68,14 +70,15 @@
                 <!-- Project Filter -->
                 <div class="relative min-w-[140px]">
                     <select name="project" onchange="this.form.submit()"
-                        class="bg-white border border-slate-200 rounded-lg pl-3 pr-8 py-2.5 text-slate-600 sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full appearance-none cursor-pointer">
+                        class="bg-background border border-input rounded-lg pl-3 pr-8 py-2.5 text-foreground sm:text-sm focus:ring-primary focus:border-primary block w-full appearance-none cursor-pointer">
                         <option value="">Projeto: Todos</option>
                         {% for p in projects %}
-                        <option value="{{ p.id }}" {% if request.GET.project|add:"0" == p.id %}selected{% endif %}>{{
+                        <option value="{{ p.id }}" {% if request.GET.project|add:"0"==p.id %}selected{% endif %}>{{
                             p.name }}</option>
                         {% endfor %}
                     </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+                    <div
+                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
                             </path>
@@ -86,14 +89,15 @@
                 <!-- Developer Filter -->
                 <div class="relative min-w-[140px]">
                     <select name="assignee" onchange="this.form.submit()"
-                        class="bg-white border border-slate-200 rounded-lg pl-3 pr-8 py-2.5 text-slate-600 sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full appearance-none cursor-pointer">
+                        class="bg-background border border-input rounded-lg pl-3 pr-8 py-2.5 text-foreground sm:text-sm focus:ring-primary focus:border-primary block w-full appearance-none cursor-pointer">
                         <option value="">Usuário: Todos</option>
                         {% for dev in developers %}
-                        <option value="{{ dev.id }}" {% if request.GET.assignee|add:"0" == dev.id %}selected{% endif %}>{{
+                        <option value="{{ dev.id }}" {% if request.GET.assignee|add:"0"==dev.id %}selected{% endif %}>{{
                             dev.get_full_name|default:dev.email }}</option>
                         {% endfor %}
                     </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+                    <div
+                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
                             </path>
@@ -103,7 +107,7 @@
 
                 {% if request.GET.search or request.GET.status or request.GET.project or request.GET.assignee %}
                 <a href="{% url 'ticket-list' %}"
-                    class="inline-flex items-center px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 bg-white hover:bg-slate-50 transition-colors"
+                    class="inline-flex items-center px-3 py-2 border border-border rounded-lg text-sm font-medium text-muted-foreground bg-card hover:bg-muted transition-colors"
                     title="Limpar Filtros">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -119,15 +123,16 @@
     <div class="space-y-4">
         {% for ticket in tickets %}
         <div
-            class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative">
+            class="bg-card p-6 rounded-xl shadow-sm border border-border hover:shadow-md transition-shadow group relative">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
                 <div class="flex items-center gap-2">
                     <span
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-muted text-muted-foreground border border-border">
                         {{ ticket.project.name }}
                     </span>
-                    <span class="text-slate-300">•</span>
-                    <span class="text-xs text-slate-500 font-medium">{{ ticket.topic.name|default:"Geral" }}</span>
+                    <span class="text-muted-foreground">•</span>
+                    <span class="text-xs text-muted-foreground font-medium">{{ ticket.topic.name|default:"Geral"
+                        }}</span>
                 </div>
                 <div class="sm:text-right">
                     {% if ticket.status == 'OPEN' %}
@@ -150,20 +155,20 @@
                 </div>
             </div>
 
-            <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
+            <h3 class="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                 <a href="{% url 'ticket-detail' ticket.pk %}" class="focus:outline-none">
                     <span class="absolute inset-0" aria-hidden="true"></span>
                     {{ ticket.title }}
                 </a>
             </h3>
 
-            <p class="text-sm text-slate-600 mb-4 line-clamp-2">
+            <p class="text-sm text-muted-foreground mb-4 line-clamp-2">
                 {{ ticket.description }}
             </p>
 
-            <div class="flex flex-wrap items-center gap-6 text-xs text-slate-500">
+            <div class="flex flex-wrap items-center gap-6 text-xs text-muted-foreground">
                 <div class="flex items-center gap-1.5">
-                    <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
@@ -176,14 +181,14 @@
                     {% endif %}
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
                     {{ ticket.comments.count }} comentários
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
@@ -192,17 +197,17 @@
             </div>
         </div>
         {% empty %}
-        <div class="text-center py-12 bg-white rounded-xl border border-dashed border-slate-200">
-            <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="text-center py-12 bg-card rounded-xl border border-dashed border-border">
+            <svg class="mx-auto h-12 w-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-slate-900">Nenhum ticket encontrado</h3>
-            <p class="mt-1 text-sm text-slate-500">Comece criando um novo ticket.</p>
+            <h3 class="mt-2 text-sm font-medium text-foreground">Nenhum ticket encontrado</h3>
+            <p class="mt-1 text-sm text-muted-foreground">Comece criando um novo ticket.</p>
             {% if not request.user.is_staff %}
             <div class="mt-6">
                 <a href="{% url 'ticket-add' %}"
-                    class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                     + Novo Ticket
                 </a>
             </div>
