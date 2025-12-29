@@ -3,27 +3,27 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-slate-900">Relatórios & Métricas</h1>
-        <p class="mt-2 text-sm text-slate-600">Visualização consolidada do desempenho da equipe e tickets.</p>
+        <h1 class="text-3xl font-bold text-foreground">Relatórios & Métricas</h1>
+        <p class="mt-2 text-sm text-muted-foreground">Visualização consolidada do desempenho da equipe e tickets.</p>
     </div>
 
     <!-- Filters -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 mb-8">
+    <div class="bg-card p-6 rounded-xl shadow-sm border border-border mb-8">
         <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-                <label for="start_date" class="block text-sm font-medium text-slate-700">Data Início</label>
+                <label for="start_date" class="block text-sm font-medium text-foreground">Data Início</label>
                 <input type="date" name="start_date" id="start_date" value="{{ request.GET.start_date }}"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md">
+                    class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-input rounded-md bg-background text-foreground">
             </div>
             <div>
-                <label for="end_date" class="block text-sm font-medium text-slate-700">Data Fim</label>
+                <label for="end_date" class="block text-sm font-medium text-foreground">Data Fim</label>
                 <input type="date" name="end_date" id="end_date" value="{{ request.GET.end_date }}"
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-slate-300 rounded-md">
+                    class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-input rounded-md bg-background text-foreground">
             </div>
             <div>
-                <label for="project" class="block text-sm font-medium text-slate-700">Projeto</label>
+                <label for="project" class="block text-sm font-medium text-foreground">Projeto</label>
                 <select name="project" id="project"
-                    class="mt-1 block w-full py-2 px-3 border border-slate-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    class="mt-1 block w-full py-2 px-3 border border-input bg-background rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm text-foreground">
                     <option value="">Todos</option>
                     {% for p in projects %}
                     <option value="{{ p.id }}" {% if selected_project_id == p.id %}selected{% endif %}>{{ p.name }}
@@ -33,7 +33,7 @@
             </div>
             <div class="flex items-end">
                 <button type="submit"
-                    class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                     Filtrar Resultados
                 </button>
             </div>
@@ -42,21 +42,21 @@
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="bg-card overflow-hidden shadow rounded-lg border border-border">
             <div class="px-4 py-5 sm:p-6">
-                <dt class="text-sm font-medium text-gray-500 truncate">Total de Tickets</dt>
-                <dd class="mt-1 text-3xl font-semibold text-gray-900">{{ total_tickets }}</dd>
+                <dt class="text-sm font-medium text-muted-foreground truncate">Total de Tickets</dt>
+                <dd class="mt-1 text-3xl font-semibold text-foreground">{{ total_tickets }}</dd>
             </div>
         </div>
-        <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="bg-card overflow-hidden shadow rounded-lg border border-border">
             <div class="px-4 py-5 sm:p-6">
-                <dt class="text-sm font-medium text-gray-500 truncate">Tickets Abertos</dt>
+                <dt class="text-sm font-medium text-muted-foreground truncate">Tickets Abertos</dt>
                 <dd class="mt-1 text-3xl font-semibold text-status-yellow">{{ open_tickets }}</dd>
             </div>
         </div>
-        <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="bg-card overflow-hidden shadow rounded-lg border border-border">
             <div class="px-4 py-5 sm:p-6">
-                <dt class="text-sm font-medium text-gray-500 truncate">Tickets Finalizados</dt>
+                <dt class="text-sm font-medium text-muted-foreground truncate">Tickets Finalizados</dt>
                 <dd class="mt-1 text-3xl font-semibold text-status-emerald">{{ closed_tickets }}</dd>
             </div>
         </div>
@@ -64,43 +64,43 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Status Breakdown -->
-        <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Por Status</h3>
+        <div class="bg-card shadow rounded-lg p-6 border border-border">
+            <h3 class="text-lg leading-6 font-medium text-foreground mb-4">Por Status</h3>
             <div class="space-y-4">
                 {% for item in tickets_by_status %}
                 <div>
                     <div class="flex items-center justify-between mb-1">
-                        <span class="text-sm font-medium text-gray-700">{{ item.status }}</span>
-                        <span class="text-sm font-medium text-gray-500">{{ item.count }}</span>
+                        <span class="text-sm font-medium text-foreground">{{ item.status }}</span>
+                        <span class="text-sm font-medium text-muted-foreground">{{ item.count }}</span>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-indigo-600 h-2.5 rounded-full"
+                    <div class="w-full bg-muted rounded-full h-2.5">
+                        <div class="bg-primary h-2.5 rounded-full"
                             style="width: {% widthratio item.count total_tickets 100 %}%"></div>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-sm text-gray-500">Nenhum dado disponível.</p>
+                <p class="text-sm text-muted-foreground">Nenhum dado disponível.</p>
                 {% endfor %}
             </div>
         </div>
 
         <!-- Project Breakdown -->
-        <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Por Projeto</h3>
+        <div class="bg-card shadow rounded-lg p-6 border border-border">
+            <h3 class="text-lg leading-6 font-medium text-foreground mb-4">Por Projeto</h3>
             <div class="space-y-4">
                 {% for item in tickets_by_project %}
                 <div>
                     <div class="flex items-center justify-between mb-1">
-                        <span class="text-sm font-medium text-gray-700">{{ item.project__name }}</span>
-                        <span class="text-sm font-medium text-gray-500">{{ item.count }}</span>
+                        <span class="text-sm font-medium text-foreground">{{ item.project__name }}</span>
+                        <span class="text-sm font-medium text-muted-foreground">{{ item.count }}</span>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div class="w-full bg-muted rounded-full h-2.5">
                         <div class="bg-purple-600 h-2.5 rounded-full"
                             style="width: {% widthratio item.count total_tickets 100 %}%"></div>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-sm text-gray-500">Nenhum dado disponível.</p>
+                <p class="text-sm text-muted-foreground">Nenhum dado disponível.</p>
                 {% endfor %}
             </div>
         </div>
@@ -108,48 +108,49 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
         <!-- Assignee Breakdown -->
-        <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Por Responsável</h3>
-            <ul class="divide-y divide-gray-200">
+        <div class="bg-card shadow rounded-lg p-6 border border-border">
+            <h3 class="text-lg leading-6 font-medium text-foreground mb-4">Por Responsável</h3>
+            <ul class="divide-y divide-border">
                 {% for item in tickets_by_assignee %}
                 <li class="py-3 flex justify-between">
-                    <span class="text-sm text-gray-700">{{ item.assignee__email|default:"Não atribuído" }}</span>
+                    <span class="text-sm text-foreground">{{ item.assignee__email|default:"Não atribuído" }}</span>
                     <span
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
                         {{ item.count }} tickets
                     </span>
                 </li>
                 {% empty %}
-                <p class="text-sm text-gray-500">Nenhum dado disponível.</p>
+                <p class="text-sm text-muted-foreground">Nenhum dado disponível.</p>
                 {% endfor %}
             </ul>
         </div>
 
         <!-- Monthly Evolution (Simple Table for now, could be chart) -->
-        <div class="bg-white shadow rounded-lg p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Evolução Mensal (Últimos 12 Meses)</h3>
+        <div class="bg-card shadow rounded-lg p-6 border border-border">
+            <h3 class="text-lg leading-6 font-medium text-foreground mb-4">Evolução Mensal (Últimos 12 Meses)</h3>
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
+                <table class="min-w-full divide-y divide-border">
                     <thead>
                         <tr>
                             <th scope="col"
-                                class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                class="px-3 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 Mês</th>
                             <th scope="col"
-                                class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                class="px-3 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                 Novos Tickets</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-card divide-y divide-border">
                         {% for item in tickets_evolution %}
                         <tr>
-                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.month|date:"F Y" }}
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-foreground">{{ item.month|date:"F Y" }}
                             </td>
-                            <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.count }}</td>
+                            <td class="px-3 py-4 whitespace-nowrap text-sm text-muted-foreground">{{ item.count }}</td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="2" class="px-3 py-4 whitespace-nowrap text-sm text-gray-500">Nenhum dado
+                            <td colspan="2" class="px-3 py-4 whitespace-nowrap text-sm text-muted-foreground">Nenhum
+                                dado
                                 disponível no período.</td>
                         </tr>
                         {% endfor %}
