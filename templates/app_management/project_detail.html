@@ -36,18 +36,15 @@
                     <div class="flex items-center">
                         <span
                             class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 border border-primary/20 mr-3">
-                            <span class="text-xs font-bold leading-none text-primary">{{
-                                project.manager.email|first|upper }}</span>
+                            <span class="text-xs font-bold leading-none text-primary">{{ project.manager.email|first|upper }}</span>
                         </span>
-                        <span class="text-sm font-medium text-foreground">{{
-                            project.manager.get_full_name|default:project.manager.username }}</span>
+                        <span class="text-sm font-medium text-foreground">{{ project.manager.get_full_name|default:project.manager.username }}</span>
                     </div>
                     {% else %}
                     <p class="text-sm text-muted-foreground italic">Não definido</p>
                     {% endif %}
                 </div>
             </div>
-
             <div>
                 <h3 class="text-lg font-medium text-foreground mb-4">Membros do Time</h3>
                 {% if project.members.exists %}
@@ -56,11 +53,9 @@
                     <li class="py-3 flex items-center">
                         <span
                             class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-muted border border-border mr-3">
-                            <span class="text-xs font-medium leading-none text-muted-foreground">{{
-                                member.email|first|upper }}</span>
+                            <span class="text-xs font-medium leading-none text-muted-foreground">{{ member.email|first|upper }}</span>
                         </span>
-                        <span class="text-sm font-medium text-foreground">{{ member.first_name|default:member.username
-                            }}</span>
+                        <span class="text-sm font-medium text-foreground">{{ member.first_name|default:member.username }}</span>
                     </li>
                     {% endfor %}
                 </ul>
