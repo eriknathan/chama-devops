@@ -73,8 +73,7 @@
                         class="bg-background border border-input rounded-lg pl-3 pr-8 py-2.5 text-foreground sm:text-sm focus:ring-primary focus:border-primary block w-full appearance-none cursor-pointer">
                         <option value="">Projeto: Todos</option>
                         {% for p in projects %}
-                        <option value="{{ p.id }}" {% if request.GET.project|add:"0" == p.id %}selected{% endif %}>{{
-                            p.name }}</option>
+                        <option value="{{ p.id }}" {% if request.GET.project|add:"0" == p.id %}selected{% endif %}>{{ p.name }}</option>
                         {% endfor %}
                     </select>
                     <div
@@ -92,8 +91,7 @@
                         class="bg-background border border-input rounded-lg pl-3 pr-8 py-2.5 text-foreground sm:text-sm focus:ring-primary focus:border-primary block w-full appearance-none cursor-pointer">
                         <option value="">Usuário: Todos</option>
                         {% for dev in developers %}
-                        <option value="{{ dev.id }}" {% if request.GET.assignee|add:"0" == dev.id %}selected{% endif %}>{{
-                            dev.get_full_name|default:dev.email }}</option>
+                        <option value="{{ dev.id }}" {% if request.GET.assignee|add:"0" == dev.id %}selected{% endif %}>{{ dev.get_full_name|default:dev.email }}</option>
                         {% endfor %}
                     </select>
                     <div
