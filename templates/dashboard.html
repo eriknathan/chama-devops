@@ -9,6 +9,7 @@
             <p class="mt-2 text-slate-600">Acompanhe suas solicitações e crie novos tickets.</p>
         </div>
         <div class="mt-4 flex md:ml-4 md:mt-0">
+            {% if not user.is_staff %}
             <a href="{% url 'ticket-add' %}"
                 class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -16,6 +17,7 @@
                 </svg>
                 Novo Ticket
             </a>
+            {% endif %}
         </div>
     </div>
 
