@@ -1,5 +1,6 @@
 services:
   web:
+    container_name: chama-devops-web
     build: .
     command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:8000 --reload"
     volumes:
@@ -12,6 +13,7 @@ services:
       - db
 
   db:
+    container_name: chama-devops-db
     image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -23,6 +25,7 @@ services:
       - "5432:5432"
 
   nginx:
+    container_name: chama-devops-nginx
     image: nginx:1.25-alpine
     restart: always
     volumes:
