@@ -4,10 +4,10 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="mb-8">
         <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold text-slate-900">{{ project.name }}</h1>
+            <h1 class="text-3xl font-bold text-foreground">{{ project.name }}</h1>
             <a href="{% url 'project-list' %}"
-                class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <svg class="mr-2 -ml-1 h-5 w-5 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                class="inline-flex items-center px-4 py-2 border border-border rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                <svg class="mr-2 -ml-1 h-5 w-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -15,53 +15,57 @@
                 Voltar
             </a>
         </div>
-        <p class="mt-2 text-sm text-slate-500">Criado em {{ project.created_at|date:"d/m/Y" }}</p>
+        <p class="mt-2 text-sm text-muted-foreground">Criado em {{ project.created_at|date:"d/m/Y" }}</p>
     </div>
 
-    <div class="bg-white shadow-sm rounded-xl overflow-hidden border border-slate-100 p-6">
+    <div class="bg-card shadow-sm rounded-xl overflow-hidden border border-border p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-                <h3 class="text-lg font-medium text-slate-900 mb-4">Descrição</h3>
-                <div class="prose prose-slate text-slate-600">
+                <h3 class="text-lg font-medium text-foreground mb-4">Descrição</h3>
+                <div class="prose prose-slate text-muted-foreground">
                     {% if project.description %}
                     {{ project.description|linebreaks }}
                     {% else %}
-                    <p class="italic text-slate-400">Nenhuma descrição disponível.</p>
+                    <p class="italic text-muted-foreground">Nenhuma descrição disponível.</p>
                     {% endif %}
                 </div>
 
                 <div class="mt-8">
-                    <h3 class="text-lg font-medium text-slate-900 mb-2">Gerente do Projeto</h3>
+                    <h3 class="text-lg font-medium text-foreground mb-2">Gerente do Projeto</h3>
                     {% if project.manager %}
                     <div class="flex items-center">
                         <span
-                            class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-indigo-100 border border-indigo-300 mr-3">
-                            <span class="text-xs font-bold leading-none text-indigo-700">{{ project.manager.email|first|upper }}</span>
+                            class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 border border-primary/20 mr-3">
+                            <span class="text-xs font-bold leading-none text-primary">{{
+                                project.manager.email|first|upper }}</span>
                         </span>
-                        <span class="text-sm font-medium text-slate-900">{{ project.manager.get_full_name|default:project.manager.username }}</span>
+                        <span class="text-sm font-medium text-foreground">{{
+                            project.manager.get_full_name|default:project.manager.username }}</span>
                     </div>
                     {% else %}
-                    <p class="text-sm text-slate-500 italic">Não definido</p>
+                    <p class="text-sm text-muted-foreground italic">Não definido</p>
                     {% endif %}
                 </div>
             </div>
 
             <div>
-                <h3 class="text-lg font-medium text-slate-900 mb-4">Membros do Time</h3>
+                <h3 class="text-lg font-medium text-foreground mb-4">Membros do Time</h3>
                 {% if project.members.exists %}
-                <ul class="divide-y divide-slate-100">
+                <ul class="divide-y divide-border">
                     {% for member in project.members.all %}
                     <li class="py-3 flex items-center">
                         <span
-                            class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-slate-100 border border-slate-300 mr-3">
-                            <span class="text-xs font-medium leading-none text-slate-700">{{ member.email|first|upper }}</span>
+                            class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-muted border border-border mr-3">
+                            <span class="text-xs font-medium leading-none text-muted-foreground">{{
+                                member.email|first|upper }}</span>
                         </span>
-                        <span class="text-sm font-medium text-slate-900">{{ member.first_name|default:member.username }}</span>
+                        <span class="text-sm font-medium text-foreground">{{ member.first_name|default:member.username
+                            }}</span>
                     </li>
                     {% endfor %}
                 </ul>
                 {% else %}
-                <p class="text-sm text-slate-500 italic">Nenhum membro atribuído.</p>
+                <p class="text-sm text-muted-foreground italic">Nenhum membro atribuído.</p>
                 {% endif %}
             </div>
         </div>
