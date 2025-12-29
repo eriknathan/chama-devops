@@ -17,27 +17,27 @@ from app_accounts.forms import CustomUserCreationForm
 class DeveloperListView(StaffRequiredMixin, ListView):
     """Lista todos os desenvolvedores (usuários)."""
     model = get_user_model()
-    template_name = 'app_core/developer_list.html'
+    template_name = 'app_management/developer_list.html'
     context_object_name = 'developers'
 
 class DeveloperCreateView(StaffRequiredMixin, CreateView):
     """Cria um novo desenvolvedor."""
     model = get_user_model()
     form_class = CustomUserCreationForm
-    template_name = 'app_core/developer_form.html'
+    template_name = 'app_management/developer_form.html'
     success_url = reverse_lazy('developer-list')
 
 # Project Views
 class ProjectListView(StaffRequiredMixin, ListView):
     """Lista todos os projetos."""
     model = Project
-    template_name = 'app_core/project_list.html'
+    template_name = 'app_management/project_list.html'
     context_object_name = 'projects'
 
 class ProjectDetailView(StaffRequiredMixin, DetailView):
     """Detalhes do projeto."""
     model = Project
-    template_name = 'app_core/project_detail.html'
+    template_name = 'app_management/project_detail.html'
     context_object_name = 'project'
 
 
@@ -45,47 +45,47 @@ class ProjectCreateView(StaffRequiredMixin, CreateView):
     """Cria um novo projeto."""
     model = Project
     form_class = ProjectForm
-    template_name = 'app_core/project_form.html'
+    template_name = 'app_management/project_form.html'
     success_url = reverse_lazy('project-list')
 
 class ProjectUpdateView(StaffRequiredMixin, UpdateView):
     """Atualiza um projeto existente."""
     model = Project
     form_class = ProjectForm
-    template_name = 'app_core/project_form.html'
+    template_name = 'app_management/project_form.html'
     success_url = reverse_lazy('project-list')
 
 class ProjectDeleteView(StaffRequiredMixin, DeleteView):
     """Remove um projeto."""
     model = Project
-    template_name = 'app_core/project_confirm_delete.html'
+    template_name = 'app_management/project_confirm_delete.html'
     success_url = reverse_lazy('project-list')
 
 # Topic Views
 class TopicListView(StaffRequiredMixin, ListView):
     """Lista todos os tópicos."""
     model = Topic
-    template_name = 'app_core/topic_list.html'
+    template_name = 'app_management/topic_list.html'
     context_object_name = 'topics'
 
 class TopicCreateView(StaffRequiredMixin, CreateView):
     """Cria um novo tópico."""
     model = Topic
     form_class = TopicForm
-    template_name = 'app_core/topic_form.html'
+    template_name = 'app_management/topic_form.html'
     success_url = reverse_lazy('topic-list')
 
 class TopicUpdateView(StaffRequiredMixin, UpdateView):
     """Atualiza um tópico existente."""
     model = Topic
     form_class = TopicForm
-    template_name = 'app_core/topic_form.html'
+    template_name = 'app_management/topic_form.html'
     success_url = reverse_lazy('topic-list')
 
 class TopicDeleteView(StaffRequiredMixin, DeleteView):
     """Remove um tópico."""
     model = Topic
-    template_name = 'app_core/topic_confirm_delete.html'
+    template_name = 'app_management/topic_confirm_delete.html'
     success_url = reverse_lazy('topic-list')
 
 
