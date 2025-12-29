@@ -2,17 +2,17 @@
 
 {% block content %}
 <div class="max-w-md mx-auto px-4 py-12">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 text-center">
-        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 mb-6">
-            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                aria-hidden="true">
+    <div class="bg-card rounded-xl shadow-sm border border-border p-8 text-center">
+        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 mb-6">
+            <svg class="h-6 w-6 text-destructive" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
             </svg>
         </div>
 
-        <h3 class="text-lg font-bold text-slate-900 mb-2">Excluir Ticket</h3>
-        <p class="text-sm text-slate-500 mb-6">
+        <h3 class="text-lg font-bold text-foreground mb-2">Excluir Ticket</h3>
+        <p class="text-sm text-muted-foreground mb-6">
             Tem certeza que deseja excluir o ticket <strong>#{{ object.id }} - {{ object.title }}</strong>? <br>
             Esta ação não pode ser desfeita.
         </p>
@@ -20,11 +20,11 @@
         <form method="post" class="flex flex-col sm:flex-row gap-3 justify-center">
             {% csrf_token %}
             <a href="{% url 'ticket-detail' object.pk %}"
-                class="inline-flex justify-center rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 sm:w-auto">
+                class="inline-flex justify-center rounded-lg bg-card px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm ring-1 ring-inset ring-input hover:bg-muted sm:w-auto transition-colors">
                 Cancelar
             </a>
             <button type="submit"
-                class="inline-flex justify-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">
+                class="inline-flex justify-center rounded-lg bg-destructive px-4 py-2.5 text-sm font-semibold text-destructive-foreground shadow-sm hover:bg-destructive/90 sm:w-auto transition-colors">
                 Sim, excluir
             </button>
         </form>
