@@ -3,25 +3,25 @@
 {% block content %}
 <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-slate-900">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-foreground">
             Editar Usuário
         </h2>
-        <p class="mt-2 text-center text-sm text-slate-600">
+        <p class="mt-2 text-center text-sm text-muted-foreground">
             Editando: {{ target_user.email }}
         </p>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div class="bg-card py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-border">
             <form class="space-y-6" method="POST">
                 {% csrf_token %}
 
                 {% if form.non_field_errors %}
-                <div class="rounded-md bg-red-50 p-4">
+                <div class="rounded-md bg-destructive/10 p-4">
                     <div class="flex">
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-red-800">Erros no formulário</h3>
-                            <div class="mt-2 text-sm text-red-700">
+                            <h3 class="text-sm font-medium text-destructive">Erros no formulário</h3>
+                            <div class="mt-2 text-sm text-destructive">
                                 {{ form.non_field_errors }}
                             </div>
                         </div>
@@ -37,23 +37,24 @@
                             {{ field }}
                         </div>
                         <div class="ml-3 text-sm">
-                            <label for="{{ field.id_for_label }}" class="font-medium text-slate-700">{{ field.label }}</label>
+                            <label for="{{ field.id_for_label }}" class="font-medium text-foreground">{{ field.label
+                                }}</label>
                             {% if field.help_text %}
-                            <p class="text-slate-500">{{ field.help_text }}</p>
+                            <p class="text-muted-foreground">{{ field.help_text }}</p>
                             {% endif %}
                         </div>
                     </div>
                     {% else %}
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-slate-700">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-foreground">
                         {{ field.label }}
                     </label>
                     <div class="mt-1">
                         <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.name }}"
                             id="{{ field.id_for_label }}" value="{{ field.value|default:'' }}"
-                            class="appearance-none block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            class="appearance-none block w-full px-3 py-2 border border-input rounded-md shadow-sm placeholder-muted-foreground focus:outline-none focus:ring-primary focus:border-primary sm:text-sm bg-background text-foreground">
                     </div>
                     {% if field.errors %}
-                    <p class="mt-2 text-sm text-red-600">{{ field.errors.0 }}</p>
+                    <p class="mt-2 text-sm text-destructive">{{ field.errors.0 }}</p>
                     {% endif %}
                     {% endif %}
                 </div>
@@ -61,11 +62,11 @@
 
                 <div class="flex items-center justify-between gap-4">
                     <a href="{% url 'user-detail' target_user.pk %}"
-                        class="w-full flex justify-center py-2 px-4 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        class="w-full flex justify-center py-2 px-4 border border-input rounded-md shadow-sm text-sm font-medium text-foreground bg-card hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                         Cancelar
                     </a>
                     <button type="submit"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                         Salvar Alterações
                     </button>
                 </div>
