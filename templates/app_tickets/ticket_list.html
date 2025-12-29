@@ -53,7 +53,7 @@
                         class="bg-background border border-input rounded-lg pl-3 pr-8 py-2.5 text-foreground sm:text-sm focus:ring-primary focus:border-primary block w-full appearance-none cursor-pointer">
                         <option value="">Status: Todos</option>
                         {% for code, label in status_choices %}
-                        <option value="{{ code }}" {% if request.GET.status==code %}selected{% endif %}>{{ label }}
+                        <option value="{{ code }}" {% if request.GET.status == code %}selected{% endif %}>{{ label }}
                         </option>
                         {% endfor %}
                     </select>
@@ -73,7 +73,7 @@
                         class="bg-background border border-input rounded-lg pl-3 pr-8 py-2.5 text-foreground sm:text-sm focus:ring-primary focus:border-primary block w-full appearance-none cursor-pointer">
                         <option value="">Projeto: Todos</option>
                         {% for p in projects %}
-                        <option value="{{ p.id }}" {% if request.GET.project|add:"0"==p.id %}selected{% endif %}>{{
+                        <option value="{{ p.id }}" {% if request.GET.project|add:"0" == p.id %}selected{% endif %}>{{
                             p.name }}</option>
                         {% endfor %}
                     </select>
@@ -92,7 +92,7 @@
                         class="bg-background border border-input rounded-lg pl-3 pr-8 py-2.5 text-foreground sm:text-sm focus:ring-primary focus:border-primary block w-full appearance-none cursor-pointer">
                         <option value="">Usuário: Todos</option>
                         {% for dev in developers %}
-                        <option value="{{ dev.id }}" {% if request.GET.assignee|add:"0"==dev.id %}selected{% endif %}>{{
+                        <option value="{{ dev.id }}" {% if request.GET.assignee|add:"0" == dev.id %}selected{% endif %}>{{
                             dev.get_full_name|default:dev.email }}</option>
                         {% endfor %}
                     </select>
@@ -131,8 +131,7 @@
                         {{ ticket.project.name }}
                     </span>
                     <span class="text-muted-foreground">•</span>
-                    <span class="text-xs text-muted-foreground font-medium">{{ ticket.topic.name|default:"Geral"
-                        }}</span>
+                    <span class="text-xs text-muted-foreground font-medium">{{ ticket.topic.name|default:"Geral" }}</span>
                 </div>
                 <div class="sm:text-right">
                     {% if ticket.status == 'OPEN' %}
