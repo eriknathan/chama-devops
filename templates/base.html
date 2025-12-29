@@ -151,6 +151,14 @@
                             DEFAULT: "hsl(var(--card))",
                             foreground: "hsl(var(--card-foreground))",
                         },
+                        // Status Colors
+                        status: {
+                            yellow: ({ opacityValue }) => `hsl(45 93% 47% / ${opacityValue || 1})`,
+                            blue: ({ opacityValue }) => `hsl(217 91% 60% / ${opacityValue || 1})`,
+                            orange: ({ opacityValue }) => `hsl(25 95% 53% / ${opacityValue || 1})`,
+                            red: ({ opacityValue }) => `hsl(0 84% 60% / ${opacityValue || 1})`,
+                            emerald: ({ opacityValue }) => `hsl(160 84% 39% / ${opacityValue || 1})`,
+                        },
                         // AWS Custom Colors
                         aws: {
                             orange: "hsl(var(--aws-orange))",
