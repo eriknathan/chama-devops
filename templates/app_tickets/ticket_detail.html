@@ -214,6 +214,15 @@
             <div class="bg-card shadow-sm rounded-xl border border-border p-6">
                 <h3 class="text-sm font-bold text-foreground mb-4">Ações</h3>
                 <div class="space-y-3">
+                    <a href="{% url 'ticket-pdf' pk=ticket.pk %}" target="_blank"
+                        class="w-full flex justify-center items-center px-4 py-2 border border-border rounded-lg shadow-sm text-sm font-medium text-foreground bg-card hover:bg-muted transition-colors">
+                        <svg class="mr-2 h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Exportar PDF
+                    </a>
                     {% if ticket.status == 'OPEN' %}
                     <a href="{% url 'ticket-action' pk=ticket.pk action='take' %}"
                         class="w-full flex justify-center items-center px-4 py-2 border border-primary text-primary rounded-lg shadow-sm text-sm font-medium bg-card hover:bg-primary/10 transition-colors">
@@ -354,7 +363,8 @@
                                             </p>
                                         </div>
                                         <div class="whitespace-nowrap text-right text-xs text-muted-foreground">
-                                            <time datetime="{{ ticket.created_at|date:'c' }}">{{ ticket.created_at|date:"d M, H:i" }}</time>
+                                            <time datetime="{{ ticket.created_at|date:'c' }}">{{
+                                                ticket.created_at|date:"d M, H:i" }}</time>
                                         </div>
                                     </div>
                                 </div>

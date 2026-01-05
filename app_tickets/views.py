@@ -182,3 +182,29 @@ class TicketDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         """Verifica se o usuário pode deletar o ticket."""
         obj = self.get_object()
         return self.request.user.is_staff or obj.requester == self.request.user
+
+
+class TicketPDFView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    """Gera um PDF do ticket."""
+    model = Ticket
+    template_name = 'app_tickets/ticket_pdf.html'
+    context_object_name = 'ticket'
+
+    def test_func(self):
+        """A mesma permissão do detalhe: staff ou dono."""
+        obj = self.get_object()
+        return self.request.user.is_staff or obj.requester == self.request.user
+
+    def render_to_response(self, context, **response_kwargs):
+        """Renderiza o template para PDF e retorna como download."""
+        from django.template.loader import render_to_string
+        from weasyprint import HTML
+        from django.http import HttpResponse
+
+        html_string = render_to_string(self.template_name, context, request=self.request)
+        
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="ticket-{self.object.pk}.pdf"'
+        
+        HTML(string=html_string, base_url=self.request.build_absolute_uri('/')).write_pdf(response)
+        return response
