@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load markdown_extras %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -50,7 +51,7 @@
                 <h1 class="text-3xl font-bold text-foreground mb-6 tracking-tight">{{ ticket.title }}</h1>
 
                 <div class="prose prose-slate dark:prose-invert max-w-none text-muted-foreground mb-8 leading-relaxed">
-                    {{ ticket.description|linebreaks }}
+                    {{ ticket.description|render_markdown }}
                 </div>
 
                 <div class="flex items-center gap-6 text-sm text-muted-foreground border-t border-border pt-6">

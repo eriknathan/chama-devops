@@ -120,6 +120,21 @@ class TicketCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         # Admins (staff) cannot create tickets, only common users
         return not self.request.user.is_staff
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from app_management.models import Topic
+        import json
+        topics = Topic.objects.all()
+        # Create a dictionary of {topic_id: template_text}
+        topic_templates = {topic.pk: topic.template for topic in topics if topic.template}
+        context['topic_templates'] = json.dumps(topic_templates)
+        
+        # Create a dictionary of {topic_id: form_fields_json}
+        topic_forms = {topic.pk: topic.form_fields for topic in topics if topic.form_fields}
+        context['topic_forms'] = json.dumps(topic_forms)
+        
+        return context
+
     def form_valid(self, form):
         ticket = form.save(commit=False)
         ticket.requester = self.request.user

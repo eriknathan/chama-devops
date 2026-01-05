@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load markdown_extras %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -144,7 +145,7 @@
                     </a>
                 </h4>
                 <p class="text-sm text-muted-foreground mb-4 line-clamp-1">
-                    {{ ticket.description }}
+                    {{ ticket.description|extract_first_value|truncatechars:100 }}
                 </p>
                 <div class="flex items-center gap-6 text-xs text-muted-foreground">
                     <div class="flex items-center gap-1.5">

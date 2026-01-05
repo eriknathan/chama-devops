@@ -24,7 +24,8 @@
 
             <div class="space-y-4">
                 {% for field in form %}
-                <div>
+                <div id="field-container-{{ field.name }}" {% if field.name == 'description' %}
+                    class="transition-all duration-300" {% endif %}>
                     <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ field.label }}</label>
                     {{ field }}
                     {% if field.errors %}
@@ -32,6 +33,12 @@
                     {% endif %}
                 </div>
                 {% endfor %}
+            </div>
+
+            <!-- Dynamic Fields Container -->
+            <div id="dynamic-fields-container" class="space-y-4 hidden border-t border-border pt-4 mt-4">
+                <h3 class="text-lg font-medium text-foreground">Detalhes da Solicitação</h3>
+                <div id="dynamic-fields-wrapper" class="space-y-4"></div>
             </div>
 
             <div class="flex justify-end gap-3 pt-4">
@@ -46,5 +53,149 @@
             </div>
         </form>
     </div>
+
+    <!-- Script to handle dynamic template building -->
+    {% if topic_templates or topic_forms %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const topicSelect = document.getElementById('id_topic');
+            const descriptionField = document.getElementById('id_description');
+            const descriptionContainer = document.getElementById('field-container-description');
+            const dynamicContainer = document.getElementById('dynamic-fields-container');
+            const dynamicWrapper = document.getElementById('dynamic-fields-wrapper');
+
+            // Safe parsing of JSON contexts
+            const topicTemplates = {{ topic_templates|default:"{}" | safe }};
+            const topicForms = {{ topic_forms|default:"{}" | safe }};
+
+        if (topicSelect && descriptionField) {
+            topicSelect.addEventListener('change', function () {
+                const selectedTopicId = this.value;
+
+
+                const formSchema = topicForms[selectedTopicId];
+                const templateText = topicTemplates[selectedTopicId];
+
+                // Reset state
+                dynamicWrapper.innerHTML = '';
+                dynamicContainer.classList.add('hidden');
+                descriptionContainer.classList.remove('hidden');
+                // Enable description field interactions again if it was effectively disabled
+
+                if (formSchema && Array.isArray(formSchema) && formSchema.length > 0) {
+                    // Topic has dynamic form fields
+
+                    // 1. Hide Standard Description Field (visually)
+                    descriptionContainer.classList.add('hidden');
+
+                    // 2. Show Dynamic Container
+                    dynamicContainer.classList.remove('hidden');
+
+                    // 3. Generate Fields
+                    const values = {}; // Store current values
+
+                    formSchema.forEach((field, index) => {
+                        const fieldId = `dyn-field-${index}`;
+                        values[field.label] = ''; // Init
+
+                        const div = document.createElement('div');
+
+                        const label = document.createElement('label');
+                        label.className = "block text-sm font-medium text-foreground mb-1";
+                        label.innerText = field.label;
+                        label.htmlFor = fieldId;
+                        div.appendChild(label);
+
+                        let input;
+                        if (field.type === 'textarea') {
+                            input = document.createElement('textarea');
+                            input.rows = 4;
+                        } else if (field.type === 'select') {
+                            input = document.createElement('select');
+                            if (field.options) {
+                                field.options.forEach(opt => {
+                                    const option = document.createElement('option');
+                                    option.value = opt;
+                                    option.text = opt;
+                                    input.appendChild(option);
+                                });
+                            }
+                        } else if (field.type === 'checkbox') {
+                            input = document.createElement('input');
+                            input.type = 'checkbox';
+                            input.className = "form-checkbox h-4 w-4 text-primary rounded border-gray-300 focus:ring-primary";
+                            // Wrap checkbox for better layout
+                            const checkDiv = document.createElement('div');
+                            checkDiv.className = "flex items-center gap-2";
+                            checkDiv.appendChild(input);
+                            const checkLabel = document.createElement('span');
+                            checkLabel.className = "text-sm text-foreground";
+                            checkLabel.innerText = "Sim";
+                            checkDiv.appendChild(checkLabel);
+
+                            div.removeChild(label); // Remove standard label
+                            const groupLabel = document.createElement('span');
+                            groupLabel.className = "block text-sm font-medium text-foreground mb-1";
+                            groupLabel.innerText = field.label;
+                            div.appendChild(groupLabel);
+                            div.appendChild(checkDiv);
+
+                            // Special handling for input ref
+                        } else {
+                            input = document.createElement('input');
+                            input.type = field.type || 'text';
+                        }
+
+                        if (field.type !== 'checkbox') {
+                            input.id = fieldId;
+                            input.className = "appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-primary focus:border-primary sm:text-sm";
+                            if (field.placeholder) input.placeholder = field.placeholder;
+                            div.appendChild(input);
+                        } else {
+                            // Already appended above
+                            input = div.querySelector('input[type="checkbox"]');
+                        }
+
+                        dynamicWrapper.appendChild(div);
+
+                        // 4. Add Change Listener to Compile Description
+                        input.addEventListener('input', () => updateDescription(formSchema, dynamicWrapper));
+                        input.addEventListener('change', () => updateDescription(formSchema, dynamicWrapper));
+                    });
+
+                    updateDescription(formSchema, dynamicWrapper); // Initial compile
+
+                } else if (templateText) {
+                    // Fallback to standard template logic if no dynamic form
+                    if (!descriptionField.value.trim() || confirm('Deseja substituir a descrição atual pelo modelo do tópico selecionado?')) {
+                        descriptionField.value = templateText;
+                    }
+                }
+            });
+        }
+
+        function updateDescription(schema, wrapper) {
+            let text = `### Detalhes do Chamado\n\n`;
+
+            schema.forEach((field, index) => {
+                let value = '';
+                if (field.type === 'checkbox') {
+                    const div = wrapper.children[index];
+                    const checkbox = div.querySelector('input[type="checkbox"]');
+                    value = checkbox.checked ? "Sim" : "Não";
+                } else {
+                    const div = wrapper.children[index];
+                    const input = div.querySelector('input, select, textarea');
+                    value = input.value;
+                }
+
+                text += `**${field.label}**: ${value}\n\n`;
+            });
+
+            descriptionField.value = text;
+        }
+        });
+    </script>
+    {% endif %}
 </div>
 {% endblock %}

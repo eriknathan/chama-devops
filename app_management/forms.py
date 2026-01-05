@@ -7,9 +7,11 @@ class TailwindFormMixin:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             if isinstance(field.widget, forms.CheckboxSelectMultiple):
-                field.widget.attrs['class'] = 'form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out'
+                field.widget.attrs['class'] = 'form-checkbox h-4 w-4 text-primary transition duration-150 ease-in-out'
             else:
-                field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-slate-300 placeholder-slate-500 text-slate-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                existing_classes = field.widget.attrs.get('class', '')
+                new_class = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-primary focus:border-primary sm:text-sm'
+                field.widget.attrs['class'] = f"{existing_classes} {new_class}".strip()
 
 from django.contrib.auth import get_user_model
 
@@ -30,4 +32,20 @@ class TopicForm(TailwindFormMixin, forms.ModelForm):
     """Formulário para Tópicos."""
     class Meta:
         model = Topic
-        fields = ['name']
+        fields = ['name', 'template', 'form_fields']
+        widgets = {
+            'template': forms.Textarea(attrs={'rows': 10, 'class': 'font-mono text-sm'}),
+            'form_fields': forms.Textarea(attrs={'rows': 10, 'class': 'font-mono text-sm placeholder-gray-400', 'placeholder': '[{"label": "Squad", "type": "text"}, {"label": "Visibilidade", "type": "select", "options": ["Privado", "Público"]}]'}),
+        }
+    
+    def clean_form_fields(self):
+        import json
+        data = self.cleaned_data['form_fields']
+        if not data:
+             return list()
+        if isinstance(data, list):
+             return data
+        try:
+            return json.loads(data)
+        except json.JSONDecodeError:
+            raise forms.ValidationError("Invalid JSON format.")

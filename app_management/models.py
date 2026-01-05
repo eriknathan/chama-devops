@@ -31,6 +31,8 @@ class Project(BaseModel):
 class Topic(BaseModel):
     """Modelo de Tópico."""
     name = models.CharField(_('Nome'), max_length=100)
+    template = models.TextField(_('Modelo de Descrição'), blank=True, help_text=_('Texto padrão para preencher a descrição do ticket ao selecionar este tópico.'))
+    form_fields = models.JSONField(_('Campos do Formulário'), default=list, blank=True, help_text=_('Esquema JSON para campos dinâmicos.'))
     
     class Meta:
         verbose_name = _('Tópico')
