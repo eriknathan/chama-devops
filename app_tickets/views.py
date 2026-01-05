@@ -152,7 +152,7 @@ class TicketUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Atualiza um ticket existente."""
     model = Ticket
     form_class = TicketForm
-    template_name = 'app_tickets/ticket_form.html'
+    template_name = 'app_tickets/ticket_edit.html'
     
     def test_func(self):
         """Verifica se o usuário pode editar o ticket."""

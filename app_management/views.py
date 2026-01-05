@@ -68,6 +68,12 @@ class TopicListView(StaffRequiredMixin, ListView):
     template_name = 'app_management/topic_list.html'
     context_object_name = 'topics'
 
+class TopicDetailView(StaffRequiredMixin, DetailView):
+    """Detalhes de um tópico."""
+    model = Topic
+    template_name = 'app_management/topic_detail.html'
+    context_object_name = 'topic'
+
 class TopicCreateView(StaffRequiredMixin, CreateView):
     """Cria um novo tópico."""
     model = Topic

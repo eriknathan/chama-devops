@@ -111,23 +111,35 @@ class TopicAdmin(admin.ModelAdmin):
     list_display = ('name', 'field_count', 'created_at')
     search_fields = ('name',)
     
-    fieldsets = (
-        ('Informações Básicas', {
-            'fields': ('name', 'template')
-        }),
-        ('Campos Dinâmicos Atuais', {
-            'fields': ('current_fields_display',),
-            'description': 'Campos que aparecem quando este tópico é selecionado no formulário de ticket.'
-        }),
-        ('Gerenciar Campos', {
-            'fields': ('form_fields',),
-            'classes': ('collapse',),
-        }),
-        ('Adicionar Novo Campo', {
-            'fields': ('new_field_label', 'new_field_type', 'new_field_placeholder', 'new_field_options'),
-            'description': 'Preencha os campos abaixo e salve para adicionar um novo campo dinâmico.'
-        }),
-    )
+    def get_fieldsets(self, request, obj=None):
+        """Retorna fieldsets dinâmicos para incluir campos de remoção."""
+        fieldsets = [
+            ('Informações Básicas', {
+                'fields': ('name', 'template')
+            }),
+            ('Campos Dinâmicos Atuais', {
+                'fields': ('current_fields_display',),
+                'description': 'Campos que aparecem quando este tópico é selecionado no formulário de ticket.'
+            }),
+            # 'Gerenciar Campos' section removed as per user request
+        ]
+        
+        # Se houver campos dinâmicos, adiciona seção para removê-los
+        if obj and obj.form_fields:
+            remove_fields = []
+            for i, _ in enumerate(obj.form_fields):
+                field_name = f'remove_field_{i}'
+                # Verificar se o campo foi adicionado ao form (o form __init__ faz isso)
+                # Mas aqui estamos definindo layout. O form varre params.
+                remove_fields.append(field_name)
+            
+            if remove_fields:
+                fieldsets.append(('Remover Campos', {
+                    'fields': tuple(remove_fields),
+                    'description': 'Marque os campos que deseja remover e salve o formulário.'
+                }))
+        
+        return fieldsets
     
     readonly_fields = ('current_fields_display',)
     
@@ -164,7 +176,7 @@ class TopicAdmin(admin.ModelAdmin):
             html += f'<tr><td style="padding: 8px; border: 1px solid #ddd;">{label}</td><td style="padding: 8px; border: 1px solid #ddd;">{field_type}</td><td style="padding: 8px; border: 1px solid #ddd;">{placeholder}</td><td style="padding: 8px; border: 1px solid #ddd;">{options}</td></tr>'
         
         html += '</table>'
-        html += '<p style="margin-top: 10px; color: #666;"><strong>Para remover campos:</strong> Edite o JSON diretamente na seção "Gerenciar Campos" abaixo.</p>'
+        # Instruction text updated
         
         return mark_safe(html)
     current_fields_display.short_description = 'Campos Configurados'

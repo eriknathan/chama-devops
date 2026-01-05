@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-foreground">Novo Chamado</h1>
         <p class="mt-2 text-sm text-muted-foreground">Descreva detalhadamente o problema ou solicitação.</p>
@@ -32,14 +32,17 @@
                     <p class="text-destructive text-xs italic mt-1">{{ field.errors.0 }}</p>
                     {% endif %}
                 </div>
+                {% if field.name == 'topic' %}
+                <div id="topic-details-container"
+                    class="hidden rounded-md bg-muted p-4 text-sm text-muted-foreground border border-border mt-2">
+                    <h4 class="font-medium text-foreground mb-2">Detalhes do Tópico:</h4>
+                    <div id="topic-details-content" class="whitespace-pre-wrap"></div>
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
 
-            <!-- Dynamic Fields Container -->
-            <div id="dynamic-fields-container" class="space-y-4 hidden border-t border-border pt-4 mt-4">
-                <h3 class="text-lg font-medium text-foreground">Detalhes da Solicitação</h3>
-                <div id="dynamic-fields-wrapper" class="space-y-4"></div>
-            </div>
+
 
             <div class="flex justify-end gap-3 pt-4">
                 <a href="{% url 'ticket-list' %}"
@@ -54,146 +57,57 @@
         </form>
     </div>
 
+    <!-- JSON Data for Topic Templates -->
+    {{ topic_templates|json_script:"topic-templates-data" }}
+
     <!-- Script to handle dynamic template building -->
     {% if topic_templates or topic_forms %}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const topicSelect = document.getElementById('id_topic');
             const descriptionField = document.getElementById('id_description');
-            const descriptionContainer = document.getElementById('field-container-description');
-            const dynamicContainer = document.getElementById('dynamic-fields-container');
-            const dynamicWrapper = document.getElementById('dynamic-fields-wrapper');
 
-            // Safe parsing of JSON contexts
-            const topicTemplates = {{ topic_templates|default:"{}" | safe }};
-            const topicForms = {{ topic_forms|default:"{}" | safe }};
+            // Safe parsing of JSON contexts using Django json_script
+            const topicTemplatesElement = document.getElementById('topic-templates-data');
+            let topicTemplates = {};
+            if (topicTemplatesElement) {
+                try {
+                    topicTemplates = JSON.parse(topicTemplatesElement.textContent);
+                    // Handle double-encoded JSON if necessary (views.py uses json.dumps)
+                    if (typeof topicTemplates === 'string') {
+                        topicTemplates = JSON.parse(topicTemplates);
+                    }
+                } catch (e) {
+                    console.error('Error parsing topic templates:', e);
+                }
+            }
 
-        if (topicSelect && descriptionField) {
-            topicSelect.addEventListener('change', function () {
-                const selectedTopicId = this.value;
+            if (topicSelect && descriptionField) {
+                const detailsContainer = document.getElementById('topic-details-container');
+                const detailsContent = document.getElementById('topic-details-content');
 
+                function updateTopicDetails() {
+                    const selectedTopicId = topicSelect.value;
+                    const templateText = topicTemplates[selectedTopicId];
 
-                const formSchema = topicForms[selectedTopicId];
-                const templateText = topicTemplates[selectedTopicId];
+                    if (templateText && detailsContainer && detailsContent) {
+                        // Show details
+                        detailsContent.textContent = templateText;
+                        detailsContainer.classList.remove('hidden');
 
-                // Reset state
-                dynamicWrapper.innerHTML = '';
-                dynamicContainer.classList.add('hidden');
-                descriptionContainer.classList.remove('hidden');
-                // Enable description field interactions again if it was effectively disabled
-
-                if (formSchema && Array.isArray(formSchema) && formSchema.length > 0) {
-                    // Topic has dynamic form fields
-
-                    // 1. Hide Standard Description Field (visually)
-                    descriptionContainer.classList.add('hidden');
-
-                    // 2. Show Dynamic Container
-                    dynamicContainer.classList.remove('hidden');
-
-                    // 3. Generate Fields
-                    const values = {}; // Store current values
-
-                    formSchema.forEach((field, index) => {
-                        const fieldId = `dyn-field-${index}`;
-                        values[field.label] = ''; // Init
-
-                        const div = document.createElement('div');
-
-                        const label = document.createElement('label');
-                        label.className = "block text-sm font-medium text-foreground mb-1";
-                        label.innerText = field.label;
-                        label.htmlFor = fieldId;
-                        div.appendChild(label);
-
-                        let input;
-                        if (field.type === 'textarea') {
-                            input = document.createElement('textarea');
-                            input.rows = 4;
-                        } else if (field.type === 'select') {
-                            input = document.createElement('select');
-                            if (field.options) {
-                                field.options.forEach(opt => {
-                                    const option = document.createElement('option');
-                                    option.value = opt;
-                                    option.text = opt;
-                                    input.appendChild(option);
-                                });
-                            }
-                        } else if (field.type === 'checkbox') {
-                            input = document.createElement('input');
-                            input.type = 'checkbox';
-                            input.className = "form-checkbox h-4 w-4 text-primary rounded border-gray-300 focus:ring-primary";
-                            // Wrap checkbox for better layout
-                            const checkDiv = document.createElement('div');
-                            checkDiv.className = "flex items-center gap-2";
-                            checkDiv.appendChild(input);
-                            const checkLabel = document.createElement('span');
-                            checkLabel.className = "text-sm text-foreground";
-                            checkLabel.innerText = "Sim";
-                            checkDiv.appendChild(checkLabel);
-
-                            div.removeChild(label); // Remove standard label
-                            const groupLabel = document.createElement('span');
-                            groupLabel.className = "block text-sm font-medium text-foreground mb-1";
-                            groupLabel.innerText = field.label;
-                            div.appendChild(groupLabel);
-                            div.appendChild(checkDiv);
-
-                            // Special handling for input ref
-                        } else {
-                            input = document.createElement('input');
-                            input.type = field.type || 'text';
-                        }
-
-                        if (field.type !== 'checkbox') {
-                            input.id = fieldId;
-                            input.className = "appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-primary focus:border-primary sm:text-sm";
-                            if (field.placeholder) input.placeholder = field.placeholder;
-                            div.appendChild(input);
-                        } else {
-                            // Already appended above
-                            input = div.querySelector('input[type="checkbox"]');
-                        }
-
-                        dynamicWrapper.appendChild(div);
-
-                        // 4. Add Change Listener to Compile Description
-                        input.addEventListener('input', () => updateDescription(formSchema, dynamicWrapper));
-                        input.addEventListener('change', () => updateDescription(formSchema, dynamicWrapper));
-                    });
-
-                    updateDescription(formSchema, dynamicWrapper); // Initial compile
-
-                } else if (templateText) {
-                    // Fallback to standard template logic if no dynamic form
-                    if (!descriptionField.value.trim() || confirm('Deseja substituir a descrição atual pelo modelo do tópico selecionado?')) {
-                        descriptionField.value = templateText;
+                    } else if (detailsContainer) {
+                        // Hide details if no template
+                        detailsContainer.classList.add('hidden');
+                        if (detailsContent) detailsContent.textContent = '';
                     }
                 }
-            });
-        }
 
-        function updateDescription(schema, wrapper) {
-            let text = `### Detalhes do Chamado\n\n`;
+                // Attach event listener
+                topicSelect.addEventListener('change', updateTopicDetails);
 
-            schema.forEach((field, index) => {
-                let value = '';
-                if (field.type === 'checkbox') {
-                    const div = wrapper.children[index];
-                    const checkbox = div.querySelector('input[type="checkbox"]');
-                    value = checkbox.checked ? "Sim" : "Não";
-                } else {
-                    const div = wrapper.children[index];
-                    const input = div.querySelector('input, select, textarea');
-                    value = input.value;
-                }
-
-                text += `**${field.label}**: ${value}\n\n`;
-            });
-
-            descriptionField.value = text;
-        }
+                // Trigger on load in case of pre-selection (e.g. browser back button or form errors)
+                updateTopicDetails();
+            }
         });
     </script>
     {% endif %}

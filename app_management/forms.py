@@ -32,20 +32,8 @@ class TopicForm(TailwindFormMixin, forms.ModelForm):
     """Formulário para Tópicos."""
     class Meta:
         model = Topic
-        fields = ['name', 'template', 'form_fields']
+        fields = ['name', 'template']
         widgets = {
             'template': forms.Textarea(attrs={'rows': 10, 'class': 'font-mono text-sm'}),
-            'form_fields': forms.Textarea(attrs={'rows': 10, 'class': 'font-mono text-sm placeholder-gray-400', 'placeholder': '[{"label": "Squad", "type": "text"}, {"label": "Visibilidade", "type": "select", "options": ["Privado", "Público"]}]'}),
         }
     
-    def clean_form_fields(self):
-        import json
-        data = self.cleaned_data['form_fields']
-        if not data:
-             return list()
-        if isinstance(data, list):
-             return data
-        try:
-            return json.loads(data)
-        except json.JSONDecodeError:
-            raise forms.ValidationError("Invalid JSON format.")

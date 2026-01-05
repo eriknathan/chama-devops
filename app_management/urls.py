@@ -18,6 +18,7 @@ urlpatterns = [
 
     # Topics
     path('topics/', views.TopicListView.as_view(), name='topic-list'),
+    path('topics/<int:pk>/', views.TopicDetailView.as_view(), name='topic-detail'),
     path('topics/add/', views.TopicCreateView.as_view(), name='topic-add'),
     path('topics/<int:pk>/edit/', views.TopicUpdateView.as_view(), name='topic-edit'),
     path('topics/<int:pk>/delete/', views.TopicDeleteView.as_view(), name='topic-delete'),
