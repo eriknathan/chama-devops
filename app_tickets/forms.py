@@ -16,7 +16,7 @@ class TicketForm(forms.ModelForm):
 
     class Meta:
         model = Ticket
-        fields = ['project', 'topic', 'title', 'description', 'attachment']
+        fields = ['project', 'topic', 'priority', 'title', 'description', 'attachment']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

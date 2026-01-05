@@ -106,6 +106,7 @@ def ticket_action_view(request, pk, action):
     elif action == 'finish':
         ticket.status = Ticket.STATUS_DONE
     
+    ticket._current_user = request.user
     ticket.save()
     return redirect('ticket-detail', pk=pk)
 
@@ -138,6 +139,7 @@ class TicketCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         ticket = form.save(commit=False)
         ticket.requester = self.request.user
+        ticket._current_user = self.request.user
         ticket.save()
         
         # Handle attachment
@@ -158,6 +160,13 @@ class TicketUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         """Verifica se o usuário pode editar o ticket."""
         obj = self.get_object()
         return self.request.user.is_staff or obj.requester == self.request.user
+
+    def form_valid(self, form):
+        """Injeta o usuário atual para o histórico antes de salvar."""
+        ticket = form.save(commit=False)
+        ticket._current_user = self.request.user
+        ticket.save()
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('ticket-detail', kwargs={'pk': self.object.pk})
