@@ -17,12 +17,12 @@
             <div class="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
             </div>
             <div>
-                <h1 class="text-2xl font-bold text-foreground">Solicitação de Novo Repositório</h1>
-                <p class="text-sm text-muted-foreground">Preencha os dados para criar um novo repositório no GitHub</p>
+                <h1 class="text-2xl font-bold text-foreground">Gerenciamento de Acesso ao GitHub</h1>
+                <p class="text-sm text-muted-foreground">Solicite adição ou remoção de acesso a repositórios</p>
             </div>
         </div>
     </div>
@@ -80,159 +80,147 @@
             </div>
         </div>
 
-        <!-- Dados Gerais do Repositório -->
+        <!-- Tipo de Solicitação -->
         <div class="bg-card border border-border rounded-xl p-6">
             <div class="flex items-center gap-2 mb-6">
                 <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                 </svg>
-                <h2 class="text-lg font-semibold text-foreground">Dados Gerais do Repositório</h2>
+                <h2 class="text-lg font-semibold text-foreground">Tipo de Solicitação</h2>
             </div>
 
-            <div class="space-y-5">
-                <!-- Nome do Repositório -->
-                <div>
-                    <label for="nome_repositorio" class="block text-sm font-medium text-foreground mb-1.5">
-                        Nome sugerido para o repositório <span class="text-destructive">*</span>
+            <div>
+                <label class="block text-sm font-medium text-foreground mb-3">
+                    O acesso deve ser: <span class="text-destructive">*</span>
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label
+                        class="relative flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                        <input type="radio" name="tipo_solicitacao" value="Adicionar" required class="sr-only peer">
+                        <div class="text-center">
+                            <svg class="mx-auto h-8 w-8 text-status-emerald mb-2" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <span class="text-sm font-medium text-foreground">Adicionar Acesso</span>
+                        </div>
                     </label>
-                    <input type="text" name="nome_repositorio" id="nome_repositorio" required
-                        placeholder="minha-api-backend"
-                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
-                    <p class="text-xs text-muted-foreground mt-1">Use letras minúsculas, números e hífens. Ex:
-                        minha-api-backend</p>
-                </div>
-
-                <!-- Descrição do Projeto -->
-                <div>
-                    <label for="descricao" class="block text-sm font-medium text-foreground mb-1.5">
-                        Breve descrição do projeto <span class="text-destructive">*</span>
+                    <label
+                        class="relative flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                        <input type="radio" name="tipo_solicitacao" value="Remover" required class="sr-only peer">
+                        <div class="text-center">
+                            <svg class="mx-auto h-8 w-8 text-status-red mb-2" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                            </svg>
+                            <span class="text-sm font-medium text-foreground">Remover Acesso</span>
+                        </div>
                     </label>
-                    <textarea name="descricao" id="descricao" rows="3" required
-                        placeholder="Descreva brevemente o propósito deste repositório..."
-                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none"></textarea>
-                    <p class="text-xs text-muted-foreground mt-1">Esta descrição será utilizada no README do repositório
-                    </p>
-                </div>
-
-                <!-- Squad Responsável -->
-                <div>
-                    <label for="squad_responsavel" class="block text-sm font-medium text-foreground mb-1.5">
-                        Squad ou time responsável <span class="text-destructive">*</span>
-                    </label>
-                    <input type="text" name="squad_responsavel" id="squad_responsavel" required
-                        placeholder="Ex: Squad Pagamentos, Time Backend"
-                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
                 </div>
             </div>
         </div>
 
-        <!-- Configurações do Repositório -->
+        <!-- Dados do Usuário -->
         <div class="bg-card border border-border rounded-xl p-6">
             <div class="flex items-center gap-2 mb-6">
                 <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <h2 class="text-lg font-semibold text-foreground">Configurações do Repositório</h2>
+                <h2 class="text-lg font-semibold text-foreground">Dados do Usuário</h2>
             </div>
 
             <div class="space-y-5">
-                <!-- Visibilidade -->
+                <!-- Nome Completo -->
                 <div>
-                    <label for="visibilidade" class="block text-sm font-medium text-foreground mb-1.5">
-                        Visibilidade <span class="text-destructive">*</span>
+                    <label for="nome_completo" class="block text-sm font-medium text-foreground mb-1.5">
+                        Nome completo <span class="text-destructive">*</span>
                     </label>
-                    <select name="visibilidade" id="visibilidade" required
-                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
-                        <option value="">Selecione...</option>
-                        <option value="Privado">🔒 Privado</option>
-                        <option value="Internal">🏢 Internal (uso interno da empresa)</option>
-                        <option value="Público">🌐 Público (requer aprovação prévia)</option>
-                    </select>
-                </div>
-
-                <!-- Linguagem Principal -->
-                <div>
-                    <label for="linguagem_principal" class="block text-sm font-medium text-foreground mb-1.5">
-                        Linguagem principal <span class="text-destructive">*</span>
-                    </label>
-                    <select name="linguagem_principal" id="linguagem_principal" required
-                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
-                        <option value="">Selecione...</option>
-                        <option value="Python">Python</option>
-                        <option value="JavaScript">JavaScript</option>
-                        <option value="TypeScript">TypeScript</option>
-                        <option value="Java">Java</option>
-                        <option value="Go">Go</option>
-                        <option value="Rust">Rust</option>
-                        <option value="C#">C#</option>
-                        <option value="PHP">PHP</option>
-                        <option value="Ruby">Ruby</option>
-                        <option value="Kotlin">Kotlin</option>
-                        <option value="Swift">Swift</option>
-                        <option value="Terraform">Terraform</option>
-                        <option value="Shell">Shell/Bash</option>
-                        <option value="Outro">Outro</option>
-                    </select>
-                    <p class="text-xs text-muted-foreground mt-1">Será usado para gerar o .gitignore automaticamente</p>
-                </div>
-
-                <!-- Template -->
-                <div>
-                    <label for="template" class="block text-sm font-medium text-foreground mb-1.5">
-                        Usar template existente?
-                    </label>
-                    <input type="text" name="template" id="template"
-                        placeholder="Ex: backend-api-template, frontend-react-template (deixe vazio se não aplicável)"
+                    <input type="text" name="nome_completo" id="nome_completo" required placeholder="João da Silva"
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
-                    <p class="text-xs text-muted-foreground mt-1">Nome do repositório template na organização (opcional)
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Acessos Iniciais -->
-        <div class="bg-card border border-border rounded-xl p-6">
-            <div class="flex items-center gap-2 mb-6">
-                <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-                <h2 class="text-lg font-semibold text-foreground">Acessos Iniciais</h2>
-            </div>
-
-            <div class="space-y-5">
-                <!-- Times/Usuários com Acesso -->
-                <div>
-                    <label for="times_acesso" class="block text-sm font-medium text-foreground mb-1.5">
-                        Times ou usuários com permissão de escrita (Write) <span class="text-destructive">*</span>
-                    </label>
-                    <textarea name="times_acesso" id="times_acesso" rows="3" required
-                        placeholder="Liste os times ou usernames do GitHub que devem ter acesso de escrita. Ex:&#10;- @squad-pagamentos&#10;- @joao.silva&#10;- @maria.santos"
-                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none"></textarea>
                 </div>
 
-                <!-- Acesso Grafana -->
+                <!-- E-mail Corporativo -->
                 <div>
-                    <label class="block text-sm font-medium text-foreground mb-3">
-                        Liberar acesso ao Grafana relacionado a este repositório?
+                    <label for="email_corporativo" class="block text-sm font-medium text-foreground mb-1.5">
+                        E-mail corporativo <span class="text-destructive">*</span>
                     </label>
-                    <div class="flex items-center gap-6">
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="radio" name="acesso_grafana" value="Sim"
-                                class="form-radio h-4 w-4 text-primary border-border focus:ring-primary">
-                            <span class="ml-2 text-sm text-foreground">Sim</span>
-                        </label>
-                        <label class="inline-flex items-center cursor-pointer">
-                            <input type="radio" name="acesso_grafana" value="Não" checked
-                                class="form-radio h-4 w-4 text-primary border-border focus:ring-primary">
-                            <span class="ml-2 text-sm text-foreground">Não</span>
-                        </label>
+                    <input type="email" name="email_corporativo" id="email_corporativo" required
+                        placeholder="joao.silva@empresa.com.br"
+                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
+                </div>
+
+                <!-- Username do GitHub -->
+                <div>
+                    <label for="github_username" class="block text-sm font-medium text-foreground mb-1.5">
+                        Username do GitHub <span class="text-destructive">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-muted-foreground">@</span>
+                        <input type="text" name="github_username" id="github_username" required placeholder="joaosilva"
+                            class="appearance-none rounded-lg relative block w-full pl-8 pr-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Dados do Acesso -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <div class="flex items-center gap-2 mb-6">
+                <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                </svg>
+                <h2 class="text-lg font-semibold text-foreground">Dados do Acesso</h2>
+            </div>
+
+            <div class="space-y-5">
+                <!-- Repositórios -->
+                <div>
+                    <label for="repositorios" class="block text-sm font-medium text-foreground mb-1.5">
+                        Link do(s) repositório(s) <span class="text-destructive">*</span>
+                    </label>
+                    <textarea name="repositorios" id="repositorios" rows="3" required
+                        placeholder="https://github.com/empresa/repo-1&#10;https://github.com/empresa/repo-2"
+                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none"></textarea>
+                    <p class="text-xs text-muted-foreground mt-1">Informe um repositório por linha</p>
+                </div>
+
+                <!-- Nível de Permissão -->
+                <div>
+                    <label for="nivel_permissao" class="block text-sm font-medium text-foreground mb-1.5">
+                        Nível de permissão desejado <span class="text-destructive">*</span>
+                    </label>
+                    <select name="nivel_permissao" id="nivel_permissao" required
+                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
+                        <option value="">Selecione...</option>
+                        <option value="Read">👁️ Leitura (Read) - Apenas visualização</option>
+                        <option value="Write">✏️ Escrita (Write) - Pode fazer push</option>
+                        <option value="Admin">⚙️ Administrador (Admin) - Controle total</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Justificativa -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <div class="flex items-center gap-2 mb-6">
+                <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h2 class="text-lg font-semibold text-foreground">Justificativa</h2>
+            </div>
+
+            <div>
+                <label for="justificativa" class="block text-sm font-medium text-foreground mb-1.5">
+                    Motivo da solicitação <span class="text-destructive">*</span>
+                </label>
+                <textarea name="justificativa" id="justificativa" rows="4" required
+                    placeholder="Descreva o motivo pelo qual o acesso precisa ser adicionado ou removido..."
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none"></textarea>
             </div>
         </div>
 
@@ -273,8 +261,8 @@
                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 <p class="text-sm text-status-yellow">
-                    <strong>Atenção:</strong> Solicitações sem informações completas ou sem definição de responsáveis
-                    poderão ser devolvidas para correção.
+                    <strong>Atenção:</strong> Solicitações incompletas ou sem justificativa poderão ser devolvidas para
+                    ajuste.
                 </p>
             </div>
         </div>

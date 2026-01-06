@@ -204,7 +204,7 @@ class RepositoryFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             project=project,
             topic=topic,
             requester=request.user,
-            priority=Ticket.PRIORITY_MEDIUM,
+            priority=request.POST.get('priority', Ticket.PRIORITY_MEDIUM),
         )
         ticket._current_user = request.user
         ticket.save()
@@ -215,6 +215,191 @@ class RepositoryFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             TicketAttachment.objects.create(ticket=ticket, file=file)
 
         return redirect(self.success_url)
+
+
+class GitHubAccessFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Formulário customizado para Gerenciamento de Acesso ao GitHub."""
+    model = Ticket
+    fields = []
+    template_name = 'app_tickets/forms/github_access_form.html'
+    success_url = reverse_lazy('ticket-list')
+
+    def test_func(self):
+        return not self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from app_management.models import Topic, Project
+        context['projects'] = Project.objects.all()
+        try:
+            context['topic'] = Topic.objects.get(name='Gerenciamento de Acesso ao GitHub')
+        except Topic.DoesNotExist:
+            pass
+        return context
+
+    def post(self, request, *args, **kwargs):
+        from app_management.models import Topic, Project
+        
+        # Get the selected project
+        project_id = request.POST.get('project')
+        project = get_object_or_404(Project, pk=project_id)
+        
+        # Get the topic
+        try:
+            topic = Topic.objects.get(name='Gerenciamento de Acesso ao GitHub')
+        except Topic.DoesNotExist:
+            topic = None
+
+        # Build description from form data
+        tipo = request.POST.get('tipo_solicitacao', '')
+        nome = request.POST.get('nome_completo', '')
+        email = request.POST.get('email_corporativo', '')
+        github_user = request.POST.get('github_username', '')
+        repositorios = request.POST.get('repositorios', '')
+        permissao = request.POST.get('nivel_permissao', '')
+        justificativa = request.POST.get('justificativa', '')
+
+        description = f"""### Tipo de Solicitação
+
+**Ação**: {tipo} acesso
+
+---
+
+### Dados do Usuário
+
+**Nome Completo**: {nome}
+
+**E-mail Corporativo**: {email}
+
+**Username GitHub**: @{github_user}
+
+---
+
+### Dados do Acesso
+
+**Repositório(s)**:
+{repositorios}
+
+**Nível de Permissão**: {permissao}
+
+---
+
+### Justificativa
+
+{justificativa}
+"""
+
+        # Create the ticket
+        ticket = Ticket.objects.create(
+            title=f'{tipo} Acesso GitHub: @{github_user}',
+            description=description,
+            project=project,
+            topic=topic,
+            requester=request.user,
+            priority=request.POST.get('priority', Ticket.PRIORITY_MEDIUM),
+        )
+        ticket._current_user = request.user
+        ticket.save()
+
+        # Handle attachments
+        files = request.FILES.getlist('attachments')
+        for file in files:
+            TicketAttachment.objects.create(ticket=ticket, file=file)
+
+        return redirect(self.success_url)
+
+
+class DowntimeFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Formulário customizado para Reporte de Indisponibilidade."""
+    model = Ticket
+    fields = []
+    template_name = 'app_tickets/forms/downtime_form.html'
+    success_url = reverse_lazy('ticket-list')
+
+    def test_func(self):
+        return not self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from app_management.models import Topic, Project
+        context['projects'] = Project.objects.all()
+        try:
+            context['topic'] = Topic.objects.get(name='Reporte de Indisponibilidade')
+        except Topic.DoesNotExist:
+            pass
+        return context
+
+    def post(self, request, *args, **kwargs):
+        from app_management.models import Topic, Project
+        
+        # Get selected project
+        project_id = request.POST.get('project')
+        project = get_object_or_404(Project, pk=project_id)
+        
+        # Get topic
+        try:
+            topic = Topic.objects.get(name='Reporte de Indisponibilidade')
+        except Topic.DoesNotExist:
+            topic = None
+
+        # Build description
+        nome = request.POST.get('nome_servico', '')
+        url = request.POST.get('url_erro', '')
+        ambiente = request.POST.get('ambiente', '')
+        sintoma = request.POST.get('sintoma_principal', '')
+        desc_sintomas = request.POST.get('descricao_sintomas', '')
+        msg_erro = request.POST.get('mensagem_erro', '')
+        impacto = request.POST.get('impacto', '')
+        horario = request.POST.get('horario_inicio', '')
+        
+        # Get priority from form
+        priority = request.POST.get('priority', Ticket.PRIORITY_MEDIUM)
+
+        description = f"""### Serviço Afetado
+
+**Nome**: {nome}
+**URL**: {url}
+**Ambiente**: {ambiente}
+
+---
+
+### Sintomas Observados
+
+**Principal**: {sintoma}
+**Descrição**: {desc_sintomas}
+
+**Mensagem de Erro**:
+```
+{msg_erro}
+```
+
+---
+
+### Impacto e Horário
+
+**Impacto**: {impacto}
+**Início**: {horario}
+"""
+
+        # Create ticket
+        ticket = Ticket.objects.create(
+            title=f'Indisponibilidade: {nome} ({sintoma})',
+            description=description,
+            project=project,
+            topic=topic,
+            requester=request.user,
+            priority=priority,
+        )
+        ticket._current_user = request.user
+        ticket.save()
+
+        # Attachments
+        files = request.FILES.getlist('attachments')
+        for file in files:
+            TicketAttachment.objects.create(ticket=ticket, file=file)
+
+        return redirect(self.success_url)
+
 
 class TicketUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """Atualiza um ticket existente."""
