@@ -55,6 +55,13 @@
                             <p class="text-destructive text-xs italic mt-1">{{ field.errors.0 }}</p>
                             {% endif %}
                         </div>
+                        {% if field.name == 'topic' %}
+                        <div id="topic-details-container"
+                            class="hidden rounded-md bg-muted p-4 text-sm text-muted-foreground border border-border mt-2">
+                            <h4 class="font-medium text-foreground mb-2">Detalhes do Tópico:</h4>
+                            <div id="topic-details-content" class="whitespace-pre-wrap"></div>
+                        </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
 
@@ -279,13 +286,31 @@
         }
 
         if (topicSelect && descriptionField) {
+            const detailsContainer = document.getElementById('topic-details-container');
+            const detailsContent = document.getElementById('topic-details-content');
+
+            function updateTopicDetails() {
+                const selectedTopicId = topicSelect.value;
+                const templateText = topicTemplates[selectedTopicId];
+
+                if (templateText && detailsContainer && detailsContent) {
+                    detailsContent.textContent = templateText;
+                    detailsContainer.classList.remove('hidden');
+                } else if (detailsContainer) {
+                    detailsContainer.classList.add('hidden');
+                    if (detailsContent) detailsContent.textContent = '';
+                }
+            }
+
             topicSelect.addEventListener('change', function () {
                 renderDynamicFields(this.value, false);
+                updateTopicDetails();
             });
 
             // Auto-render on page load if topic is already selected
             if (topicSelect.value) {
                 renderDynamicFields(topicSelect.value, true);
+                updateTopicDetails();
             }
         }
 

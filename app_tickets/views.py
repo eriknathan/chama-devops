@@ -110,16 +110,122 @@ def ticket_action_view(request, pk, action):
     ticket.save()
     return redirect('ticket-detail', pk=pk)
 
-class TicketCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-    """Cria um novo ticket."""
-    model = Ticket
-    form_class = TicketForm
-    template_name = 'app_tickets/ticket_form.html'
-    success_url = reverse_lazy('ticket-list')
+class TopicSelectView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    """Exibe lista de tópicos para seleção antes de criar ticket."""
+    model = None
+    template_name = 'app_tickets/topic_select.html'
+    context_object_name = 'topics'
 
     def test_func(self):
         # Admins (staff) cannot create tickets, only common users
         return not self.request.user.is_staff
+
+    def get_queryset(self):
+        from app_management.models import Topic
+        return Topic.objects.all()
+
+
+
+class RepositoryFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Formulário customizado para Solicitação de Novo Repositório."""
+    model = Ticket
+    fields = []  # Não usamos o formulário padrão
+    template_name = 'app_tickets/forms/repository_form.html'
+    success_url = reverse_lazy('ticket-list')
+
+    def test_func(self):
+        return not self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from app_management.models import Topic, Project
+        context['projects'] = Project.objects.all()
+        try:
+            context['topic'] = Topic.objects.get(name='Solicitação de Novo Repositório')
+        except Topic.DoesNotExist:
+            pass
+        return context
+
+    def post(self, request, *args, **kwargs):
+        from app_management.models import Topic, Project
+        
+        # Get the selected project
+        project_id = request.POST.get('project')
+        project = get_object_or_404(Project, pk=project_id)
+        
+        # Get the topic
+        try:
+            topic = Topic.objects.get(name='Solicitação de Novo Repositório')
+        except Topic.DoesNotExist:
+            topic = None
+
+        # Build description from form data
+        nome_repo = request.POST.get('nome_repositorio', '')
+        descricao = request.POST.get('descricao', '')
+        squad = request.POST.get('squad_responsavel', '')
+        visibilidade = request.POST.get('visibilidade', '')
+        linguagem = request.POST.get('linguagem_principal', '')
+        template = request.POST.get('template', '')
+        times_acesso = request.POST.get('times_acesso', '')
+        acesso_grafana = request.POST.get('acesso_grafana', 'Não')
+
+        description = f"""### Dados Gerais do Repositório
+
+**Nome do Repositório**: {nome_repo}
+
+**Descrição do Projeto**: {descricao}
+
+**Squad/Time Responsável**: {squad}
+
+---
+
+### Configurações do Repositório
+
+**Visibilidade**: {visibilidade}
+
+**Linguagem Principal**: {linguagem}
+
+**Template**: {template if template else 'Nenhum (criar do zero)'}
+
+---
+
+### Acessos Iniciais
+
+**Times/Usuários com Acesso Write**:
+{times_acesso}
+
+**Liberar Acesso Grafana**: {acesso_grafana}
+"""
+
+        # Create the ticket
+        ticket = Ticket.objects.create(
+            title=f'Novo Repositório: {nome_repo}',
+            description=description,
+            project=project,
+            topic=topic,
+            requester=request.user,
+            priority=Ticket.PRIORITY_MEDIUM,
+        )
+        ticket._current_user = request.user
+        ticket.save()
+
+        # Handle attachments
+        files = request.FILES.getlist('attachments')
+        for file in files:
+            TicketAttachment.objects.create(ticket=ticket, file=file)
+
+        return redirect(self.success_url)
+
+class TicketUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """Atualiza um ticket existente."""
+    model = Ticket
+    form_class = TicketForm
+    template_name = 'app_tickets/ticket_edit.html'
+    
+    def test_func(self):
+        """Verifica se o usuário pode editar o ticket."""
+        obj = self.get_object()
+        return self.request.user.is_staff or obj.requester == self.request.user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -135,31 +241,6 @@ class TicketCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         context['topic_forms'] = json.dumps(topic_forms)
         
         return context
-
-    def form_valid(self, form):
-        ticket = form.save(commit=False)
-        ticket.requester = self.request.user
-        ticket._current_user = self.request.user
-        ticket.save()
-        
-        # Handle attachment
-        files = self.request.FILES.getlist('attachment')
-        for file in files:
-            TicketAttachment.objects.create(ticket=ticket, file=file)
-            
-        return redirect(self.success_url)
-
-
-class TicketUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """Atualiza um ticket existente."""
-    model = Ticket
-    form_class = TicketForm
-    template_name = 'app_tickets/ticket_edit.html'
-    
-    def test_func(self):
-        """Verifica se o usuário pode editar o ticket."""
-        obj = self.get_object()
-        return self.request.user.is_staff or obj.requester == self.request.user
 
     def form_valid(self, form):
         """Injeta o usuário atual para o histórico antes de salvar."""

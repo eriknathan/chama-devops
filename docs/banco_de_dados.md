@@ -11,12 +11,14 @@ erDiagram
     User ||--o{ Ticket : "solicita (requester)"
     User ||--o{ Ticket : "atribuido_a (assignee)"
     User ||--o{ Comment : "autor_de"
+    User ||--o{ TicketHistory : "realizou_acao"
     
     Project ||--o{ Ticket : "contem"
     Topic ||--o{ Ticket : "categoriza"
     
     Ticket ||--o{ Comment : "possui"
     Ticket ||--o{ TicketAttachment : "possui_arquivos"
+    Ticket ||--o{ TicketHistory : "possui_historico"
 
     User {
         int id PK
@@ -41,6 +43,8 @@ erDiagram
     Topic {
         int id PK
         string name
+        text template "Modelo de descrição"
+        json form_fields "Campos dinâmicos"
         datetime created_at
         datetime updated_at
     }
@@ -49,11 +53,14 @@ erDiagram
         int id PK
         string title
         text description
-        string status
+        string status "OPEN, ACCEPTED, IN_PROGRESS, BLOCKED, DONE"
+        string priority "LOW, MEDIUM, HIGH, CRITICAL"
         int requester_id FK
         int assignee_id FK
         int project_id FK
         int topic_id FK
+        datetime first_response_at "SLA"
+        datetime resolved_at "SLA"
         datetime created_at
         datetime updated_at
     }
@@ -73,6 +80,16 @@ erDiagram
         string file "Path"
         int ticket_id FK
         datetime uploaded_at
+    }
+
+    TicketHistory {
+        int id PK
+        int ticket_id FK
+        int user_id FK
+        string action "status_changed, assignee_changed"
+        string old_value
+        string new_value
+        datetime created_at
     }
 ```
 
@@ -111,8 +128,10 @@ Representa um projeto, cliente ou contexto de trabalho.
 *   **members** (`ManyToManyField` -> `User`): Lista de usuários vinculados ao projeto (ex: equipe).
 
 #### `Topic`
-Categorias transversais para organização.
-*   **name** (`CharField`, max: 100): Nome do tópico (ex: "Infra", "Frontend").
+Categorias transversais para organização com suporte a templates.
+*   **name** (`CharField`, max: 100): Nome do tópico (ex: "Acesso GitHub", "Deploy").
+*   **template** (`TextField`, opcional): Modelo de descrição pré-definido para o ticket.
+*   **form_fields** (`JSONField`): Esquema JSON para campos dinâmicos do formulário.
 
 ---
 
@@ -128,10 +147,17 @@ A entidade central de solicitação.
     *   `IN_PROGRESS`: Em Andamento
     *   `BLOCKED`: Travado
     *   `DONE`: Finalizado
+*   **priority** (`CharField`, com choices):
+    *   `LOW`: Baixa
+    *   `MEDIUM`: Média (padrão)
+    *   `HIGH`: Alta
+    *   `CRITICAL`: Crítica
 *   **requester** (`ForeignKey` -> `User`): Quem abriu o chamado.
 *   **assignee** (`ForeignKey` -> `User`, opcional): Quem está cuidando do chamado.
 *   **project** (`ForeignKey` -> `Project`): Projeto de origem.
 *   **topic** (`ForeignKey` -> `Topic`, opcional): Categoria da demanda.
+*   **first_response_at** (`DateTimeField`, opcional): Data/hora da primeira resposta (métrica SLA).
+*   **resolved_at** (`DateTimeField`, opcional): Data/hora da resolução (métrica SLA).
 
 #### `TicketAttachment`
 Arquivos anexados a um ticket.
@@ -145,3 +171,12 @@ Histórico de conversas dentro do ticket.
 *   **author** (`ForeignKey` -> `User`): Quem comentou.
 *   **content** (`TextField`): Conteúdo da mensagem.
 *   **is_internal** (`BooleanField`, padrão `False`): Se marcado, visível apenas para usuários `is_staff`.
+
+#### `TicketHistory`
+Registro de mudanças realizadas no ticket para auditoria.
+*   **ticket** (`ForeignKey` -> `Ticket`): Ticket relacionado.
+*   **user** (`ForeignKey` -> `User`, opcional): Usuário que realizou a ação.
+*   **action** (`CharField`, max: 50): Tipo da ação (ex: `status_changed`, `assignee_changed`).
+*   **old_value** (`CharField`, opcional): Valor anterior.
+*   **new_value** (`CharField`, opcional): Novo valor.
+*   **created_at** (`DateTimeField`): Data/hora da mudança.

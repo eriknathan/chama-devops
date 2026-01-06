@@ -138,12 +138,10 @@
                     {% for i in page_obj.paginator.page_range %}
                     {% if page_obj.number == i %}
                     <span
-                        class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{{
-                        i }}</span>
+                        class="relative z-10 inline-flex items-center bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{{ i }}</span>
                     {% else %}
                     <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}"
-                        class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-foreground ring-1 ring-inset ring-input hover:bg-muted focus:z-20 focus:outline-offset-0">{{
-                        i }}</a>
+                        class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-foreground ring-1 ring-inset ring-input hover:bg-muted focus:z-20 focus:outline-offset-0">{{ i }}</a>
                     {% endif %}
                     {% endfor %}
 
