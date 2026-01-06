@@ -1,0 +1,618 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center gap-3 mb-4">
+            <a href="{% url 'ticket-new' %}" class="text-muted-foreground hover:text-foreground transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+            </a>
+            <span class="text-sm text-muted-foreground">Novo Chamado</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="h-12 w-12 rounded-lg bg-status-purple/10 flex items-center justify-center text-status-purple">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-foreground">Intake de Projeto</h1>
+                <p class="text-sm text-muted-foreground">Preencha as informações para dimensionamento da infraestrutura
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-8">
+        {% csrf_token %}
+
+        <!-- Seleção de Projeto (Vinculação) -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <div class="flex items-center gap-2 mb-6">
+                <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <h2 class="text-lg font-semibold text-foreground">Seleção de Projeto</h2>
+            </div>
+            <div>
+                <label for="project" class="block text-sm font-medium text-foreground mb-1.5">
+                    Selecione o projeto existente <span class="text-destructive">*</span>
+                </label>
+                <select name="project" id="project" required
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
+                    <option value="">Selecione um projeto...</option>
+                    {% for project in projects %}
+                    <option value="{{ project.pk }}">{{ project.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Prioridade (Mapeada da Criticidade, mas exibida para consistência visual ou escondida e controlada?) 
+                 O usuário pediu "Criticidade do Negócio" no form. Vou manter o campo de Prioridade padrão do sistema para consistência técnica, 
+                 mas vou deixá-lo visível e o campo "Criticidade do Negócio" vai ser informativo no corpo do ticket. -->
+            <div class="mt-4">
+                <label for="priority" class="block text-sm font-medium text-foreground mb-1.5">
+                    Criticidade / Prioridade do Chamado <span class="text-destructive">*</span>
+                </label>
+                <div class="relative">
+                    <select name="priority" id="priority" required
+                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
+                        <option value="LOW">Baixa</option>
+                        <option value="MEDIUM" selected>Média</option>
+                        <option value="HIGH">Alta</option>
+                        <option value="CRITICAL">Crítica</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2.1 Informações Gerais do Projeto -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-foreground mb-6 border-b border-border pb-2">2.1 Informações Gerais do
+                Projeto</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-1.5">Nome do Projeto <span
+                            class="text-destructive">*</span></label>
+                    <input type="text" name="nome_projeto" required
+                        class="w-full rounded-lg border border-border px-3 py-2.5 bg-background focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-1.5">Centro de Custo / Squad <span
+                            class="text-destructive">*</span></label>
+                    <input type="text" name="centro_custo" required
+                        class="w-full rounded-lg border border-border px-3 py-2.5 bg-background focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-1.5">Tech Lead Responsável <span
+                            class="text-destructive">*</span></label>
+                    <input type="text" name="tech_lead" required
+                        class="w-full rounded-lg border border-border px-3 py-2.5 bg-background focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-1.5">E-mail de Contato <span
+                            class="text-destructive">*</span></label>
+                    <input type="email" name="email_contato" required
+                        class="w-full rounded-lg border border-border px-3 py-2.5 bg-background focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-1.5">Data de Go-Live Prevista <span
+                            class="text-destructive">*</span></label>
+                    <input type="date" name="data_golive" required
+                        class="w-full rounded-lg border border-border px-3 py-2.5 bg-background focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-1.5">Criticidade do Negócio <span
+                            class="text-destructive">*</span></label>
+                    <div class="flex gap-4 mt-2">
+                        <label class="flex items-center"><input type="radio" name="criticidade_negocio" value="Crítico"
+                                required class="mr-2 text-primary focus:ring-primary"> Crítico</label>
+                        <label class="flex items-center"><input type="radio" name="criticidade_negocio" value="Alto"
+                                class="mr-2 text-primary focus:ring-primary"> Alto</label>
+                        <label class="flex items-center"><input type="radio" name="criticidade_negocio" value="Médio"
+                                class="mr-2 text-primary focus:ring-primary"> Médio</label>
+                        <label class="flex items-center"><input type="radio" name="criticidade_negocio" value="Baixo"
+                                class="mr-2 text-primary focus:ring-primary"> Baixo</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2.2 Arquitetura e Tipo de Aplicação -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-foreground mb-6 border-b border-border pb-2">2.2 Arquitetura e Tipo de
+                Aplicação</h2>
+
+            <div class="space-y-8">
+                <!-- Tipo de Aplicação -->
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-3">Tipo de Aplicação <span
+                            class="text-destructive">*</span></label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="tipo_aplicacao" value="Web Frontend"
+                                class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Web Frontend</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="tipo_aplicacao" value="API/Backend"
+                                class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">API/Backend</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="tipo_aplicacao" value="Worker/Job"
+                                class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Worker/Job</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="tipo_aplicacao" value="Monolito"
+                                class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Monolito</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="tipo_aplicacao" value="BFF"
+                                class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">BFF</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Stack Tecnológica -->
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-3">Stack Tecnológica <span
+                            class="text-destructive">*</span></label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="stack" value="Node.js" class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Node.js</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="stack" value="Java/Spring"
+                                class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Java/Spring</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="stack" value="Python" class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Python</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="stack" value=".NET" class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">.NET</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="checkbox" name="stack" value="Go" class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Go</span>
+                            </div>
+                        </label>
+                        <!-- Outro -->
+                        <label class="cursor-pointer relative h-full group">
+                            <div
+                                class="h-full flex flex-col justify-center p-2 rounded-lg border border-border bg-background group-focus-within:border-primary group-focus-within:ring-1 group-focus-within:ring-primary transition-colors">
+                                <span
+                                    class="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5 ml-1">Outro</span>
+                                <input type="text" name="stack_outro"
+                                    class="w-full bg-transparent border-0 p-0 px-1 text-sm focus:ring-0 placeholder:text-muted-foreground/50 text-foreground"
+                                    placeholder="...">
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Modelo de Deploy -->
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-3">Modelo de Deploy <span
+                            class="text-destructive">*</span></label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <label class="cursor-pointer relative h-full">
+                            <input type="radio" name="deploy_model" value="Container (ECS/EKS)"
+                                class="peer absolute opacity-0 w-0 h-0" required>
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Container (ECS/EKS)</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="radio" name="deploy_model" value="Serverless (Lambda)"
+                                class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Serverless (Lambda)</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="radio" name="deploy_model" value="EC2" class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">EC2</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative h-full">
+                            <input type="radio" name="deploy_model" value="Elastic Beanstalk"
+                                class="peer absolute opacity-0 w-0 h-0">
+                            <div
+                                class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                <span class="text-sm font-medium">Elastic Beanstalk</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Repositório -->
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-3">Repositório de Código <span
+                            class="text-destructive">*</span></label>
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <label class="cursor-pointer relative h-full">
+                                <input type="radio" name="repositorio_tipo" value="GitHub"
+                                    class="peer absolute opacity-0 w-0 h-0" required>
+                                <div
+                                    class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                    <span class="text-sm font-medium">GitHub</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer relative h-full">
+                                <input type="radio" name="repositorio_tipo" value="GitLab"
+                                    class="peer absolute opacity-0 w-0 h-0">
+                                <div
+                                    class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                    <span class="text-sm font-medium">GitLab</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer relative h-full">
+                                <input type="radio" name="repositorio_tipo" value="Bitbucket"
+                                    class="peer absolute opacity-0 w-0 h-0">
+                                <div
+                                    class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                    <span class="text-sm font-medium">Bitbucket</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer relative h-full">
+                                <input type="radio" name="repositorio_tipo" value="CodeCommit"
+                                    class="peer absolute opacity-0 w-0 h-0">
+                                <div
+                                    class="h-full flex items-center justify-center text-center p-3 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-colors">
+                                    <span class="text-sm font-medium">CodeCommit</span>
+                                </div>
+                            </label>
+                        </div>
+                        <input type="text" name="repositorio_url"
+                            placeholder="URL do Repositório (ex: https://github.com/org/repo)"
+                            class="w-full rounded-lg border border-border px-3 py-2.5 bg-background focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-shadow shadow-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2.3 Requisitos de Rede e Acesso -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-foreground mb-6 border-b border-border pb-2">2.3 Requisitos de Rede e
+                Acesso</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Exposição da Aplicação <span
+                            class="text-destructive">*</span></label>
+                    <select name="exposicao" required
+                        class="w-full rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <option value="">Selecione...</option>
+                        <option value="Internet (pública)">Internet (pública)</option>
+                        <option value="Interna (VPN/VPC)">Interna (VPN/VPC)</option>
+                        <option value="Ambas">Ambas</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Requer VPN? <span
+                            class="text-destructive">*</span></label>
+                    <div class="flex items-center gap-4 mb-2">
+                        <label class="flex items-center"><input type="radio" name="vpn" value="Sim" required
+                                class="mr-2"> Sim</label>
+                        <label class="flex items-center"><input type="radio" name="vpn" value="Não" class="mr-2">
+                            Não</label>
+                    </div>
+                    <input type="text" name="vpn_perfil" placeholder="Se sim, qual perfil de acesso?"
+                        class="w-full rounded-lg border border-border px-3 py-2.5 bg-background text-sm">
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-sm font-medium text-foreground mb-2">Domínio / DNS</label>
+                    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                        <input type="text" name="dominio" placeholder="Domínio desejado (ex: app.empresa.com)"
+                            class="flex-1 w-full rounded-lg border border-border px-3 py-2.5 bg-background text-sm">
+                        <div class="flex gap-4 p-2 bg-muted/30 rounded-lg">
+                            <label class="flex items-center"><input type="radio" name="dominio_tipo" value="Novo"
+                                    class="mr-2"> Novo</label>
+                            <label class="flex items-center"><input type="radio" name="dominio_tipo" value="Existente"
+                                    class="mr-2"> Existente</label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Certificado SSL/TLS</label>
+                    <select name="certificado" class="w-full rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <option value="ACM (AWS)">ACM (AWS)</option>
+                        <option value="Certificado próprio">Certificado próprio</option>
+                        <option value="Lets Encrypt">Let's Encrypt</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">WAF / Firewall</label>
+                    <select name="waf" class="w-full rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <option value="AWS WAF">AWS WAF</option>
+                        <option value="CloudFlare">CloudFlare</option>
+                        <option value="Não necessário">Não necessário</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">CDN</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center"><input type="radio" name="cdn" value="CloudFront" class="mr-2">
+                            CloudFront</label>
+                        <label class="flex items-center"><input type="radio" name="cdn" value="CloudFlare" class="mr-2">
+                            CloudFlare</label>
+                        <label class="flex items-center"><input type="radio" name="cdn" value="Não necessário" checked
+                                class="mr-2"> N/A</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2.4 Serviços AWS Necessários -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-foreground mb-6 border-b border-border pb-2">2.4 Serviços AWS
+                Necessários</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <h3 class="font-medium text-primary mb-3">Banco de Dados</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center"><input type="checkbox" name="aws_db" value="RDS PostgreSQL"
+                                class="mr-2"> RDS PostgreSQL</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_db" value="RDS MySQL"
+                                class="mr-2"> RDS MySQL</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_db" value="Aurora"
+                                class="mr-2"> Aurora</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_db" value="DynamoDB"
+                                class="mr-2"> DynamoDB</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_db" value="DocumentDB"
+                                class="mr-2"> DocumentDB</label>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-medium text-primary mb-3">Cache e Mensageria</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center"><input type="checkbox" name="aws_cache"
+                                value="ElastiCache Redis" class="mr-2"> ElastiCache Redis</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_cache"
+                                value="ElastiCache Memcached" class="mr-2"> ElastiCache Memcached</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_cache" value="SQS"
+                                class="mr-2"> SQS</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_cache" value="SNS"
+                                class="mr-2"> SNS</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_cache" value="EventBridge"
+                                class="mr-2"> EventBridge</label>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-medium text-primary mb-3">Storage</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center"><input type="checkbox" name="aws_storage" value="S3"
+                                class="mr-2"> S3 (arquivos/assets)</label>
+                        <label class="flex items-center"><input type="checkbox" name="aws_storage" value="EFS"
+                                class="mr-2"> EFS (file system)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2.5 HA e Performance -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-foreground mb-6 border-b border-border pb-2">2.5 Alta Disponibilidade
+                e Performance</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">SLA Esperado</label>
+                    <select name="sla" class="w-full rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <option value="99.9%">99.9%</option>
+                        <option value="99.95%">99.95%</option>
+                        <option value="99.99%">99.99%</option>
+                        <option value="Não crítico">Não crítico</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Multi-AZ</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center"><input type="radio" name="multiaz" value="Sim" class="mr-2">
+                            Sim</label>
+                        <label class="flex items-center"><input type="radio" name="multiaz" value="Não" checked
+                                class="mr-2"> Não</label>
+                    </div>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-sm font-medium text-foreground mb-2">Auto Scaling</label>
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <input type="number" name="asg_min" placeholder="Min"
+                            class="w-24 rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <span>/</span>
+                        <input type="number" name="asg_max" placeholder="Max"
+                            class="w-24 rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <span class="text-sm text-muted-foreground mr-2">instâncias</span>
+                        <label class="flex items-center"><input type="checkbox" name="asg_metric" value="CPU"
+                                class="mr-2"> Por CPU</label>
+                        <label class="flex items-center"><input type="checkbox" name="asg_metric" value="Memória"
+                                class="mr-2"> Por Memória</label>
+                        <label class="flex items-center"><input type="checkbox" name="asg_metric" value="Requests"
+                                class="mr-2"> Por Requests</label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">RPS Estimado (pico)</label>
+                    <select name="rps" class="w-full rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <option value="< 100">
+                            < 100</option>
+                        <option value="100-1000">100–1000</option>
+                        <option value="1000-10000">1000–10000</option>
+                        <option value="> 10000">> 10000</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Latência Aceitável (P95)</label>
+                    <select name="latencia" class="w-full rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <option value="< 100ms">
+                            < 100ms</option>
+                        <option value="< 500ms">
+                            < 500ms</option>
+                        <option value="< 1s">
+                            < 1s</option>
+                        <option value="Não crítico">Não crítico</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2.6 Observabilidade -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-foreground mb-6 border-b border-border pb-2">2.6 Observabilidade e
+                Monitoramento</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Stack de Logs</label>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center"><input type="checkbox" name="obs_logs" value="CloudWatch Logs"
+                                class="mr-2"> CloudWatch Logs</label>
+                        <label class="flex items-center"><input type="checkbox" name="obs_logs" value="Grafana Loki"
+                                class="mr-2"> Grafana Loki</label>
+                        <label class="flex items-center"><input type="checkbox" name="obs_logs" value="Datadog"
+                                class="mr-2"> Datadog</label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Métricas</label>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center"><input type="checkbox" name="obs_metrics"
+                                value="CloudWatch Metrics" class="mr-2"> CloudWatch Metrics</label>
+                        <label class="flex items-center"><input type="checkbox" name="obs_metrics"
+                                value="Prometheus + Grafana" class="mr-2"> Prometheus + Grafana</label>
+                        <label class="flex items-center"><input type="checkbox" name="obs_metrics" value="Datadog"
+                                class="mr-2"> Datadog</label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Alertas</label>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center"><input type="checkbox" name="obs_alerts"
+                                value="CloudWatch Alarms" class="mr-2"> CloudWatch Alarms</label>
+                        <label class="flex items-center"><input type="checkbox" name="obs_alerts" value="PagerDuty"
+                                class="mr-2"> PagerDuty</label>
+                        <label class="flex items-center"><input type="checkbox" name="obs_alerts" value="Slack"
+                                class="mr-2"> Slack</label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-foreground mb-2">Dashboard</label>
+                    <select name="obs_dashboard"
+                        class="w-full rounded-lg border border-border px-3 py-2.5 bg-background">
+                        <option value="Sim, Grafana dedicado">Sim, Grafana dedicado</option>
+                        <option value="Sim, compartilhado">Sim, compartilhado</option>
+                        <option value="Não necessário">Não necessário</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Observações Finais -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-foreground mb-4">Observações Adicionais</h2>
+            <textarea name="observacoes" rows="4"
+                class="w-full rounded-lg border border-border px-3 py-2.5 bg-background text-foreground"
+                placeholder="Alguma outra consideração importante?"></textarea>
+        </div>
+
+        <!-- Anexos -->
+        <div class="bg-card border border-border rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-foreground mb-4">Anexos</h2>
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-foreground">Arquivos Complementares</label>
+                <div
+                    class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-border border-dashed rounded-lg hover:border-primary/50 transition-colors">
+                    <div class="space-y-1 text-center">
+                        <svg class="mx-auto h-12 w-12 text-muted-foreground" stroke="currentColor" fill="none"
+                            viewBox="0 0 48 48">
+                            <path
+                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="flex text-sm text-muted-foreground justify-center">
+                            <label for="attachments"
+                                class="relative cursor-pointer bg-card rounded-md font-medium text-primary hover:text-primary/90 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                <span>Upload de arquivos</span>
+                                <input id="attachments" name="attachments" type="file" class="sr-only" multiple>
+                            </label>
+                            <p class="pl-1">ou arraste e solte</p>
+                        </div>
+                        <p class="text-xs text-muted-foreground">PNG, JPG, PDF, DOCX até 10MB</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aviso Final -->
+        <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 flex items-start gap-3">
+            <svg class="h-5 w-5 text-yellow-600 dark:text-yellow-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <p class="text-sm text-yellow-700 dark:text-yellow-400">
+                <strong>Atenção:</strong> Solicitações sem informações completas ou sem definição de responsáveis
+                poderão ser devolvidas para correção.
+            </p>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-end gap-3 pt-4">
+            <a href="{% url 'ticket-new' %}"
+                class="px-5 py-2.5 border border-input rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted transition-colors">Cancelar</a>
+            <button type="submit"
+                class="inline-flex items-center gap-2 px-5 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Enviar Solicitação
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

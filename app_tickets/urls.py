@@ -7,6 +7,7 @@ urlpatterns = [
     path('new/repository/', views.RepositoryFormView.as_view(), name='ticket-form-repository'),
     path('new/github-access/', views.GitHubAccessFormView.as_view(), name='ticket-form-github-access'),
     path('new/downtime/', views.DowntimeFormView.as_view(), name='ticket-form-downtime'),
+    path('new/project-intake/', views.ProjectIntakeFormView.as_view(), name='ticket-form-project-intake'),
     path('<int:pk>/', views.TicketDetailView.as_view(), name='ticket-detail'),
     path('<int:pk>/edit/', views.TicketUpdateView.as_view(), name='ticket-edit'),
     path('<int:pk>/delete/', views.TicketDeleteView.as_view(), name='ticket-delete'),

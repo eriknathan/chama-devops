@@ -1,130 +1,9 @@
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, get_object_or_404
-from .models import Ticket, TicketAttachment, Comment
-from .forms import TicketForm, CommentForm
-
-from django.db.models import Q
-from django.contrib.auth import get_user_model
-from app_management.models import Project
-
-class TicketListView(LoginRequiredMixin, ListView):
-    """Lista app_tickets com filtros."""
-    model = Ticket
-    template_name = 'app_tickets/ticket_list.html'
-    context_object_name = 'tickets'
-    ordering = ['-created_at']
-
-    def get_queryset(self):
-        """Filtra app_tickets baseado em status, projeto, responsável e busca."""
-        queryset = super().get_queryset()
-        
-        # Base filter: Staff sees all, others see only their requests
-        if not self.request.user.is_staff:
-            queryset = queryset.filter(requester=self.request.user)
-            
-        # Search (Title or Description)
-        search_query = self.request.GET.get('search')
-        if search_query:
-            queryset = queryset.filter(
-                Q(title__icontains=search_query) | 
-                Q(description__icontains=search_query)
-            )
-            
-        # Filter by Project
-        project_id = self.request.GET.get('project')
-        if project_id:
-            queryset = queryset.filter(project_id=project_id)
-            
-        # Filter by Status
-        status = self.request.GET.get('status')
-        if status:
-            queryset = queryset.filter(status=status)
-            
-        # Filter by Assignee (Developer)
-        assignee_id = self.request.GET.get('assignee')
-        if assignee_id:
-            queryset = queryset.filter(assignee_id=assignee_id)
-            
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['projects'] = Project.objects.all()
-        context['developers'] = get_user_model().objects.all()
-        context['status_choices'] = Ticket.STATUS_CHOICES
-        return context
-
-class TicketDetailView(LoginRequiredMixin, DetailView):
-    """Exibe detalhes de um ticket."""
-    model = Ticket
-    template_name = 'app_tickets/ticket_detail.html'
-    context_object_name = 'ticket'
-
-
-    def get_queryset(self):
-        # Allow user to see only their app_tickets, staff sees all
-        queryset = super().get_queryset()
-        if self.request.user.is_staff:
-            return queryset
-        return queryset.filter(requester=self.request.user)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['comment_form'] = CommentForm()
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        """Processa a criação de comentários."""
-        self.object = self.get_object()
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.ticket = self.object
-            comment.author = request.user
-            comment.save()
-            return redirect('ticket-detail', pk=self.object.pk)
-        return self.render_to_response(self.get_context_data(comment_form=form))
-
-
-def ticket_action_view(request, pk, action):
-    """Executa ações de mudança de estado em um ticket."""
-    ticket = get_object_or_404(Ticket, pk=pk)
-    
-    if not request.user.is_staff:
-        # Only staff can perform actions
-        return redirect('ticket-detail', pk=pk)
-
-    if action == 'take':
-        ticket.assignee = request.user
-        ticket.status = Ticket.STATUS_ACCEPTED
-    elif action == 'start':
-        ticket.status = Ticket.STATUS_IN_PROGRESS
-    elif action == 'block':
-        ticket.status = Ticket.STATUS_BLOCKED
-    elif action == 'finish':
-        ticket.status = Ticket.STATUS_DONE
-    
-    ticket._current_user = request.user
-    ticket.save()
-    return redirect('ticket-detail', pk=pk)
-
-class TopicSelectView(LoginRequiredMixin, UserPassesTestMixin, ListView):
-    """Exibe lista de tópicos para seleção antes de criar ticket."""
-    model = None
-    template_name = 'app_tickets/topic_select.html'
-    context_object_name = 'topics'
-
-    def test_func(self):
-        # Admins (staff) cannot create tickets, only common users
-        return not self.request.user.is_staff
-
-    def get_queryset(self):
-        from app_management.models import Topic
-        return Topic.objects.all()
-
-
+from ..models import Ticket, TicketAttachment
+from app_management.models import Project, Topic
 
 class RepositoryFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     """Formulário customizado para Solicitação de Novo Repositório."""
@@ -138,7 +17,6 @@ class RepositoryFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        from app_management.models import Topic, Project
         context['projects'] = Project.objects.all()
         try:
             context['topic'] = Topic.objects.get(name='Solicitação de Novo Repositório')
@@ -147,8 +25,6 @@ class RepositoryFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        from app_management.models import Topic, Project
-        
         # Get the selected project
         project_id = request.POST.get('project')
         project = get_object_or_404(Project, pk=project_id)
@@ -229,7 +105,6 @@ class GitHubAccessFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        from app_management.models import Topic, Project
         context['projects'] = Project.objects.all()
         try:
             context['topic'] = Topic.objects.get(name='Gerenciamento de Acesso ao GitHub')
@@ -238,8 +113,6 @@ class GitHubAccessFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        from app_management.models import Topic, Project
-        
         # Get the selected project
         project_id = request.POST.get('project')
         project = get_object_or_404(Project, pk=project_id)
@@ -321,7 +194,6 @@ class DowntimeFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        from app_management.models import Topic, Project
         context['projects'] = Project.objects.all()
         try:
             context['topic'] = Topic.objects.get(name='Reporte de Indisponibilidade')
@@ -330,8 +202,6 @@ class DowntimeFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        from app_management.models import Topic, Project
-        
         # Get selected project
         project_id = request.POST.get('project')
         project = get_object_or_404(Project, pk=project_id)
@@ -401,76 +271,167 @@ class DowntimeFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return redirect(self.success_url)
 
 
-class TicketUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """Atualiza um ticket existente."""
+class ProjectIntakeFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    """Formulário customizado para Intake de Projeto."""
     model = Ticket
-    form_class = TicketForm
-    template_name = 'app_tickets/ticket_edit.html'
-    
-    def test_func(self):
-        """Verifica se o usuário pode editar o ticket."""
-        obj = self.get_object()
-        return self.request.user.is_staff or obj.requester == self.request.user
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        from app_management.models import Topic
-        import json
-        topics = Topic.objects.all()
-        # Create a dictionary of {topic_id: template_text}
-        topic_templates = {topic.pk: topic.template for topic in topics if topic.template}
-        context['topic_templates'] = json.dumps(topic_templates)
-        
-        # Create a dictionary of {topic_id: form_fields_json}
-        topic_forms = {topic.pk: topic.form_fields for topic in topics if topic.form_fields}
-        context['topic_forms'] = json.dumps(topic_forms)
-        
-        return context
-
-    def form_valid(self, form):
-        """Injeta o usuário atual para o histórico antes de salvar."""
-        ticket = form.save(commit=False)
-        ticket._current_user = self.request.user
-        ticket.save()
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy('ticket-detail', kwargs={'pk': self.object.pk})
-
-
-class TicketDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """Deleta um ticket existente."""
-    model = Ticket
-    template_name = 'app_tickets/ticket_confirm_delete.html'
+    fields = []
+    template_name = 'app_tickets/forms/project_intake_form.html'
     success_url = reverse_lazy('ticket-list')
 
     def test_func(self):
-        """Verifica se o usuário pode deletar o ticket."""
-        obj = self.get_object()
-        return self.request.user.is_staff or obj.requester == self.request.user
+        return not self.request.user.is_staff
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['projects'] = Project.objects.all()
+        # Fallback to None if topic doesn't exist, logic will handle it
+        try:
+            context['topic'] = Topic.objects.get(name='Intake de Projeto')
+        except Topic.DoesNotExist:
+            context['topic'] = None
+        return context
 
-class TicketPDFView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
-    """Gera um PDF do ticket."""
-    model = Ticket
-    template_name = 'app_tickets/ticket_pdf.html'
-    context_object_name = 'ticket'
-
-    def test_func(self):
-        """A mesma permissão do detalhe: staff ou dono."""
-        obj = self.get_object()
-        return self.request.user.is_staff or obj.requester == self.request.user
-
-    def render_to_response(self, context, **response_kwargs):
-        """Renderiza o template para PDF e retorna como download."""
-        from django.template.loader import render_to_string
-        from weasyprint import HTML
-        from django.http import HttpResponse
-
-        html_string = render_to_string(self.template_name, context, request=self.request)
+    def post(self, request, *args, **kwargs):
+        # Project & Topic
+        project_id = request.POST.get('project')
+        project = get_object_or_404(Project, pk=project_id)
         
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="ticket-{self.object.pk}.pdf"'
+        try:
+            topic = Topic.objects.get(name='Intake de Projeto')
+        except Topic.DoesNotExist:
+            topic = None
+
+        # 2.1 Info Gerais
+        nome_projeto = request.POST.get('nome_projeto', '')
+        centro_custo = request.POST.get('centro_custo', '')
+        tech_lead = request.POST.get('tech_lead', '')
+        email_contato = request.POST.get('email_contato', '')
+        data_golive = request.POST.get('data_golive', '')
+        criticidade_negocio = request.POST.get('criticidade_negocio', '')
+
+        # 2.2 Arquitetura
+        tipos_app = request.POST.getlist('tipo_aplicacao')
+        stack = request.POST.getlist('stack')
+        stack_outro = request.POST.get('stack_outro', '')
+        if stack_outro:
+            stack.append(f'Outro: {stack_outro}')
+        deploy_model = request.POST.get('deploy_model', '')
+        repo_tipo = request.POST.get('repositorio_tipo', '')
+        repo_url = request.POST.get('repositorio_url', '')
+
+        # 2.3 Rede
+        exposicao = request.POST.get('exposicao', '')
+        vpn = request.POST.get('vpn', '')
+        vpn_perfil = request.POST.get('vpn_perfil', '')
+        dominio = request.POST.get('dominio', '')
+        dominio_tipo = request.POST.get('dominio_tipo', '')
+        certificado = request.POST.get('certificado', '')
+        waf = request.POST.get('waf', '')
+        cdn = request.POST.get('cdn', '')
+
+        # 2.4 AWS
+        aws_db = request.POST.getlist('aws_db')
+        aws_cache = request.POST.getlist('aws_cache')
+        aws_storage = request.POST.getlist('aws_storage')
+
+        # 2.5 HA & Performance
+        sla = request.POST.get('sla', '')
+        multiaz = request.POST.get('multiaz', '')
+        asg_min = request.POST.get('asg_min', '')
+        asg_max = request.POST.get('asg_max', '')
+        asg_metrics = request.POST.getlist('asg_metric')
+        rps = request.POST.get('rps', '')
+        latencia = request.POST.get('latencia', '')
+
+        # 2.6 Obs
+        obs_logs = request.POST.getlist('obs_logs')
+        obs_metrics = request.POST.getlist('obs_metrics')
+        obs_alerts = request.POST.getlist('obs_alerts')
+        obs_dashboard = request.POST.get('obs_dashboard', '')
+        observacoes = request.POST.get('observacoes', '')
+
+        # Description Builder
+        description = f"""### 2.1 Informações Gerais
+**Nome do Projeto**: {nome_projeto}
+**Centro de Custo**: {centro_custo}
+**Tech Lead**: {tech_lead}
+**E-mail**: {email_contato}
+**Go-Live**: {data_golive}
+**Criticidade Negócio**: {criticidade_negocio}
+
+---
+
+### 2.2 Arquitetura
+**Tipo Aplicação**: {', '.join(tipos_app)}
+**Stack**: {', '.join(stack)}
+**Deploy**: {deploy_model}
+**Repositório**: {repo_tipo} ({repo_url})
+
+---
+
+### 2.3 Rede
+**Exposição**: {exposicao}
+**VPN**: {vpn} ({vpn_perfil if vpn == 'Sim' else 'N/A'})
+**Domínio**: {dominio} ({dominio_tipo})
+**Certificado**: {certificado}
+**WAF**: {waf}
+**CDN**: {cdn}
+
+---
+
+### 2.4 Serviços AWS
+**Banco de Dados**: {', '.join(aws_db) if aws_db else 'Nenhum'}
+**Cache/Msg**: {', '.join(aws_cache) if aws_cache else 'Nenhum'}
+**Storage**: {', '.join(aws_storage) if aws_storage else 'Nenhum'}
+
+---
+
+### 2.5 HA e Performance
+**SLA**: {sla}
+**Multi-AZ**: {multiaz}
+**Auto Scaling**: {asg_min}-{asg_max} instâncias (Por: {', '.join(asg_metrics)})
+**RPS**: {rps}
+**Latência**: {latencia}
+
+---
+
+### 2.6 Observabilidade
+**Logs**: {', '.join(obs_logs) if obs_logs else 'Padrão'}
+**Métricas**: {', '.join(obs_metrics) if obs_metrics else 'Padrão'}
+**Alertas**: {', '.join(obs_alerts) if obs_alerts else 'Nenhum'}
+**Dashboard**: {obs_dashboard}
+
+---
+
+**Observações Adicionais**:
+{observacoes}
+"""
+
+        # Priority Mapping
+        priority_map = {
+            'Crítico': Ticket.PRIORITY_CRITICAL,
+            'Alto': Ticket.PRIORITY_HIGH,
+            'Médio': Ticket.PRIORITY_MEDIUM,
+            'Baixo': Ticket.PRIORITY_LOW
+        }
+        # Use explicit priority if provided, else map from business criticality
+        form_priority = request.POST.get('priority')
+        business_priority = priority_map.get(criticidade_negocio, Ticket.PRIORITY_MEDIUM)
         
-        HTML(string=html_string, base_url=self.request.build_absolute_uri('/')).write_pdf(response)
-        return response
+        ticket = Ticket.objects.create(
+            title=f'Intake: {nome_projeto}',
+            description=description,
+            project=project,
+            topic=topic,
+            requester=request.user,
+            priority=form_priority or business_priority,
+        )
+        ticket._current_user = request.user
+        ticket.save()
+
+        # Files
+        files = request.FILES.getlist('attachments')
+        for file in files:
+            TicketAttachment.objects.create(ticket=ticket, file=file)
+
+        return redirect(self.success_url)
