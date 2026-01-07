@@ -3,227 +3,237 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Ticket #{{ ticket.pk }}</title>
+    <title>Ticket #{{ ticket.pk }} - Relatório Técnico</title>
     <style>
         @page {
             size: A4;
-            margin: 0;
-
-            @top-right {
-                content: "Ticket #{{ ticket.pk }}";
-                font-family: 'Inter', sans-serif;
-                font-size: 9px;
-                color: #64748b;
-                margin-top: 1cm;
-                margin-right: 1.5cm;
-            }
+            margin: 1.5cm;
+            margin-top: 2cm;
 
             @bottom-center {
-                content: "Pág " counter(page);
-                font-family: 'Inter', sans-serif;
-                font-size: 9px;
+                content: "CONFIDENCIAL • Chama DevOps • CHAMA DEVOPS \A Página " counter(page) " de " counter(pages);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 8px;
                 color: #94a3b8;
+                white-space: pre-wrap;
+                text-align: center;
                 margin-bottom: 1cm;
             }
         }
 
-        @font-face {
-            font-family: 'Inter';
-            font-style: normal;
-            font-weight: 400;
-            src: local('Verdana');
-            /* Fallback seguro */
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            color: #334155;
-            line-height: 1.6;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #1f2937;
+            /* Gray 900 */
+            line-height: 1.5;
             font-size: 11px;
-            margin: 0;
-            background-color: #fff;
         }
 
-        /* HEADER */
-        .header {
-            background-color: #0f172a;
-            /* Slate 900 */
-            color: white;
-            padding: 40px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            margin: 0;
+        /* TIPOGRAFIA */
+        h1 {
             font-size: 24px;
-            font-weight: 700;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 0;
+            line-height: 1.1;
             letter-spacing: -0.5px;
         }
 
-        .header .subtitle {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .meta-generated {
-            text-align: right;
-            font-size: 9px;
-            color: #cbd5e1;
-        }
-
-        /* CONTENT WRAPPER */
-        .container {
-            padding: 40px 50px;
-        }
-
-        /* TITLE SECTION */
-        .ticket-main {
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 25px;
-            margin-bottom: 30px;
-        }
-
-        .ticket-id {
-            color: #64748b;
-            font-weight: 600;
+        h2 {
             font-size: 14px;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .ticket-title {
+            font-weight: 700;
+            text-transform: uppercase;
             margin: 0;
-            font-size: 26px;
-            color: #0f172a;
-            line-height: 1.3;
+            padding-left: 10px;
+            border-left: 4px solid #f97316;
+            letter-spacing: 0.5px;
         }
 
-        /* GRID LAYOUTS */
-        .row {
+        /* HEADER */
+        .header-section {
             display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .header-top-label {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9px;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header-meta {
+            text-align: right;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9px;
+            color: #6b7280;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        .header-divider {
+            border-bottom: 3px solid #111827;
+            /* Black line */
+            margin-bottom: 25px;
+        }
+
+        /* BADGES (Retangulares e Sólidos) */
+        .badges-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 35px;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 2px;
+            /* Retangular */
+            color: white;
+            display: inline-block;
+        }
+
+        .badge-orange {
+            background-color: #f97316;
+        }
+
+        .badge-dark {
+            background-color: #111827;
+        }
+
+        .badge-light {
+            background-color: white;
+            color: #1f2937;
+            border: 1px solid #e5e7eb;
+            padding: 5px 11px;
+            /* Compensate border */
+        }
+
+        /* GRID RESUMO (Com divisórias verticais) */
+        .summary-grid {
+            display: table;
+            /* WeasyPrint friendly grid */
+            width: 100%;
+            margin-bottom: 40px;
+            border-collapse: collapse;
+        }
+
+        .summary-col {
+            display: table-cell;
+            width: 33%;
+            padding-right: 20px;
+            vertical-align: top;
+            border-right: 1px solid #e5e7eb;
+            /* Divisor vertical */
+            padding-left: 20px;
+        }
+
+        .summary-col:first-child {
+            padding-left: 0;
+        }
+
+        .summary-col:last-child {
+            border-right: none;
+        }
+
+        .field-label {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+        }
+
+        .field-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .field-sub {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        /* SEÇÕES */
+        .section-wrapper {
+            margin-top: 40px;
+        }
+
+        .section-content {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #374151;
+        }
+
+        /* COMENTÁRIOS */
+        .comment-item {
             margin-bottom: 20px;
         }
 
-        .col {
-            flex: 1;
-            padding-right: 20px;
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 11px;
         }
 
-        .col-30 {
-            width: 30%;
-            flex: none;
+        .comment-box {
+            background-color: #f9fafb;
+            /* Gray 50 */
+            padding: 12px 15px;
+            border-radius: 0;
+            color: #374151;
+            font-size: 11px;
+            line-height: 1.6;
         }
 
-        .col-70 {
-            width: 70%;
-            flex: none;
+        /* FIX SVGs Sizing */
+        svg {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
         }
 
-        /* KEY-VALUE BOXES */
-        .info-box {
-            background: #f8fafc;
-            border-radius: 8px;
-            padding: 15px;
-            border: 1px solid #e2e8f0;
-            height: 100%;
+        .w-6 {
+            width: 24px;
         }
 
-        .label {
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #64748b;
-            margin-bottom: 4px;
-            font-weight: 600;
+        .h-6 {
+            height: 24px;
         }
 
-        .value {
-            font-size: 13px;
-            color: #0f172a;
-            font-weight: 500;
+        .w-5 {
+            width: 20px;
         }
 
-        /* BADGES */
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
+        .h-5 {
+            height: 20px;
         }
 
-        /* Cores dos badges para WeasyPrint */
-        .badge-status {
-            background: #e2e8f0;
-            color: #475569;
+        .w-4 {
+            width: 16px;
         }
 
-        .bg-open {
-            background: #fef9c3;
-            color: #a16207;
+        .h-4 {
+            height: 16px;
         }
 
-        /* Yellow */
-        .bg-progress {
-            background: #ffedd5;
-            color: #9a3412;
-        }
-
-        /* Orange */
-        .bg-done {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        /* Emerald */
-        .bg-priority-high {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        /* Red */
-        .bg-priority-med {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        /* Blue */
-
-        /* DESCRIPTION */
-        .description-section {
-            margin-top: 30px;
-        }
-
-        .section-header {
-            font-size: 14px;
-            font-weight: 700;
-            color: #334155;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .markdown-content {
-            font-size: 12px;
-            background: #fafafa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #3b82f6;
-            /* Accent color */
-        }
-
-        /* TIMELINE / HISTORY */
+        /* HISTÓRICO (Estilo Clean Table) */
         .history-table {
             width: 100%;
             border-collapse: collapse;
@@ -233,165 +243,200 @@
 
         .history-table th {
             text-align: left;
-            color: #64748b;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 8px 4px;
-            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 9px;
+            color: #6b7280;
+            padding-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .history-table td {
-            border-bottom: 1px solid #f1f5f9;
-            padding: 8px 4px;
-            color: #334155;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
         }
 
-        /* FOOTER */
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 8px;
-            color: #94a3b8;
-            border-top: 1px dashed #e2e8f0;
-            padding-top: 20px;
+        .action-pill {
+            background-color: #f3f4f6;
+            padding: 3px 8px;
+            border-radius: 2px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9px;
+            font-weight: bold;
+            color: #374151;
+            text-transform: uppercase;
+        }
+
+        /* CSS Helpers for Markdown Render Interop */
+        .text-primary {
+            color: #f97316 !important;
+        }
+
+        .text-muted-foreground {
+            color: #6b7280 !important;
+        }
+
+        .font-mono {
+            font-family: 'Courier New', Courier, monospace !important;
+        }
+
+        .border-l-2 {
+            border-left: 3px solid #f97316 !important;
+            padding-left: 12px !important;
+            margin-left: 0 !important;
+        }
+
+        .mt-24 {
+            margin-top: 30px !important;
+        }
+
+        /* Adjust sizing for PDF */
+        .pb-6 {
+            padding-bottom: 10px !important;
+        }
+
+        .border-b {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        /* Icons */
+        .icon-sm {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            background-color: #cbd5e1;
+            margin-right: 4px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="header">
+    <!-- Header -->
+    <div class="header-section">
         <div>
-            <h1>Chama DevOps</h1>
-            <div class="subtitle">Relatório Oficial de Ticket</div>
+            <div class="header-top-label">
+                📄 RELATÓRIO TÉCNICO #{{ ticket.pk }}
+            </div>
+            <h1>{{ ticket.title }}</h1>
         </div>
-        <div class="meta-generated">
-            Gerado por: {{ request.user.get_full_name|default:request.user.email }}<br>
-            Em: {% now "d/m/Y \à\s H:i" %}
+        <div class="header-meta">
+            GERADO EM<br>
+            {% now "d/m/Y H:i" %}<br>
+            POR {{ request.user.get_full_name|upper }}
         </div>
     </div>
 
-    <div class="container">
+    <div class="header-divider"></div>
 
-        <div class="ticket-main">
-            <span class="ticket-id">#{{ ticket.pk }} • {{ ticket.topic.name|default:"Tópico Geral" }}</span>
-            <h2 class="ticket-title">{{ ticket.title }}</h2>
+    <!-- Status Badges -->
+    <div class="badges-row">
+        <!-- Status -->
+        {% if ticket.status == 'OPEN' %}
+        <span class="badge badge-orange">EM ABERTO</span>
+        {% elif ticket.status == 'IN_PROGRESS' %}
+        <span class="badge badge-orange">EM ANDAMENTO</span>
+        {% elif ticket.status == 'DONE' %}
+        <span class="badge badge-dark" style="background-color: #10b981;">FINALIZADO</span>
+        {% else %}
+        <span class="badge badge-dark">{{ ticket.get_status_display|upper }}</span>
+        {% endif %}
+
+        <!-- Priority -->
+        <span class="badge badge-dark">
+            PRIORIDADE: {{ ticket.get_priority_display|upper }}
+        </span>
+
+        <!-- Project -->
+        <span class="badge badge-light">
+            {{ ticket.project.name|upper }}
+        </span>
+    </div>
+
+    <!-- Summary Grid -->
+    <div class="summary-grid">
+        <div class="summary-col">
+            <div class="field-label">👤 SOLICITANTE</div>
+            <div class="field-value">{{ ticket.requester.get_full_name }}</div>
+            <div class="field-sub">{{ ticket.requester.email }}</div>
         </div>
-
-        <!-- Status Bar -->
-        <div style="margin-bottom: 30px;">
-            <span class="badge 
-                {% if ticket.status == 'OPEN' %}bg-open
-                {% elif ticket.status == 'IN_PROGRESS' %}bg-progress
-                {% elif ticket.status == 'DONE' %}bg-done
-                {% else %}badge-status{% endif %}">
-                Status: {{ ticket.get_status_display }}
-            </span>
-
-            <span class="badge 
-                {% if ticket.priority == 'HIGH' or ticket.priority == 'CRITICAL' %}bg-priority-high
-                {% elif ticket.priority == 'MEDIUM' %}bg-priority-med
-                {% else %}badge-status{% endif %}">
-                Prioridade: {{ ticket.get_priority_display }}
-            </span>
-
-            <span class="badge badge-status">Projeto: {{ ticket.project.name }}</span>
+        <div class="summary-col">
+            <div class="field-label">🔧 RESPONSÁVEL</div>
+            <div class="field-value">{{ ticket.assignee.get_full_name|default:"Não atribuído" }}</div>
+            {% if ticket.assignee %}<div class="field-sub">{{ ticket.assignee.email }}</div>{% endif %}
         </div>
-
-        <div class="row">
-            <div class="col">
-                <div class="info-box">
-                    <div class="label">Solicitante</div>
-                    <div class="value">{{ ticket.requester.get_full_name|default:ticket.requester.email }}</div>
-                    <div style="font-size: 10px; color: #64748b; margin-top: 2px;">{{ ticket.requester.email }}</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="info-box">
-                    <div class="label">Responsável Técnico</div>
-                    <div class="value">{{ ticket.assignee.get_full_name|default:ticket.assignee.email|default:"-- Pendente --" }}</div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="info-box">
-                    <div class="label">Datas</div>
-                    <div style="font-size: 10px; margin-bottom: 3px;">
-                        Criado: <strong>{{ ticket.created_at|date:"d/m/Y H:i" }}</strong>
-                    </div>
-                    {% if ticket.resolved_at %}
-                    <div style="font-size: 10px;">
-                        Resolvido: <strong>{{ ticket.resolved_at|date:"d/m/Y H:i" }}</strong>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
+        <div class="summary-col">
+            <div class="field-label">📅 DATA CRIAÇÃO</div>
+            <div class="field-value">{{ ticket.created_at|date:"d/m/Y" }}</div>
+            <div class="field-sub">{{ ticket.created_at|date:"H:i" }}</div>
         </div>
+    </div>
 
-        <div class="description-section">
-            <div class="section-header">Descrição Detalhada</div>
-            <div class="markdown-content">
-                {% load markdown_extras %}
-                {{ ticket.description|render_markdown }}
-            </div>
+    <!-- Description -->
+    <div class="section-wrapper">
+        <h2>DESCRIÇÃO DO CHAMADO</h2>
+        <div class="section-content">
+            {% load markdown_extras %}
+            {{ ticket.description|render_markdown }}
         </div>
+    </div>
 
-        {% if ticket.comments.exists %}
-        <div class="description-section" style="page-break-before: always;">
-            <div class="section-header">Diário de Bordo (Comentários)</div>
+    <!-- Comments -->
+    {% if ticket.comments.exists %}
+    <div class="section-wrapper" style="page-break-before: always;">
+        <h2>DIÁRIO DE BORDO</h2>
+        <div class="section-content">
             {% for comment in ticket.comments.all %}
-            <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dotted #cbd5e1;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <div style="font-weight: 700; color: #334155; font-size: 11px;">
-                        {{ comment.author.get_full_name|default:comment.author.email }}
-                        {% if comment.is_internal %}
-                        <span
-                            style="background: #fef08a; padding: 1px 4px; border-radius: 3px; font-size: 9px; color: #854d0e;">NOTA
-                            INTERNA</span>
-                        {% endif %}
-                    </div>
-                    <div style="font-size: 9px; color: #94a3b8;">{{ comment.created_at|date:"d/m/Y H:i" }}</div>
+            <div class="comment-item">
+                <div class="comment-header">
+                    <span style="font-weight: 700; color: #111827;">{{
+                        comment.author.get_full_name|default:comment.author.email }}</span>
+                    <span style="font-family: 'Courier New', monospace; color: #6b7280;">{{
+                        comment.created_at|date:"d/m/Y H:i" }}</span>
                 </div>
-                <div style="font-size: 11px; white-space: pre-wrap;">{{ comment.content }}</div>
+                <div class="comment-box">
+                    {{ comment.content|linebreaksbr }}
+                </div>
             </div>
             {% endfor %}
         </div>
-        {% endif %}
-
-        {% if ticket.history.exists %}
-        <div class="description-section">
-            <div class="section-header">Trilha de Auditoria</div>
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th width="20%">Data/Hora</th>
-                        <th width="25%">Usuário</th>
-                        <th width="15%">Ação</th>
-                        <th>Detalhes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for h in ticket.history.all %}
-                    <tr>
-                        <td>{{ h.created_at|date:"d/m/Y H:i:s" }}</td>
-                        <td>{{ h.user.get_full_name|default:"Sistema" }}</td>
-                        <td>{{ h.action }}</td>
-                        <td>
-                            {% if h.old_value %}
-                            <span style="color:#ef4444;text-decoration:line-through">{{ h.old_value }}</span> &rarr;
-                            {% endif %}
-                            <span style="color:#10b981;font-weight:600">{{ h.new_value }}</span>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-
-        <div class="footer">
-            Este documento foi gerado automaticamente pelo sistema Chama DevOps.<br>
-            Confidencialidade: As informações contidas aqui são de uso interno.
-        </div>
     </div>
+    {% endif %}
+
+    <!-- History -->
+    {% if ticket.history.exists %}
+    <div class="section-wrapper">
+        <h2>TRILHA DE AUDITORIA</h2>
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th width="15%">DATA</th>
+                    <th width="20%">USUÁRIO</th>
+                    <th width="15%">AÇÃO</th>
+                    <th>ALTERAÇÃO</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for h in ticket.history.all %}
+                <tr>
+                    <td style="font-family: 'Courier New', monospace;">{{ h.created_at|date:"d/m/Y H:i" }}</td>
+                    <td>{{ h.user.get_full_name|default:"Sistema" }}</td>
+                    <td><span class="action-pill">{{ h.action }}</span></td>
+                    <td style="font-family: 'Courier New', monospace;">
+                        {% if h.old_value %}
+                        <span style="color: #9ca3af; text-decoration: line-through;">{{ h.old_value }}</span>
+                        <span style="color: #d1d5db; margin: 0 5px;">➔</span>
+                        {% endif %}
+                        <span style="color: #111827; font-weight: 600;">{{ h.new_value }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
 
 </body>
 
