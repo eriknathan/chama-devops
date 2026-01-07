@@ -5,13 +5,15 @@
     <!-- Header -->
     <div class="mb-8">
         <div class="flex items-center gap-3 mb-4">
-            <a href="{% url 'ticket-new' %}" class="text-muted-foreground hover:text-foreground transition-colors">
+            <a href="{% if is_editing %}{% url 'ticket-detail' object.pk %}{% else %}{% url 'ticket-new' %}{% endif %}"
+                class="text-muted-foreground hover:text-foreground transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
             </a>
-            <span class="text-sm text-muted-foreground">Novo Chamado</span>
+            <span class="text-sm text-muted-foreground">{% if is_editing %}Editar Chamado #{{ object.pk }}{% else %}Novo
+                Chamado{% endif %}</span>
         </div>
         <div class="flex items-center gap-4">
             <div class="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
@@ -21,8 +23,10 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-2xl font-bold text-foreground">Gerenciamento de Acesso ao GitHub</h1>
-                <p class="text-sm text-muted-foreground">Solicite adição ou remoção de acesso a repositórios</p>
+                <h1 class="text-2xl font-bold text-foreground">{% if is_editing %}Editar Acesso GitHub{% else
+                    %}Gerenciamento de Acesso ao GitHub{% endif %}</h1>
+                <p class="text-sm text-muted-foreground">{% if is_editing %}Atualize a solicitação de acesso{% else
+                    %}Solicite adição ou remoção de acesso a repositórios{% endif %}</p>
             </div>
         </div>
     </div>
@@ -48,7 +52,8 @@
                     class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
                     <option value="">Selecione um projeto...</option>
                     {% for project in projects %}
-                    <option value="{{ project.pk }}">{{ project.name }}</option>
+                    <option value="{{ project.pk }}" {% if object.project.pk==project.pk %}selected{% endif %}>{{
+                        project.name }}</option>
                     {% endfor %}
                 </select>
                 <p class="text-xs text-muted-foreground mt-1">Escolha o projeto ao qual este chamado está relacionado
@@ -63,10 +68,12 @@
                 <div class="relative">
                     <select name="priority" id="priority" required
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
-                        <option value="LOW">Baixa</option>
-                        <option value="MEDIUM" selected>Média</option>
-                        <option value="HIGH">Alta</option>
-                        <option value="CRITICAL">Crítica</option>
+                        <option value="LOW" {% if object.priority=='LOW' %}selected{% endif %}>Baixa</option>
+                        <option value="MEDIUM" {% if not object.priority or object.priority=='MEDIUM' %}selected{% endif
+                            %}>Média</option>
+                        <option value="HIGH" {% if object.priority=='HIGH' %}selected{% endif %}>Alta</option>
+                        <option value="CRITICAL" {% if object.priority=='CRITICAL' %}selected{% endif %}>Crítica
+                        </option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
                         <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -97,7 +104,8 @@
                 <div class="grid grid-cols-2 gap-4">
                     <label
                         class="relative flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                        <input type="radio" name="tipo_solicitacao" value="Adicionar" required class="sr-only peer">
+                        <input type="radio" name="tipo_solicitacao" value="Adicionar" required class="sr-only peer" {%
+                            if tipo_solicitacao=='Adicionar' %}checked{% endif %}>
                         <div class="text-center">
                             <svg class="mx-auto h-8 w-8 text-status-emerald mb-2" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -109,7 +117,8 @@
                     </label>
                     <label
                         class="relative flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                        <input type="radio" name="tipo_solicitacao" value="Remover" required class="sr-only peer">
+                        <input type="radio" name="tipo_solicitacao" value="Remover" required class="sr-only peer" {% if
+                            tipo_solicitacao=='Remover' %}checked{% endif %}>
                         <div class="text-center">
                             <svg class="mx-auto h-8 w-8 text-status-red mb-2" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -139,6 +148,7 @@
                         Nome completo <span class="text-destructive">*</span>
                     </label>
                     <input type="text" name="nome_completo" id="nome_completo" required placeholder="João da Silva"
+                        value="{{ nome_completo|default:'' }}"
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
                 </div>
 
@@ -148,7 +158,7 @@
                         E-mail corporativo <span class="text-destructive">*</span>
                     </label>
                     <input type="email" name="email_corporativo" id="email_corporativo" required
-                        placeholder="joao.silva@empresa.com.br"
+                        placeholder="joao.silva@empresa.com.br" value="{{ email_corporativo|default:'' }}"
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
                 </div>
 
@@ -160,6 +170,7 @@
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-muted-foreground">@</span>
                         <input type="text" name="github_username" id="github_username" required placeholder="joaosilva"
+                            value="{{ github_username|default:'' }}"
                             class="appearance-none rounded-lg relative block w-full pl-8 pr-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors">
                     </div>
                 </div>
@@ -184,7 +195,7 @@
                     </label>
                     <textarea name="repositorios" id="repositorios" rows="3" required
                         placeholder="https://github.com/empresa/repo-1&#10;https://github.com/empresa/repo-2"
-                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none"></textarea>
+                        class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none">{{ repositorios|default:'' }}</textarea>
                     <p class="text-xs text-muted-foreground mt-1">Informe um repositório por linha</p>
                 </div>
 
@@ -196,9 +207,12 @@
                     <select name="nivel_permissao" id="nivel_permissao" required
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
                         <option value="">Selecione...</option>
-                        <option value="Read">👁️ Leitura (Read) - Apenas visualização</option>
-                        <option value="Write">✏️ Escrita (Write) - Pode fazer push</option>
-                        <option value="Admin">⚙️ Administrador (Admin) - Controle total</option>
+                        <option value="Read" {% if nivel_permissao=='Read' %}selected{% endif %}>👁️ Leitura (Read) -
+                            Apenas visualização</option>
+                        <option value="Write" {% if nivel_permissao=='Write' %}selected{% endif %}>✏️ Escrita (Write) -
+                            Pode fazer push</option>
+                        <option value="Admin" {% if nivel_permissao=='Admin' %}selected{% endif %}>⚙️ Administrador
+                            (Admin) - Controle total</option>
                     </select>
                 </div>
             </div>
@@ -220,7 +234,7 @@
                 </label>
                 <textarea name="justificativa" id="justificativa" rows="4" required
                     placeholder="Descreva o motivo pelo qual o acesso precisa ser adicionado ou removido..."
-                    class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none"></textarea>
+                    class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background placeholder-muted-foreground text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none">{{ justificativa|default:'' }}</textarea>
             </div>
         </div>
 
@@ -269,16 +283,21 @@
 
         <!-- Botões -->
         <div class="flex justify-end gap-3 pt-4">
-            <a href="{% url 'ticket-new' %}"
+            <a href="{% if is_editing %}{% url 'ticket-detail' object.pk %}{% else %}{% url 'ticket-new' %}{% endif %}"
                 class="px-5 py-2.5 border border-input rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
                 Cancelar
             </a>
             <button type="submit"
                 class="inline-flex items-center gap-2 px-5 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {% if is_editing %}
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                    {% else %}
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    {% endif %}
                 </svg>
-                Abrir Chamado
+                {% if is_editing %}Salvar Alterações{% else %}Abrir Chamado{% endif %}
             </button>
         </div>
     </form>
