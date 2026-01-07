@@ -27,6 +27,10 @@ def render_markdown(text):
         if not line:
             continue
         
+        # Check for separator
+        if re.match(r'^---+\s*$', line):
+            continue
+
         # Check for header (### Header)
         header_match = re.match(r'^###\s*(.+)$', line)
         if header_match:
@@ -35,32 +39,53 @@ def render_markdown(text):
                 html_parts.append(_render_fields_grid(fields))
                 fields = []
             current_section = header_match.group(1)
-            html_parts.append(f'<h3 class="text-lg font-bold text-foreground mb-4 flex items-center gap-2"><svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>{current_section}</h3>')
+            
+            # Premium Header Style with improved separation
+            if html_parts:
+                # Not the first section: Close previous grid (if any logic needed) and add spacer
+                html_parts.append('<div class="h-px bg-transparent w-full my-8"></div>')
+                margin_class = "mt-8 pt-4"
+            else:
+                # First section
+                margin_class = "mt-2"
+            
+            html_parts.append(f'''
+            <div class="{margin_class} mb-10 pb-6 border-b border-border/60 flex items-center gap-4">
+                <span class="p-2 rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20 shadow-sm">
+                    {_get_section_icon(current_section)}
+                </span>
+                <h3 class="text-xl font-bold text-foreground uppercase tracking-widest leading-none">{current_section}</h3>
+            </div>
+            ''')
             continue
         
         # Check for **Label**: Value pattern
         field_match = re.match(r'^\*\*(.+?)\*\*:\s*(.*)$', line)
         if field_match:
             label = field_match.group(1)
-            value = field_match.group(2).strip() or '<span class="text-muted-foreground italic">Não informado</span>'
+            value = field_match.group(2).strip() or '<span class="text-muted-foreground/50 italic text-xs">N/A</span>'
             
             # Detect and convert URLs to links
             if value and 'http' in value:
                 value = re.sub(
                     r'(https?://[^\s<]+)',
-                    r'<a href="\1" target="_blank" class="text-primary hover:underline break-all">\1</a>',
+                    r'<a href="\1" target="_blank" class="text-primary hover:text-primary/80 hover:underline break-all transition-colors">\1</a>',
                     value
                 )
             
             fields.append({'label': label, 'value': value})
             continue
         
-        # Regular text
+        # Regular text - Append to last field if exists, otherwise new paragraph
         if line:
             if fields:
-                html_parts.append(_render_fields_grid(fields))
-                fields = []
-            html_parts.append(f'<p class="text-muted-foreground mb-2">{line}</p>')
+                last_field = fields[-1]
+                if not last_field['value']:
+                    last_field['value'] = line
+                else:
+                    last_field['value'] += f"<br><span class='block mt-1'>{line}</span>"
+            else:
+                html_parts.append(f'<p class="text-muted-foreground mb-3 text-sm leading-relaxed">{line}</p>')
     
     # Output remaining fields
     if fields:
@@ -70,28 +95,37 @@ def render_markdown(text):
 
 
 def _render_fields_grid(fields):
-    """Renderiza os campos em um grid de cards."""
-    html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">'
+    """Renderiza os campos em um layout técnico premium."""
+    html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8">'
     
     for field in fields:
         label = field['label']
         value = field['value']
         
-        # Add icon based on field name
-        icon = _get_field_icon(label)
-        
         html += f'''
-        <div class="bg-muted/30 rounded-lg p-4 border border-border/50">
-            <div class="flex items-center gap-2 mb-1">
-                {icon}
-                <span class="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</span>
+        <div class="group relative">
+            <div class="absolute left-0 top-1 bottom-1 w-0.5 bg-border group-hover:bg-primary transition-colors duration-300"></div>
+            <div class="pl-4">
+                <dt class="text-[10px] font-mono font-medium text-muted-foreground uppercase tracking-widest mb-2 opacity-70 group-hover:opacity-100 transition-opacity">{label}</dt>
+                <dd class="text-sm font-medium text-foreground leading-relaxed break-words">{value}</dd>
             </div>
-            <div class="text-sm font-medium text-foreground">{value}</div>
         </div>
         '''
     
     html += '</div>'
     return html
+
+
+def _get_section_icon(section):
+    """Retorna ícone para seções comuns."""
+    section_lower = section.lower()
+    if 'gerais' in section_lower or 'info' in section_lower:
+        return '<svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>'
+    elif 'arquitetura' in section_lower or 'stack' in section_lower:
+        return '<svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>'
+    elif 'rede' in section_lower or 'infra' in section_lower:
+        return '<svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>'
+    return '<svg class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>'
 
 
 def _get_field_icon(label):
