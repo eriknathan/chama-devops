@@ -1,9 +1,23 @@
-# Usar imagem oficial do Python
+# Usar imagem Node.js para compilar Tailwind CSS
+FROM node:20-alpine AS tailwind-builder
+
+WORKDIR /app
+
+# Copiar arquivos de configuração
+COPY package.json tailwind.config.js postcss.config.js ./
+COPY static/src ./static/src
+COPY templates ./templates
+COPY app_*/templates ./app_templates/
+
+# Instalar dependências e compilar CSS
+RUN npm install && npm run build
+
+# ================================
+# Imagem final Python
+# ================================
 FROM python:3.12-slim
 
 # Definir variáveis de ambiente
-# PYTHONDONTWRITEBYTECODE: Previne Python de escrever arquivos pyc
-# PYTHONUNBUFFERED: Previne Python de bufferizar stdout e stderr
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
@@ -31,8 +45,9 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copiar projeto
 COPY . /app/
 
-# Coletar arquivos estáticos (se necessário descomentar e ajustar)
-# RUN python manage.py collectstatic --noinput
+# Copiar CSS compilado do estágio anterior (DEPOIS de COPY . para sobrescrever o diretório vazio)
+RUN mkdir -p /app/static/css
+COPY --from=tailwind-builder /app/static/css/style.css /app/static/css/style.css
 
 # Expor porta
 EXPOSE 8000

@@ -1,4 +1,4 @@
-.PHONY: up down build logs migrate superuser shell test clean populate reset-db fresh-start help docs backup
+.PHONY: up down build logs migrate superuser shell test clean populate reset-db fresh-start help docs backup css-dev css-build
 
 help:
 	@echo "Available commands:"
@@ -16,6 +16,8 @@ help:
 	@echo "  make fresh-start - Reset DB, start containers, and migrate"
 	@echo "  make clean       - Alias for reset-db"
 	@echo "  make backup      - Create a database backup"
+	@echo "  make css-dev     - Watch and compile Tailwind CSS (dev mode)"
+	@echo "  make css-build   - Build minified Tailwind CSS (production)"
 
 up:
 	docker-compose up -d
@@ -64,3 +66,9 @@ backup:
 	@echo "Creating database backup..."
 	docker-compose exec -T db bash -c 'pg_dump -U $$POSTGRES_USER $$POSTGRES_DB' > db_backup_$$(date +%Y-%m-%d_%H-%M-%S).sql
 	@echo "Backup saved to current directory."
+
+css-dev:
+	npm run dev
+
+css-build:
+	npm run build

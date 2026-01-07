@@ -1,0 +1,14 @@
+{
+  "name": "chama-devops",
+  "version": "1.0.0",
+  "description": "ChamaDevOps - Portal de Tickets e Gestão",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./static/src/input.css -o ./static/css/style.css --watch",
+    "build": "npx tailwindcss -i ./static/src/input.css -o ./static/css/style.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32"
+  }
+}

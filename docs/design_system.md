@@ -4,12 +4,54 @@
 
 | Tecnologia        | Versão       | Descrição                              |
 | ----------------- | ------------ | -------------------------------------- |
-| **Tailwind CSS**  | v3.x         | Framework CSS utility-first            |
-| **shadcn/ui**     | -            | Componentes React baseados em Radix UI |
-| **Framer Motion** | v12.x        | Animações e transições                 |
-| **Lucide React**  | v0.462       | Biblioteca de ícones                   |
+| **Tailwind CSS**  | v3.4         | Framework CSS utility-first (local)    |
+| **PostCSS**       | v8.4         | Processador CSS                        |
+| **Lucide**        | latest       | Biblioteca de ícones                   |
+| **Alpine.js**     | v3.x         | Interatividade leve                    |
 | **Inter**         | Google Fonts | Fonte principal                        |
 
+---
+
+## ⚙️ Tailwind CSS - Configuração Local
+
+O Tailwind CSS é compilado localmente (não via CDN) para otimização de produção.
+
+### Arquivos de Configuração
+
+| Arquivo | Descrição |
+|---------|-----------|
+| `package.json` | Dependências npm e scripts de build |
+| `tailwind.config.js` | Configuração de cores, animações e tema |
+| `postcss.config.js` | Configuração do PostCSS |
+| `static/src/input.css` | CSS fonte com diretivas Tailwind |
+| `static/css/style.css` | CSS compilado (output) |
+
+### Comandos de Build
+
+```bash
+# Usando Docker (sem Node.js local)
+docker run --rm \
+  -v $(pwd)/package.json:/app/package.json \
+  -v $(pwd)/tailwind.config.js:/app/tailwind.config.js \
+  -v $(pwd)/postcss.config.js:/app/postcss.config.js \
+  -v $(pwd)/static/src:/app/static/src \
+  -v $(pwd)/templates:/app/templates \
+  -v $(pwd)/static/css:/app/static/css \
+  -w /app node:20-alpine sh -c "npm install && npm run build"
+
+# Usando Node.js local
+npm install        # Primeira vez
+make css-build     # Build de produção
+make css-dev       # Watch mode (desenvolvimento)
+```
+
+### Integração no Template
+
+Os templates base carregam o CSS compilado:
+
+```html
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+```
 ---
 
 ## 🎯 Paleta de Cores (HSL)

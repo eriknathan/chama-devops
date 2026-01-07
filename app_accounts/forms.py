@@ -7,7 +7,7 @@ class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-input bg-background/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring sm:text-sm transition-colors'
+            field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-secondary text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary sm:text-sm transition-colors'
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -16,7 +16,7 @@ class CustomUserCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-input bg-background/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring sm:text-sm transition-colors'
+            field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-secondary text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary sm:text-sm transition-colors'
 
     class Meta:
         model = User
@@ -33,9 +33,9 @@ class AdminUserCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         for name, field in self.fields.items():
             if name in ['is_staff', 'is_active']:
-                field.widget.attrs['class'] = 'h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded'
+                field.widget.attrs['class'] = 'h-4 w-4 text-primary focus:ring-primary border-border rounded'
             else:
-                field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-input bg-background/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring sm:text-sm transition-colors'
+                field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-secondary text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary sm:text-sm transition-colors'
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -43,7 +43,7 @@ class CustomUserChangeForm(UserChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-input bg-background/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring sm:text-sm transition-colors'
+            field.widget.attrs['class'] = 'appearance-none rounded-lg relative block w-full px-3 py-2 border border-border bg-secondary text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary sm:text-sm transition-colors'
 
     class Meta:
         model = User
