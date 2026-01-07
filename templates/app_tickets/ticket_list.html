@@ -121,68 +121,67 @@
     </div>
 
     <!-- Ticket List -->
-    <div class="space-y-4">
+    <div class="space-y-3">
         {% for ticket in tickets %}
         <div
-            class="bg-card p-6 rounded-xl shadow-sm border border-border hover:shadow-md transition-shadow group relative">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
+            class="bg-card py-4 px-5 rounded-xl shadow-sm border border-border hover:shadow-md transition-shadow group relative">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                 <div class="flex items-center gap-2">
                     <span
                         class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-muted text-muted-foreground border border-border">
                         {{ ticket.project.name }}
                     </span>
                     <span class="text-muted-foreground">•</span>
-                    <span class="text-xs text-muted-foreground font-medium">{{ ticket.topic.name|default:"Geral" }}</span>
+                    <span class="text-xs text-muted-foreground font-medium">{{ ticket.topic.name|default:"Geral" }}
+                    </span>
                 </div>
-                <div class="sm:text-right">
+                <div class="sm:text-right flex sm:flex-col items-center sm:items-end gap-2 sm:gap-1">
                     {% if ticket.status == 'OPEN' %}
                     <span
-                        class="px-3 py-1 inline-flex text-xs font-bold rounded-full bg-status-yellow/10 text-status-yellow border border-status-yellow/20">Aberto</span>
+                        class="px-2.5 py-0.5 inline-flex text-xs font-bold rounded-full bg-status-yellow/10 text-status-yellow border border-status-yellow/20">Aberto</span>
                     {% elif ticket.status == 'ACCEPTED' %}
                     <span
-                        class="px-3 py-1 inline-flex text-xs font-bold rounded-full bg-status-blue/10 text-status-blue border border-status-blue/20">Aceito</span>
+                        class="px-2.5 py-0.5 inline-flex text-xs font-bold rounded-full bg-status-blue/10 text-status-blue border border-status-blue/20">Aceito</span>
                     {% elif ticket.status == 'IN_PROGRESS' %}
                     <span
-                        class="px-3 py-1 inline-flex text-xs font-bold rounded-full bg-status-orange/10 text-status-orange border border-status-orange/20">Em
+                        class="px-2.5 py-0.5 inline-flex text-xs font-bold rounded-full bg-status-orange/10 text-status-orange border border-status-orange/20">Em
                         andamento</span>
                     {% elif ticket.status == 'BLOCKED' %}
                     <span
-                        class="px-3 py-1 inline-flex text-xs font-bold rounded-full bg-status-red/10 text-status-red border border-status-red/20">Travado</span>
+                        class="px-2.5 py-0.5 inline-flex text-xs font-bold rounded-full bg-status-red/10 text-status-red border border-status-red/20">Travado</span>
                     {% elif ticket.status == 'DONE' %}
                     <span
-                        class="px-3 py-1 inline-flex text-xs font-bold rounded-full bg-status-emerald/10 text-status-emerald border border-status-emerald/20">Finalizado</span>
+                        class="px-2.5 py-0.5 inline-flex text-xs font-bold rounded-full bg-status-emerald/10 text-status-emerald border border-status-emerald/20">Finalizado</span>
                     {% endif %}
 
-                    <div class="mt-1">
-                        {% if ticket.priority == 'LOW' %}
-                        <span
-                            class="px-2 py-0.5 inline-flex text-xs font-medium rounded-full bg-slate-100 text-slate-800 border border-slate-200">Baixa</span>
-                        {% elif ticket.priority == 'MEDIUM' %}
-                        <span
-                            class="px-2 py-0.5 inline-flex text-xs font-medium rounded-full bg-blue-50 text-blue-700 border border-blue-200">Média</span>
-                        {% elif ticket.priority == 'HIGH' %}
-                        <span
-                            class="px-2 py-0.5 inline-flex text-xs font-medium rounded-full bg-orange-50 text-orange-700 border border-orange-200">Alta</span>
-                        {% elif ticket.priority == 'CRITICAL' %}
-                        <span
-                            class="px-2 py-0.5 inline-flex text-xs font-medium rounded-full bg-red-50 text-red-700 border border-red-200">Crítica</span>
-                        {% endif %}
-                    </div>
+                    {% if ticket.priority == 'LOW' %}
+                    <span
+                        class="px-2 py-0.5 inline-flex text-xs font-medium rounded-full bg-slate-100 text-slate-800 border border-slate-200">Baixa</span>
+                    {% elif ticket.priority == 'MEDIUM' %}
+                    <span
+                        class="px-2 py-0.5 inline-flex text-xs font-medium rounded-full bg-blue-50 text-blue-700 border border-blue-200">Média</span>
+                    {% elif ticket.priority == 'HIGH' %}
+                    <span
+                        class="px-2 py-0.5 inline-flex text-xs font-medium rounded-full bg-orange-50 text-orange-700 border border-orange-200">Alta</span>
+                    {% elif ticket.priority == 'CRITICAL' %}
+                    <span
+                        class="px-2 py-0.5 inline-flex text-xs font-medium rounded-full bg-red-50 text-red-700 border border-red-200">Crítica</span>
+                    {% endif %}
                 </div>
             </div>
 
-            <h3 class="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+            <h3 class="text-base font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
                 <a href="{% url 'ticket-detail' ticket.pk %}" class="focus:outline-none">
                     <span class="absolute inset-0" aria-hidden="true"></span>
                     {{ ticket.title }}
                 </a>
             </h3>
 
-            <p class="text-sm text-muted-foreground mb-4 line-clamp-2">
-                {{ ticket.description|extract_first_value|truncatechars:150 }}
+            <p class="text-sm text-muted-foreground mb-2 line-clamp-1">
+                {{ ticket.description|extract_first_value|truncatechars:100 }}
             </p>
 
-            <div class="flex flex-wrap items-center gap-6 text-xs text-muted-foreground">
+            <div class="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                 <div class="flex items-center gap-1.5">
                     <svg class="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
