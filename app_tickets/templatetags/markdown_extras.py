@@ -60,14 +60,17 @@ def render_markdown(text):
             continue
         
         # Check for **Label**: Value pattern
+        # More robust regex to handle various label characters and avoiding greediness
         field_match = re.match(r'^\*\*(.+?)\*\*:\s*(.*)$', line)
         if field_match:
-            label = field_match.group(1)
-            value = field_match.group(2).strip() or '<span class="text-muted-foreground/50 italic text-xs">N/A</span>'
+            label = field_match.group(1).strip()
+            # Handle empty values
+            raw_value = field_match.group(2).strip()
+            value = raw_value if raw_value else '<span class="text-muted-foreground/50 italic text-xs">N/A</span>'
             
             # Detect and convert URLs to links
-            if value and 'http' in value:
-                value = re.sub(
+            if value and 'http' in value and '<a href' not in value:
+                 value = re.sub(
                     r'(https?://[^\s<]+)',
                     r'<a href="\1" target="_blank" class="text-primary hover:text-primary/80 hover:underline break-all transition-colors">\1</a>',
                     value
@@ -76,13 +79,16 @@ def render_markdown(text):
             fields.append({'label': label, 'value': value})
             continue
         
-        # Regular text - Append to last field if exists, otherwise new paragraph
+        # Regular text - Append to last field if exists
         if line:
             if fields:
                 last_field = fields[-1]
-                if not last_field['value']:
+                # If we are here, it means 'line' is a continuation of the previous value.
+                # We need to ensure it doesn't just jam onto the end.
+                if not last_field['value'] or 'N/A' in last_field['value']:
                     last_field['value'] = line
                 else:
+                    # Append as a new line block for clarity
                     last_field['value'] += f"<br><span class='block mt-1'>{line}</span>"
             else:
                 html_parts.append(f'<p class="text-muted-foreground mb-3 text-sm leading-relaxed">{line}</p>')
@@ -106,8 +112,8 @@ def _render_fields_grid(fields):
         <div class="group relative">
             <div class="absolute left-0 top-1 bottom-1 w-0.5 bg-border group-hover:bg-primary transition-colors duration-300"></div>
             <div class="pl-4">
-                <dt class="text-[10px] font-mono font-medium text-muted-foreground uppercase tracking-widest mb-2 opacity-70 group-hover:opacity-100 transition-opacity">{label}</dt>
-                <dd class="text-sm font-medium text-foreground leading-relaxed break-words">{value}</dd>
+                <dt class="text-xs font-mono font-medium text-muted-foreground uppercase tracking-widest mb-2 opacity-70 group-hover:opacity-100 transition-opacity break-words">{label}</dt>
+                <dd class="text-base font-medium text-foreground leading-relaxed break-words">{value}</dd>
             </div>
         </div>
         '''
