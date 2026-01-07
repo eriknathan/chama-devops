@@ -5,6 +5,7 @@ from django.shortcuts import redirect, get_object_or_404
 from ..models import Ticket, TicketAttachment
 from app_management.models import Project, Topic
 
+
 class RepositoryFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     """Formulário customizado para Solicitação de Novo Repositório."""
     model = Ticket
@@ -219,7 +220,7 @@ class DowntimeFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         sintoma = request.POST.get('sintoma_principal', '')
         desc_sintomas = request.POST.get('descricao_sintomas', '')
         msg_erro = request.POST.get('mensagem_erro', '')
-        impacto = request.POST.get('impacto', '')
+        impacto = request.POST.get('quem_afetado', '') # Changed key to match form
         horario = request.POST.get('horario_inicio', '')
         
         # Get priority from form
@@ -227,27 +228,23 @@ class DowntimeFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
         description = f"""### Serviço Afetado
 
-**Nome**: {nome}
+**Serviço**: {nome}
 **URL**: {url}
 **Ambiente**: {ambiente}
 
 ---
 
-### Sintomas Observados
+### Sintomas
 
-**Principal**: {sintoma}
+**Sintoma Principal**: {sintoma}
 **Descrição**: {desc_sintomas}
-
-**Mensagem de Erro**:
-```
-{msg_erro}
-```
+**Mensagem de Erro**: {msg_erro}
 
 ---
 
-### Impacto e Horário
+### Impacto
 
-**Impacto**: {impacto}
+**Afetados**: {impacto}
 **Início**: {horario}
 """
 
@@ -428,10 +425,11 @@ class ProjectIntakeFormView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
         )
         ticket._current_user = request.user
         ticket.save()
-
-        # Files
+        
+        # Attachments
         files = request.FILES.getlist('attachments')
         for file in files:
             TicketAttachment.objects.create(ticket=ticket, file=file)
 
         return redirect(self.success_url)
+
