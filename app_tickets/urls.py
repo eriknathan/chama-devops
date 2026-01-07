@@ -9,7 +9,6 @@ urlpatterns = [
     path('new/downtime/', views.DowntimeFormView.as_view(), name='ticket-form-downtime'),
     path('new/project-intake/', views.ProjectIntakeFormView.as_view(), name='ticket-form-project-intake'),
     path('<int:pk>/', views.TicketDetailView.as_view(), name='ticket-detail'),
-    path('<int:pk>/edit/', views.TicketUpdateView.as_view(), name='ticket-edit'),
     path('<int:pk>/delete/', views.TicketDeleteView.as_view(), name='ticket-delete'),
     path('<int:pk>/action/<str:action>/', views.ticket_action_view, name='ticket-action'),
     path('<int:pk>/pdf/', views.TicketPDFView.as_view(), name='ticket-pdf'),
