@@ -9,7 +9,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'sans-serif'],
+                sans: ['DM Sans', 'sans-serif'],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -18,11 +18,11 @@ module.exports = {
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
                 primary: {
-                    DEFAULT: "hsl(var(--primary))",
+                    DEFAULT: "hsl(var(--color-primary))",
                     foreground: "hsl(var(--primary-foreground))",
                 },
                 secondary: {
-                    DEFAULT: "hsl(var(--secondary))",
+                    DEFAULT: "hsl(var(--color-secondary))",
                     foreground: "hsl(var(--secondary-foreground))",
                 },
                 destructive: {
@@ -45,39 +45,34 @@ module.exports = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
-                // Status Colors
+                // Flowlog Custom Colors
+                brand: {
+                    DEFAULT: "hsl(var(--color-primary))",
+                    secondary: "hsl(var(--color-secondary))",
+                },
+                navy: {
+                    900: "hsl(var(--color-sidebar-bg))",
+                    800: "hsl(var(--text-main))",
+                },
                 status: {
-                    yellow: "hsl(45 93% 47%)",
-                    blue: "hsl(217 91% 60%)",
-                    orange: "hsl(25 95% 53%)",
-                    red: "hsl(0 84% 60%)",
-                    emerald: "hsl(160 84% 39%)",
+                    success: "hsl(var(--status-success))",
+                    warning: "hsl(var(--status-warning))",
+                    error: "hsl(var(--status-error))",
                 },
-                // AWS Custom Colors
-                aws: {
-                    orange: "hsl(var(--aws-orange))",
-                    light: "hsl(var(--aws-orange-light))",
-                    dark: "hsl(var(--aws-dark))",
-                    darker: "hsl(var(--aws-darker))",
-                },
-                success: "hsl(var(--success))",
-                warning: "hsl(var(--warning))",
-                info: "hsl(var(--info))",
             },
             borderRadius: {
-                lg: "var(--radius)",
-                md: "calc(var(--radius) - 2px)",
-                sm: "calc(var(--radius) - 4px)",
+                xl: "var(--card-radius)",
+                lg: "var(--input-radius)",
+                md: "10px",
+                sm: "6px",
             },
             backgroundImage: {
-                'gradient-primary': 'linear-gradient(135deg, hsl(var(--aws-orange)) 0%, hsl(var(--aws-orange-light)) 100%)',
-                'gradient-dark': 'linear-gradient(180deg, hsl(var(--aws-dark)) 0%, hsl(var(--aws-darker)) 100%)',
+                'gradient-primary': 'linear-gradient(135deg, hsl(var(--color-primary)) 0%, hsl(var(--color-secondary)) 100%)',
                 'gradient-card': 'linear-gradient(135deg, hsl(220 14% 98%) 0%, hsl(220 14% 96%) 100%)',
             },
             boxShadow: {
-                'glow': '0 0 40px hsl(24 95% 53% / 0.15)',
-                'glow-lg': '0 0 60px hsl(24 95% 53% / 0.25)',
-                'card': '0 4px 24px -4px hsl(222 47% 11% / 0.1)',
+                'soft': 'var(--shadow-soft)',
+                'card': 'var(--shadow-soft)',
             },
             keyframes: {
                 'accordion-down': {

@@ -1,67 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ========================================
-   CSS Variables - Design Tokens
+   CSS Variables - Flowlog Design System
    ======================================== */
 
 @layer base {
   :root {
-    /* Modo Claro */
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Colors - Brand (HSL Values) */
+    --color-primary: 251 100% 55%;
+    /* #4318FF */
+    --color-secondary: 229 94% 70%;
+    /* #6A82FB */
+    --color-sidebar-bg: 227 60% 17%;
+    /* #111C44 */
 
-    --primary: 24 95% 53%;
+    /* Backgrounds */
+    --bg-body: 222 67% 98%;
+    /* #F4F7FE */
+    --bg-surface: 0 0% 100%;
+    /* #FFFFFF */
+
+    /* Text */
+    --text-main: 231 46% 31%;
+    /* #2B3674 */
+    --text-label: 224 30% 73%;
+    /* #A3AED0 */
+
+    /* Status */
+    --status-success: 166 95% 41%;
+    /* #05CD99 */
+    --status-warning: 34 100% 64%;
+    /* #FFB547 */
+    --status-error: 5 83% 62%;
+    /* #EE5D50 */
+    --bg-error-light: 0 100% 98%;
+    /* #FFF5F5 */
+
+    /* Dimensions & Effects */
+    --card-radius: 20px;
+    --input-radius: 16px;
+    --shadow-soft: 0px 18px 40px rgba(112, 144, 176, 0.12);
+
+    /* Mapping to Shadcn/Tailwind Variables */
+    --background: var(--bg-body);
+    --foreground: var(--text-main);
+
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-main);
+
+    --popover: var(--bg-surface);
+    --popover-foreground: var(--text-main);
+
+    --primary: var(--color-primary);
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: var(--bg-surface);
+    --secondary-foreground: var(--color-primary);
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 222 67% 98%;
+    --muted-foreground: var(--text-label);
 
-    --accent: 24 95% 53%;
+    --accent: var(--color-secondary);
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: var(--status-error);
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 24 95% 53%;
+    --border: 226 232 240;
+    /* Gray-200 aprox */
+    --input: 226 232 240;
+    --ring: var(--color-primary);
 
-    --radius: 0.75rem;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    /* AWS Custom Tokens */
-    --aws-orange: 24 95% 53%;
-    --aws-orange-light: 32 98% 60%;
-    --aws-dark: 222 47% 11%;
-    --aws-darker: 222 47% 6%;
-    --success: 142 76% 36%;
-    --warning: 38 92% 50%;
-    --info: 199 89% 48%;
-
-    /* Shadows */
-    --shadow-glow: 0 0 40px hsl(24 95% 53% / 0.15);
-    --shadow-card: 0 4px 24px -4px hsl(222 47% 11% / 0.1);
+    --radius: var(--card-radius);
   }
 
   .dark {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
-    --card: 222 47% 9%;
-    --secondary: 222 47% 14%;
-    --border: 222 30% 18%;
-    --input: 222 30% 18%;
-    --muted: 217 33% 17%;
+    /* Adapted Dark Mode for Flowlog */
+    --bg-body: 227 60% 17%;
+    /* Navy Dark */
+    --bg-surface: 231 46% 25%;
+    /* Lighter Navy */
+    --text-main: 0 0% 100%;
+    --text-label: 224 30% 73%;
+
+    --background: var(--bg-body);
+    --foreground: var(--text-main);
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-main);
+    --secondary: 231 46% 31%;
+    --muted: 231 46% 31%;
+    --border: 231 46% 31%;
+    --input: 231 46% 31%;
   }
+
 
   /* Apply base styles */
   body {
@@ -80,6 +115,7 @@
    ======================================== */
 
 @layer components {
+
   /* Glassmorphism effect */
   .glass {
     backdrop-filter: blur(12px);
@@ -94,7 +130,7 @@
 
   /* Gradient text effect */
   .gradient-text {
-    background: linear-gradient(135deg, hsl(var(--aws-orange)), hsl(var(--aws-orange-light)));
+    background: linear-gradient(135deg, hsl(var(--corporate-blue)), hsl(var(--corporate-blue-light)));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

@@ -16,8 +16,12 @@ help:
 	@echo "  make fresh-start - Reset DB, start containers, and migrate"
 	@echo "  make clean       - Alias for reset-db"
 	@echo "  make backup      - Create a database backup"
-	@echo "  make css-dev     - Watch and compile Tailwind CSS (dev mode)"
+	@echo "  make css-dev     - Watch and compile Tailwind CSS (dev mode using Docker)"
 	@echo "  make css-build   - Build minified Tailwind CSS (production)"
+	@echo "  make css-logs    - Follow Tailwind build logs"
+
+css-logs:
+	docker-compose logs -f tailwind
 
 up:
 	docker-compose up -d

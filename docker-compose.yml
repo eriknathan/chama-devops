@@ -11,6 +11,16 @@ services:
       - .env
     depends_on:
       - db
+      - tailwind
+
+  tailwind:
+    container_name: chama-devops-tailwind
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm install && npm run dev"
+    tty: true
 
   db:
     container_name: chama-devops-db
