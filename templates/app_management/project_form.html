@@ -6,9 +6,7 @@
         <h1 class="text-3xl font-bold text-foreground">
             {% if object %}Editar Projeto{% else %}Novo Projeto{% endif %}
         </h1>
-        <p class="mt-2 text-sm text-muted-foreground">Preencha as informações abaixo para {% if object %}atualizar{%
-            else
-            %}criar{% endif %} o projeto.</p>
+        <p class="mt-2 text-sm text-muted-foreground">Preencha as informações abaixo para {% if object %}atualizar{% else %}criar{% endif %} o projeto.</p>
     </div>
 
     <div class="bg-card shadow-sm rounded-xl overflow-hidden border border-border p-6">
@@ -29,7 +27,8 @@
             <div class="space-y-4">
                 {% for field in form %}
                 <div>
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{ field.label }}</label>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">{{
+                        field.label }}</label>
 
                     {% if field.name == 'members' %}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2 max-h-60 overflow-y-auto p-1">

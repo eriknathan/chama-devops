@@ -36,8 +36,7 @@
                     <div class="flex items-center">
                         <span
                             class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 border border-primary/20 mr-3">
-                            <span class="text-xs font-bold leading-none text-primary">{{
-                                project.manager.email|first|upper }}</span>
+                            <span class="text-xs font-bold leading-none text-primary">{{ project.manager.email|first|upper }}</span>
                         </span>
                         <span class="text-sm font-medium text-foreground">{{
                             project.manager.get_full_name|default:project.manager.username }}</span>
@@ -74,7 +73,8 @@
     <div class="mt-8">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-bold text-foreground">Tickets do Projeto</h2>
-            <span class="text-sm text-muted-foreground">{{ project.app_tickets.count }} ticket{{ project.app_tickets.count|pluralize }}</span>
+            <span class="text-sm text-muted-foreground">{{ project.app_tickets.count }} ticket{{
+                project.app_tickets.count|pluralize }}</span>
         </div>
 
         {% if project.app_tickets.exists %}
@@ -112,7 +112,8 @@
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{% url 'ticket-detail' ticket.pk %}"
-                                    class="text-sm text-foreground hover:text-primary line-clamp-1">{{ ticket.title }}</a>
+                                    class="text-sm text-foreground hover:text-primary line-clamp-1">{{ ticket.title
+                                    }}</a>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -136,7 +137,8 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm text-muted-foreground">{{ ticket.requester.get_full_name|default:ticket.requester.email }}</span>
+                                <span class="text-sm text-muted-foreground">{{
+                                    ticket.requester.get_full_name|default:ticket.requester.email }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="text-sm text-muted-foreground">{{ ticket.created_at|date:"d/m/Y" }}</span>
