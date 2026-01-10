@@ -19,16 +19,15 @@
         <!-- Main Content -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Ticket Detail Card -->
-            <div class="bg-card shadow-sm rounded-xl border border-border p-8">
+            <div class="bg-white shadow-soft rounded-2xl p-8">
                 <div class="flex items-center gap-3 mb-6">
                     <!-- Badge based on topic -->
                     <span
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-muted text-muted-foreground border border-border">
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
                         {{ ticket.project.name }}
                     </span>
                     <span class="text-muted-foreground">•</span>
-                    <span class="text-sm text-muted-foreground font-medium">{{ ticket.topic.name|default:"Geral"
-                        }}</span>
+                    <span class="text-sm text-muted-foreground font-medium">{{ ticket.topic.name|default:"Geral" }}</span>
                     <!-- Status Badge -->
                     {% if ticket.status == 'OPEN' %}
                     <span
@@ -76,7 +75,7 @@
             </div>
 
             <!-- Anexos -->
-            <div class="bg-card shadow-sm rounded-xl border border-border p-6">
+            <div class="bg-white shadow-soft rounded-2xl p-6">
                 <h3 class="flex items-center gap-2 text-sm font-bold text-foreground mb-4 uppercase tracking-wide">
                     <svg class="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -114,7 +113,7 @@
             </div>
 
             <!-- Comentários -->
-            <div class="bg-card shadow-sm rounded-xl border border-border p-6">
+            <div class="bg-white shadow-soft rounded-2xl p-6">
                 <div class="flex items-center gap-2 mb-8">
                     <svg class="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -134,10 +133,8 @@
                             <div
                                 class="bg-muted/50 p-4 rounded-2xl rounded-tl-none {% if comment.is_internal %}bg-status-yellow/10 border border-status-yellow/20{% endif %}">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="text-sm font-bold text-foreground">{{
-                                        comment.author.get_full_name|default:comment.author.email }}</span>
-                                    <span class="text-xs text-muted-foreground">{{ comment.created_at|date:"d M Y, H:i"
-                                        }}</span>
+                                    <span class="text-sm font-bold text-foreground">{{ comment.author.get_full_name|default:comment.author.email }}</span>
+                                    <span class="text-xs text-muted-foreground">{{ comment.created_at|date:"d M Y, H:i" }}</span>
                                 </div>
                                 <div class="text-sm text-muted-foreground leading-relaxed">
                                     {{ comment.content|linebreaksbr }}
@@ -184,7 +181,7 @@
         <!-- Sidebar -->
         <div class="space-y-6">
             <!-- Responsible -->
-            <div class="bg-card shadow-sm rounded-xl border border-border p-6">
+            <div class="bg-white shadow-soft rounded-2xl p-6">
                 <h3 class="text-sm font-bold text-foreground mb-4">Responsável</h3>
                 <div class="flex items-center gap-3">
                     {% if ticket.assignee %}
@@ -193,8 +190,7 @@
                         {{ ticket.assignee.email|first|upper }}
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-foreground">{{
-                            ticket.assignee.get_full_name|default:ticket.assignee.email }}</p>
+                        <p class="text-sm font-bold text-foreground">{{ ticket.assignee.get_full_name|default:ticket.assignee.email }}</p>
                         <p class="text-xs text-muted-foreground">Usuário</p>
                     </div>
                     {% else %}
@@ -215,7 +211,7 @@
             <!-- Actions -->
             {% if user.is_staff or user == ticket.requester %}
             {% if user.is_staff %}
-            <div class="bg-card shadow-sm rounded-xl border border-border p-6">
+            <div class="bg-white shadow-soft rounded-2xl p-6">
                 <h3 class="text-sm font-bold text-foreground mb-4">Ações</h3>
                 <div class="space-y-3">
                     <a href="{% url 'ticket-pdf' pk=ticket.pk %}" target="_blank"
@@ -265,7 +261,7 @@
 
             <!-- Delete Action for Creator or Staff -->
             {% if user == ticket.requester or user.is_staff %}
-            <div class="bg-card shadow-sm rounded-xl border border-border p-6">
+            <div class="bg-white shadow-soft rounded-2xl p-6">
                 <h3 class="text-sm font-bold text-foreground mb-4">Gerenciar</h3>
                 <div class="space-y-3">
                     <a href="{% url 'ticket-delete' pk=ticket.pk %}"
@@ -282,7 +278,7 @@
             {% endif %}
 
             <!-- Timeline -->
-            <div class="bg-card shadow-sm rounded-xl border border-border p-6">
+            <div class="bg-white shadow-soft rounded-2xl p-6">
                 <h3 class="text-sm font-bold text-foreground mb-6">Timeline</h3>
                 <div class="flow-root">
                     <ul role="list" class="-mb-8">
@@ -342,24 +338,17 @@
                                     <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                                         <div>
                                             <p class="text-xs text-foreground">
-                                                <span class="font-bold">{% if history.user %}{{
-                                                    history.user.get_full_name|default:history.user.email }}{% else %}Sistema{% endif %}</span>
+                                                <span class="font-bold">{% if history.user %}{{ history.user.get_full_name|default:history.user.email }}{% else %}Sistema{% endif %}</span>
                                                 {% if history.action == 'created' %}
                                                 criou este ticket
                                                 {% elif history.action == 'status_changed' %}
                                                 alterou o status de <span
-                                                    class="font-mono text-[10px] bg-muted px-1 rounded">{{
-                                                    history.old_value }}</span> para <span class="font-bold">{{
-                                                    history.new_value }}</span> {% elif history.action == 'priority_changed' %} alterou a prioridade de <span
-                                                    class="font-mono text-[10px] bg-muted px-1 rounded">{{
-                                                    history.old_value }}</span> para <span class="font-bold">{{
-                                                    history.new_value }}</span> {% elif history.action == 'assignee_changed' %} atribuiu a <span class="font-bold">{{
-                                                    history.new_value }}</span> {% endif %}
+                                                    class="font-mono text-[10px] bg-muted px-1 rounded">{{ history.old_value }}</span> para <span class="font-bold">{{ history.new_value }}</span> {% elif history.action == 'priority_changed' %} alterou a prioridade de <span
+                                                    class="font-mono text-[10px] bg-muted px-1 rounded">{{ history.old_value }}</span> para <span class="font-bold">{{ history.new_value }}</span> {% elif history.action == 'assignee_changed' %} atribuiu a <span class="font-bold">{{ history.new_value }}</span> {% endif %}
                                             </p>
                                         </div>
                                         <div class="whitespace-nowrap text-right text-xs text-muted-foreground">
-                                            <time datetime="{{ ticket.created_at|date:'c' }}">{{
-                                                ticket.created_at|date:"d M, H:i" }}</time>
+                                            <time datetime="{{ ticket.created_at|date:'c' }}">{{ ticket.created_at|date:"d M, H:i" }}</time>
                                         </div>
                                     </div>
                                 </div>
@@ -384,8 +373,7 @@
                                             <p class="text-xs font-semibold text-foreground">Ticket criado (legado)</p>
                                         </div>
                                         <div class="whitespace-nowrap text-right text-xs text-muted-foreground">
-                                            <time datetime="{{ ticket.created_at|date:'c' }}">{{
-                                                ticket.created_at|date:"d M, H:i" }}</time>
+                                            <time datetime="{{ ticket.created_at|date:'c' }}">{{ ticket.created_at|date:"d M, H:i" }}</time>
                                         </div>
                                     </div>
                                 </div>
