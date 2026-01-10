@@ -31,6 +31,7 @@ Este comando irá:
 - Subir o banco PostgreSQL
 - Subir o MinIO (armazenamento de arquivos)
 - Subir a aplicação Django
+- Subir o container Tailwind (Compilador CSS em tempo real)
 - Subir o Nginx como proxy reverso
 
 ### 3. Aplique as migrações e crie um superusuário
@@ -117,6 +118,7 @@ O projeto inclui um `Makefile` para facilitar operações comuns:
 | `make createsuperuser` | Cria usuário administrador |
 | `make populate` | Popula o banco com dados de teste |
 | `make shell` | Abre shell Django interativo |
+| `make css-logs` | Vê logs do compilador Tailwind CSS |
 
 ---
 
