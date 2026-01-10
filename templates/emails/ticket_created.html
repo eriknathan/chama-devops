@@ -1,45 +1,236 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
     <meta charset="utf-8">
-    <title>Novo Ticket Criado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Novo Ticket Criado - ChamaDevOps</title>
 </head>
 
 <body
-    style="font-family: Arial, sans-serif; line-height: 1.5; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0a0f1a; color: #f8fafc;">
 
-    <div style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
-        <h2 style="margin: 0; color: #4f46e5;">ChamaDevOps</h2>
-    </div>
+    <!-- Container Principal -->
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0f1a;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
 
-    <p style="font-size: 16px;">Olá,</p>
+                <!-- Card Principal -->
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+                    style="max-width: 600px; background-color: #111827; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.3);">
 
-    <p>Um novo ticket foi criado com sucesso.</p>
+                    <!-- Header com Gradiente -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); padding: 32px 40px;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td>
+                                        <h1
+                                            style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">
+                                            🔔 ChamaDevOps
+                                        </h1>
+                                        <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255, 255, 255, 0.9);">
+                                            Sistema de Gestão de Chamados
+                                        </p>
+                                    </td>
+                                    <td align="right" style="vertical-align: middle;">
+                                        <span
+                                            style="display: inline-block; background-color: rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 20px;">
+                                            NOVO TICKET
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
 
-    <div style="background-color: #f9fafb; padding: 15px; border-radius: 4px; margin: 20px 0;">
-        <h3 style="margin-top: 0; font-size: 18px;">{{ ticket.title }} <small
-                style="color: #666; font-weight: normal;">#{{ ticket.id }}</small></h3>
+                    <!-- Corpo do Email -->
+                    <tr>
+                        <td style="padding: 40px;">
 
-        <p style="margin: 5px 0;"><strong>Projeto:</strong> {{ ticket.project.name }}</p>
-        <p style="margin: 5px 0;"><strong>Tópico:</strong> {{ ticket.topic.name }}</p>
-        <p style="margin: 5px 0;"><strong>Solicitante:</strong> {{ ticket.requester.first_name }}</p>
+                            <!-- Saudação -->
+                            <p style="margin: 0 0 24px 0; font-size: 16px; color: #f8fafc; line-height: 1.6;">
+                                Olá! 👋
+                            </p>
 
-        <div style="margin-top: 15px; border-top: 1px solid #e5e7eb; padding-top: 10px;">
-            <p style="margin: 0; color: #555;">{{ ticket.description|linebreaksbr }}</p>
-        </div>
-    </div>
+                            <p style="margin: 0 0 32px 0; font-size: 15px; color: #94a3b8; line-height: 1.6;">
+                                Um novo ticket foi criado com sucesso no sistema. Confira os detalhes abaixo:
+                            </p>
 
-    <p>
-        <a href="{{ protocol }}://{{ domain }}{% url 'ticket-detail' ticket.pk %}"
-            style="display: inline-block; background-color: #4f46e5; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Visualizar
-            Ticket</a>
-    </p>
+                            <!-- Card do Ticket -->
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+                                style="background-color: #1e293b; border-radius: 12px; border: 1px solid #334155; overflow: hidden;">
 
-    <div
-        style="margin-top: 30px; padding-top: 10px; border-top: 1px solid #eee; font-size: 12px; color: #999; text-align: center;">
-        <p>&copy; {% now "Y" %} ChamaDevOps. Mensagem automática.</p>
-    </div>
+                                <!-- Título do Ticket -->
+                                <tr>
+                                    <td style="padding: 24px 24px 16px 24px; border-bottom: 1px solid #334155;">
+                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td>
+                                                    <span
+                                                        style="display: inline-block; background-color: #f97316; color: #ffffff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                        #{{ ticket.id }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-top: 12px;">
+                                                    <h2
+                                                        style="margin: 0; font-size: 20px; font-weight: 600; color: #f8fafc; line-height: 1.4;">
+                                                        {{ ticket.title }}
+                                                    </h2>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- Detalhes do Ticket -->
+                                <tr>
+                                    <td style="padding: 20px 24px;">
+                                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                            <!-- Projeto -->
+                                            <tr>
+                                                <td style="padding: 8px 0;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td
+                                                                style="width: 120px; font-size: 13px; color: #64748b; font-weight: 500;">
+                                                                📁 Projeto
+                                                            </td>
+                                                            <td
+                                                                style="font-size: 14px; color: #e2e8f0; font-weight: 500;">
+                                                                {{ ticket.project.name }}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <!-- Tópico -->
+                                            <tr>
+                                                <td style="padding: 8px 0;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td
+                                                                style="width: 120px; font-size: 13px; color: #64748b; font-weight: 500;">
+                                                                🏷️ Tópico
+                                                            </td>
+                                                            <td
+                                                                style="font-size: 14px; color: #e2e8f0; font-weight: 500;">
+                                                                {{ ticket.topic.name }}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <!-- Solicitante -->
+                                            <tr>
+                                                <td style="padding: 8px 0;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td
+                                                                style="width: 120px; font-size: 13px; color: #64748b; font-weight: 500;">
+                                                                👤 Solicitante
+                                                            </td>
+                                                            <td
+                                                                style="font-size: 14px; color: #e2e8f0; font-weight: 500;">
+                                                                {{ ticket.requester.get_full_name|default:ticket.requester.first_name }}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <!-- Prioridade -->
+                                            <tr>
+                                                <td style="padding: 8px 0;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td
+                                                                style="width: 120px; font-size: 13px; color: #64748b; font-weight: 500;">
+                                                                ⚡ Prioridade
+                                                            </td>
+                                                            <td>
+                                                                <span style="display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px;
+                                                                    {% if ticket.priority == 'CRITICAL' %}
+                                                                    background-color: #7f1d1d; color: #fecaca;
+                                                                    {% elif ticket.priority == 'HIGH' %}
+                                                                    background-color: #7c2d12; color: #fed7aa;
+                                                                    {% elif ticket.priority == 'MEDIUM' %}
+                                                                    background-color: #713f12; color: #fef08a;
+                                                                    {% else %}
+                                                                    background-color: #1e3a5f; color: #93c5fd;
+                                                                    {% endif %}
+                                                                ">
+                                                                    {{ ticket.get_priority_display }}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- Descrição -->
+                                {% if ticket.description %}
+                                <tr>
+                                    <td style="padding: 0 24px 24px 24px;">
+                                        <div
+                                            style="background-color: #0f172a; border-radius: 8px; padding: 16px; border-left: 3px solid #f97316;">
+                                            <p
+                                                style="margin: 0 0 8px 0; font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                Descrição
+                                            </p>
+                                            <p style="margin: 0; font-size: 14px; color: #cbd5e1; line-height: 1.6;">
+                                                {{ ticket.description|linebreaksbr|truncatewords:50 }}
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </table>
+
+                            <!-- Botão CTA -->
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+                                style="margin-top: 32px;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="{{ protocol }}://{{ domain }}{% url 'ticket-detail' ticket.pk %}"
+                                            style="display: inline-block; background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); color: #ffffff; font-size: 15px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 10px; box-shadow: 0 4px 14px -3px rgba(249, 115, 22, 0.5);">
+                                            Visualizar Ticket →
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #0f172a; padding: 24px 40px; border-top: 1px solid #1e293b;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="center">
+                                        <p style="margin: 0 0 8px 0; font-size: 13px; color: #64748b;">
+                                            Esta é uma mensagem automática do sistema ChamaDevOps.
+                                        </p>
+                                        <p style="margin: 0; font-size: 12px; color: #475569;">
+                                            &copy; {% now "Y" %} ChamaDevOps. Todos os direitos reservados.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
 
 </body>
 
