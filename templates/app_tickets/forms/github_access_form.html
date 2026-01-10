@@ -50,8 +50,7 @@
                     class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
                     <option value="">Selecione um projeto...</option>
                     {% for project in projects %}
-                    <option value="{{ project.pk }}" {% if object.project.pk == project.pk %}selected{% endif %}>{{
-                        project.name }}</option>
+                    <option value="{{ project.pk }}" {% if object.project.pk == project.pk %}selected{% endif %}>{{ project.name }}</option>
                     {% endfor %}
                 </select>
                 <p class="text-xs text-muted-foreground mt-1">Escolha o projeto ao qual este chamado está relacionado
