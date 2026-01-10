@@ -23,10 +23,8 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-2xl font-bold text-foreground">{% if is_editing %}Editar Repositório{% else
-                    %}Solicitação de Novo Repositório{% endif %}</h1>
-                <p class="text-sm text-muted-foreground">{% if is_editing %}Atualize as informações do repositório{%
-                    else %}Preencha os dados para criar um novo repositório no GitHub{% endif %}</p>
+                <h1 class="text-2xl font-bold text-foreground">{% if is_editing %}Editar Repositório{% else %}Solicitação de Novo Repositório{% endif %}</h1>
+                <p class="text-sm text-muted-foreground">{% if is_editing %}Atualize as informações do repositório{% else %}Preencha os dados para criar um novo repositório no GitHub{% endif %}</p>
             </div>
         </div>
     </div>
@@ -52,7 +50,7 @@
                     class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
                     <option value="">Selecione um projeto...</option>
                     {% for project in projects %}
-                    <option value="{{ project.pk }}" {% if object.project.pk==project.pk %}selected{% endif %}>{{
+                    <option value="{{ project.pk }}" {% if object.project.pk == project.pk %}selected{% endif %}>{{
                         project.name }}</option>
                     {% endfor %}
                 </select>
@@ -68,11 +66,10 @@
                 <div class="relative">
                     <select name="priority" id="priority" required
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
-                        <option value="LOW" {% if object.priority=='LOW' %}selected{% endif %}>Baixa</option>
-                        <option value="MEDIUM" {% if not object.priority or object.priority=='MEDIUM' %}selected{% endif
-                            %}>Média</option>
-                        <option value="HIGH" {% if object.priority=='HIGH' %}selected{% endif %}>Alta</option>
-                        <option value="CRITICAL" {% if object.priority=='CRITICAL' %}selected{% endif %}>Crítica
+                        <option value="LOW" {% if object.priority == 'LOW' %}selected{% endif %}>Baixa</option>
+                        <option value="MEDIUM" {% if not object.priority or object.priority == 'MEDIUM' %}selected{% endif %}>Média</option>
+                        <option value="HIGH" {% if object.priority == 'HIGH' %}selected{% endif %}>Alta</option>
+                        <option value="CRITICAL" {% if object.priority == 'CRITICAL' %}selected{% endif %}>Crítica
                         </option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
@@ -155,10 +152,10 @@
                     <select name="visibilidade" id="visibilidade" required
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
                         <option value="">Selecione...</option>
-                        <option value="Privado" {% if visibilidade=='Privado' %}selected{% endif %}>🔒 Privado</option>
-                        <option value="Internal" {% if visibilidade=='Internal' %}selected{% endif %}>🏢 Internal (uso
+                        <option value="Privado" {% if visibilidade == 'Privado' %}selected{% endif %}>🔒 Privado</option>
+                        <option value="Internal" {% if visibilidade == 'Internal' %}selected{% endif %}>🏢 Internal (uso
                             interno da empresa)</option>
-                        <option value="Público" {% if visibilidade=='Público' %}selected{% endif %}>🌐 Público (requer
+                        <option value="Público" {% if visibilidade == 'Público' %}selected{% endif %}>🌐 Público (requer
                             aprovação prévia)</option>
                     </select>
                 </div>
@@ -171,12 +168,23 @@
                     <select name="linguagem_principal" id="linguagem_principal" required
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
                         <option value="">Selecione...</option>
-                        {% for lang in
-                        "Python,JavaScript,TypeScript,Java,Go,Rust,C#,PHP,Ruby,Kotlin,Swift,Terraform,Shell,Outro"|make_list
-                        %}
-                        <option value="{{ lang }}" {% if linguagem_principal==lang %}selected{% endif %}>{{ lang }}
+                        <option value="Python" {% if linguagem_principal == 'Python' %}selected{% endif %}>Python</option>
+                        <option value="JavaScript" {% if linguagem_principal == 'JavaScript' %}selected{% endif %}>
+                            JavaScript</option>
+                        <option value="TypeScript" {% if linguagem_principal == 'TypeScript' %}selected{% endif %}>
+                            TypeScript</option>
+                        <option value="Java" {% if linguagem_principal == 'Java' %}selected{% endif %}>Java</option>
+                        <option value="Go" {% if linguagem_principal == 'Go' %}selected{% endif %}>Go</option>
+                        <option value="Rust" {% if linguagem_principal == 'Rust' %}selected{% endif %}>Rust</option>
+                        <option value="C#" {% if linguagem_principal == 'C#' %}selected{% endif %}>C#</option>
+                        <option value="PHP" {% if linguagem_principal == 'PHP' %}selected{% endif %}>PHP</option>
+                        <option value="Ruby" {% if linguagem_principal == 'Ruby' %}selected{% endif %}>Ruby</option>
+                        <option value="Kotlin" {% if linguagem_principal == 'Kotlin' %}selected{% endif %}>Kotlin</option>
+                        <option value="Swift" {% if linguagem_principal == 'Swift' %}selected{% endif %}>Swift</option>
+                        <option value="Terraform" {% if linguagem_principal == 'Terraform' %}selected{% endif %}>Terraform
                         </option>
-                        {% endfor %}
+                        <option value="Shell" {% if linguagem_principal == 'Shell' %}selected{% endif %}>Shell</option>
+                        <option value="Outro" {% if linguagem_principal == 'Outro' %}selected{% endif %}>Outro</option>
                     </select>
                     <p class="text-xs text-muted-foreground mt-1">Será usado para gerar o .gitignore automaticamente</p>
                 </div>
@@ -224,14 +232,12 @@
                     </label>
                     <div class="flex items-center gap-6">
                         <label class="inline-flex items-center cursor-pointer">
-                            <input type="radio" name="acesso_grafana" value="Sim" {% if acesso_grafana=='Sim'
-                                %}checked{% endif %}
+                            <input type="radio" name="acesso_grafana" value="Sim" {% if acesso_grafana == 'Sim' %}checked{% endif %}
                                 class="form-radio h-4 w-4 text-primary border-border focus:ring-primary">
                             <span class="ml-2 text-sm text-foreground">Sim</span>
                         </label>
                         <label class="inline-flex items-center cursor-pointer">
-                            <input type="radio" name="acesso_grafana" value="Não" {% if acesso_grafana=='Não' or not
-                                acesso_grafana %}checked{% endif %}
+                            <input type="radio" name="acesso_grafana" value="Não" {% if acesso_grafana == 'Não' or not acesso_grafana %}checked{% endif %}
                                 class="form-radio h-4 w-4 text-primary border-border focus:ring-primary">
                             <span class="ml-2 text-sm text-foreground">Não</span>
                         </label>

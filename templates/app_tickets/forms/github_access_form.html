@@ -23,10 +23,8 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-2xl font-bold text-foreground">{% if is_editing %}Editar Acesso GitHub{% else
-                    %}Gerenciamento de Acesso ao GitHub{% endif %}</h1>
-                <p class="text-sm text-muted-foreground">{% if is_editing %}Atualize a solicitação de acesso{% else
-                    %}Solicite adição ou remoção de acesso a repositórios{% endif %}</p>
+                <h1 class="text-2xl font-bold text-foreground">{% if is_editing %}Editar Acesso GitHub{% else %}Gerenciamento de Acesso ao GitHub{% endif %}</h1>
+                <p class="text-sm text-muted-foreground">{% if is_editing %}Atualize a solicitação de acesso{% else %}Solicite adição ou remoção de acesso a repositórios{% endif %}</p>
             </div>
         </div>
     </div>
@@ -52,7 +50,7 @@
                     class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
                     <option value="">Selecione um projeto...</option>
                     {% for project in projects %}
-                    <option value="{{ project.pk }}" {% if object.project.pk==project.pk %}selected{% endif %}>{{
+                    <option value="{{ project.pk }}" {% if object.project.pk == project.pk %}selected{% endif %}>{{
                         project.name }}</option>
                     {% endfor %}
                 </select>
@@ -68,11 +66,10 @@
                 <div class="relative">
                     <select name="priority" id="priority" required
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
-                        <option value="LOW" {% if object.priority=='LOW' %}selected{% endif %}>Baixa</option>
-                        <option value="MEDIUM" {% if not object.priority or object.priority=='MEDIUM' %}selected{% endif
-                            %}>Média</option>
-                        <option value="HIGH" {% if object.priority=='HIGH' %}selected{% endif %}>Alta</option>
-                        <option value="CRITICAL" {% if object.priority=='CRITICAL' %}selected{% endif %}>Crítica
+                        <option value="LOW" {% if object.priority == 'LOW' %}selected{% endif %}>Baixa</option>
+                        <option value="MEDIUM" {% if not object.priority or object.priority == 'MEDIUM' %}selected{% endif %}>Média</option>
+                        <option value="HIGH" {% if object.priority == 'HIGH' %}selected{% endif %}>Alta</option>
+                        <option value="CRITICAL" {% if object.priority == 'CRITICAL' %}selected{% endif %}>Crítica
                         </option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
@@ -104,8 +101,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <label
                         class="relative flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                        <input type="radio" name="tipo_solicitacao" value="Adicionar" required class="sr-only peer" {%
-                            if tipo_solicitacao=='Adicionar' %}checked{% endif %}>
+                        <input type="radio" name="tipo_solicitacao" value="Adicionar" required class="sr-only peer" {% if tipo_solicitacao == 'Adicionar' %}checked{% endif %}>
                         <div class="text-center">
                             <svg class="mx-auto h-8 w-8 text-status-emerald mb-2" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -117,8 +113,7 @@
                     </label>
                     <label
                         class="relative flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:border-primary/50 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                        <input type="radio" name="tipo_solicitacao" value="Remover" required class="sr-only peer" {% if
-                            tipo_solicitacao=='Remover' %}checked{% endif %}>
+                        <input type="radio" name="tipo_solicitacao" value="Remover" required class="sr-only peer" {% if tipo_solicitacao == 'Remover' %}checked{% endif %}>
                         <div class="text-center">
                             <svg class="mx-auto h-8 w-8 text-status-red mb-2" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -207,11 +202,11 @@
                     <select name="nivel_permissao" id="nivel_permissao" required
                         class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
                         <option value="">Selecione...</option>
-                        <option value="Read" {% if nivel_permissao=='Read' %}selected{% endif %}>👁️ Leitura (Read) -
+                        <option value="Read" {% if nivel_permissao == 'Read' %}selected{% endif %}>👁️ Leitura (Read) -
                             Apenas visualização</option>
-                        <option value="Write" {% if nivel_permissao=='Write' %}selected{% endif %}>✏️ Escrita (Write) -
+                        <option value="Write" {% if nivel_permissao == 'Write' %}selected{% endif %}>✏️ Escrita (Write) -
                             Pode fazer push</option>
-                        <option value="Admin" {% if nivel_permissao=='Admin' %}selected{% endif %}>⚙️ Administrador
+                        <option value="Admin" {% if nivel_permissao == 'Admin' %}selected{% endif %}>⚙️ Administrador
                             (Admin) - Controle total</option>
                     </select>
                 </div>
