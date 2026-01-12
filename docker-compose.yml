@@ -2,7 +2,7 @@ services:
   web:
     container_name: chama-devops-web
     build: .
-    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:8000 --reload"
+    command: sh -c "python manage.py migrate && python manage.py create_topics && python manage.py collectstatic --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:8000 --reload"
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
