@@ -5,6 +5,18 @@ from django.utils.html import escape
 
 register = template.Library()
 
+import markdown as md_lib
+
+@register.filter(name='markdown_format')
+def markdown_format(text):
+    """
+    Renderiza markdown padrão para HTML seguro.
+    Ideal para emails onde classes customizadas não funcionam bem.
+    """
+    if not text:
+        return ''
+    return mark_safe(md_lib.markdown(text, extensions=['extra', 'nl2br']))
+
 
 @register.filter(name='render_markdown')
 def render_markdown(text):

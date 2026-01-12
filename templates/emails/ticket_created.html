@@ -1,34 +1,36 @@
+{% load markdown_extras %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
+    <meta name="color-scheme" content="dark">
     <title>Novo Ticket Criado - ChamaDevOps</title>
 </head>
 
 <body
-    style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0a0f1a; color: #f8fafc;">
+    style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #020617; color: #f8fafc;">
 
     <!-- Container Principal -->
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0a0f1a;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #020617;">
         <tr>
             <td align="center" style="padding: 40px 20px;">
 
                 <!-- Card Principal -->
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
-                    style="max-width: 600px; background-color: #111827; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.3);">
+                    style="max-width: 600px; background-color: #0f172a; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.5); border: 1px solid #1e293b;">
 
                     <!-- Header com Gradiente -->
                     <tr>
-                        <td style="background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); padding: 32px 40px;">
+                        <td
+                            style="background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%); padding: 32px 40px; border-bottom: 1px solid rgba(255,255,255,0.1);">
                             <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td>
                                         <h1
                                             style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px;">
-                                            🔔 ChamaDevOps
+                                            🚀 ChamaDevOps
                                         </h1>
                                         <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255, 255, 255, 0.9);">
                                             Sistema de Gestão de Chamados
@@ -36,7 +38,7 @@
                                     </td>
                                     <td align="right" style="vertical-align: middle;">
                                         <span
-                                            style="display: inline-block; background-color: rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 20px;">
+                                            style="display: inline-block; background-color: rgba(255, 255, 255, 0.2); color: #ffffff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3);">
                                             NOVO TICKET
                                         </span>
                                     </td>
@@ -68,18 +70,12 @@
                                         <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                                             <tr>
                                                 <td>
-                                                    <span
-                                                        style="display: inline-block; background-color: #f97316; color: #ffffff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-                                                        #{{ ticket.id }}
-                                                    </span>
+                                                    <span style="display: inline-block; background-color: #4f46e5; color: #ffffff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">#{{ ticket.id }}</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-top: 12px;">
-                                                    <h2
-                                                        style="margin: 0; font-size: 20px; font-weight: 600; color: #f8fafc; line-height: 1.4;">
-                                                        {{ ticket.title }}
-                                                    </h2>
+                                                    <h2 style="margin: 0; font-size: 20px; font-weight: 600; color: #f8fafc; line-height: 1.4;">{{ ticket.title }}</h2>
                                                 </td>
                                             </tr>
                                         </table>
@@ -95,14 +91,8 @@
                                                 <td style="padding: 8px 0;">
                                                     <table role="presentation" cellspacing="0" cellpadding="0">
                                                         <tr>
-                                                            <td
-                                                                style="width: 120px; font-size: 13px; color: #64748b; font-weight: 500;">
-                                                                📁 Projeto
-                                                            </td>
-                                                            <td
-                                                                style="font-size: 14px; color: #e2e8f0; font-weight: 500;">
-                                                                {{ ticket.project.name }}
-                                                            </td>
+                                                            <td style="width: 120px; font-size: 13px; color: #94a3b8; font-weight: 500;">📁 Projeto</td>
+                                                            <td style="font-size: 14px; color: #e2e8f0; font-weight: 500;">{{ ticket.project.name }}</td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -112,14 +102,8 @@
                                                 <td style="padding: 8px 0;">
                                                     <table role="presentation" cellspacing="0" cellpadding="0">
                                                         <tr>
-                                                            <td
-                                                                style="width: 120px; font-size: 13px; color: #64748b; font-weight: 500;">
-                                                                🏷️ Tópico
-                                                            </td>
-                                                            <td
-                                                                style="font-size: 14px; color: #e2e8f0; font-weight: 500;">
-                                                                {{ ticket.topic.name }}
-                                                            </td>
+                                                            <td style="width: 120px; font-size: 13px; color: #94a3b8; font-weight: 500;">🏷️ Tópico</td>
+                                                            <td style="font-size: 14px; color: #e2e8f0; font-weight: 500;">{{ ticket.topic.name }}</td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -129,14 +113,8 @@
                                                 <td style="padding: 8px 0;">
                                                     <table role="presentation" cellspacing="0" cellpadding="0">
                                                         <tr>
-                                                            <td
-                                                                style="width: 120px; font-size: 13px; color: #64748b; font-weight: 500;">
-                                                                👤 Solicitante
-                                                            </td>
-                                                            <td
-                                                                style="font-size: 14px; color: #e2e8f0; font-weight: 500;">
-                                                                {{ ticket.requester.get_full_name|default:ticket.requester.first_name }}
-                                                            </td>
+                                                            <td style="width: 120px; font-size: 13px; color: #94a3b8; font-weight: 500;">👤 Solicitante</td>
+                                                            <td style="font-size: 14px; color: #e2e8f0; font-weight: 500;">{{ ticket.requester.get_full_name|default:ticket.requester.first_name }}</td>
                                                         </tr>
                                                     </table>
                                                 </td>
@@ -146,20 +124,17 @@
                                                 <td style="padding: 8px 0;">
                                                     <table role="presentation" cellspacing="0" cellpadding="0">
                                                         <tr>
-                                                            <td
-                                                                style="width: 120px; font-size: 13px; color: #64748b; font-weight: 500;">
-                                                                ⚡ Prioridade
-                                                            </td>
+                                                            <td style="width: 120px; font-size: 13px; color: #94a3b8; font-weight: 500;">⚡ Prioridade</td>
                                                             <td>
                                                                 <span style="display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px;
                                                                     {% if ticket.priority == 'CRITICAL' %}
-                                                                    background-color: #7f1d1d; color: #fecaca;
+                                                                    background-color: #7f1d1d; color: #fecaca; border: 1px solid #991b1b;
                                                                     {% elif ticket.priority == 'HIGH' %}
-                                                                    background-color: #7c2d12; color: #fed7aa;
+                                                                    background-color: #7c2d12; color: #fed7aa; border: 1px solid #9a3412;
                                                                     {% elif ticket.priority == 'MEDIUM' %}
-                                                                    background-color: #713f12; color: #fef08a;
+                                                                    background-color: #713f12; color: #fef08a; border: 1px solid #854d0e;
                                                                     {% else %}
-                                                                    background-color: #1e3a5f; color: #93c5fd;
+                                                                    background-color: #172554; color: #93c5fd; border: 1px solid #1e40af;
                                                                     {% endif %}
                                                                 ">
                                                                     {{ ticket.get_priority_display }}
@@ -177,15 +152,11 @@
                                 {% if ticket.description %}
                                 <tr>
                                     <td style="padding: 0 24px 24px 24px;">
-                                        <div
-                                            style="background-color: #0f172a; border-radius: 8px; padding: 16px; border-left: 3px solid #f97316;">
-                                            <p
-                                                style="margin: 0 0 8px 0; font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
-                                                Descrição
-                                            </p>
-                                            <p style="margin: 0; font-size: 14px; color: #cbd5e1; line-height: 1.6;">
-                                                {{ ticket.description|linebreaksbr|truncatewords:50 }}
-                                            </p>
+                                        <div style="background-color: #0f172a; border-radius: 8px; padding: 16px; border-left: 3px solid #6366f1;">
+                                            <p style="margin: 0 0 8px 0; font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Descrição</p>
+                                            <div style="margin: 0; font-size: 14px; color: #cbd5e1; line-height: 1.6;">
+                                                {{ ticket.description|markdown_format }}
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -198,7 +169,7 @@
                                 <tr>
                                     <td align="center">
                                         <a href="{{ protocol }}://{{ domain }}{% url 'ticket-detail' ticket.pk %}"
-                                            style="display: inline-block; background: linear-gradient(135deg, #f97316 0%, #fb923c 100%); color: #ffffff; font-size: 15px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 10px; box-shadow: 0 4px 14px -3px rgba(249, 115, 22, 0.5);">
+                                            style="display: inline-block; background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%); color: #ffffff; font-size: 15px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 10px; box-shadow: 0 4px 14px -3px rgba(79, 70, 229, 0.4); border: 1px solid rgba(255,255,255,0.1);">
                                             Visualizar Ticket →
                                         </a>
                                     </td>
@@ -210,7 +181,7 @@
 
                     <!-- Footer -->
                     <tr>
-                        <td style="background-color: #0f172a; padding: 24px 40px; border-top: 1px solid #1e293b;">
+                        <td style="background-color: #020617; padding: 24px 40px; border-top: 1px solid #1e293b;">
                             <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td align="center">
