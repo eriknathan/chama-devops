@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center gap-3 mb-4">
+            <a href="{% url 'ticket-new' %}" class="text-muted-foreground hover:text-foreground transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+            </a>
+            <span class="text-sm text-muted-foreground">Novo Chamado</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <!-- Generic Icon based on Topic Name Logic or just a default Document Icon -->
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold text-foreground">{{ topic.name }}</h1>
+                <p class="text-sm text-muted-foreground">{{ topic.template|default:"Preencha as informações abaixo."|truncatewords:20 }}</p>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-8">
+        {% csrf_token %}
+
+        <!-- Card 1: General Info (Project & Priority) -->
+        <div class="bg-card border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <div class="flex items-center gap-2 mb-6">
+                <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h2 class="text-lg font-semibold text-foreground">Informações Gerais</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Project -->
+                <div>
+                    <label for="project" class="block text-sm font-medium text-foreground mb-1.5">
+                        Projeto <span class="text-destructive">*</span>
+                    </label>
+                    <select name="project" id="project" required class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 h-11 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
+                        <option value="">Selecione um projeto...</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Priority -->
+                <div>
+                    <label for="priority" class="block text-sm font-medium text-foreground mb-1.5">
+                        Prioridade <span class="text-destructive">*</span>
+                    </label>
+                    <div class="relative">
+                        <select name="priority" id="priority" class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 h-11 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
+                            <option value="LOW">Baixa</option>
+                            <option value="MEDIUM" selected>Média</option>
+                            <option value="HIGH">Alta</option>
+                            <option value="CRITICAL">Crítica</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
+                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Dynamic Fields -->
+        <div class="bg-card border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <div class="flex items-center gap-2 mb-6">
+                <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h2 class="text-lg font-semibold text-foreground">Detalhes da Solicitação</h2>
+            </div>
+
+            <div class="space-y-5">
+                {% for field in topic.form_fields %}
+                <div>
+                    <!-- Label -->
+                    {% if field.type != 'checkbox' %}
+                    <label for="{{ field.name }}" class="block text-sm font-medium text-foreground mb-1.5">
+                        {{ field.label }} {% if field.required %}<span class="text-destructive">*</span>{% endif %}
+                    </label>
+                    {% endif %}
+
+                    <!-- Controls -->
+                    {% if field.type == 'select' %}
+                    <div class="relative">
+                        <select name="{{ field.name }}" id="{{ field.name }}" {% if field.required %}required{% endif %} class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 h-11 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors cursor-pointer">
+                            {% for option in field.options %}
+                            <option value="{{ option }}">{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
+                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {% elif field.type == 'checkbox' %}
+                    <div class="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-muted/20">
+                        <div class="flex items-center h-5">
+                            <input type="checkbox" name="{{ field.name }}" id="{{ field.name }}" class="h-4 w-4 rounded border-primary text-primary focus:ring-primary cursor-pointer">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="{{ field.name }}" class="text-sm font-medium text-foreground cursor-pointer">
+                                {{ field.label }}
+                            </label>
+                            {% if field.help_text %}
+                            <p class="text-xs text-muted-foreground">{{ field.help_text }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% elif field.type == 'multiselect' %}
+                    <div class="mt-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                            {% for option in field.options %}
+                            <div class="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-muted/10 hover:bg-muted/30 transition-colors">
+                                <div class="flex items-center h-5">
+                                    <input type="checkbox" name="{{ field.name }}" value="{{ option }}" id="{{ field.name }}_{{ forloop.counter }}" class="h-4 w-4 rounded border-primary text-primary focus:ring-primary cursor-pointer">
+                                </div>
+                                <label for="{{ field.name }}_{{ forloop.counter }}"
+                                    class="text-sm font-medium text-foreground cursor-pointer flex-1">
+                                    {{ option }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if field.help_text %}
+                        <p class="text-xs text-muted-foreground mt-2">{{ field.help_text }}</p>
+                        {% endif %}
+                    </div>
+
+                    {% elif field.type == 'textarea' %}
+                    <textarea name="{{ field.name }}" id="{{ field.name }}" rows="4" {% if field.required %}required{% endif %} class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 h-11 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors resize-none" placeholder="{{ field.placeholder|default:'' }}"></textarea>
+
+                    {% else %}
+                    <input type="{{ field.type|default:'text' }}" name="{{ field.name }}" id="{{ field.name }}" {% if field.required %}required{% endif %} class="appearance-none rounded-lg relative block w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 h-11 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors" placeholder="{{ field.help_text|default:'' }}">
+                    {% endif %}
+
+                    {% if field.help_text and field.type != 'checkbox' %}
+                    <p class="text-xs text-muted-foreground mt-1">{{ field.help_text }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Card 3: Attachments -->
+        <div class="bg-card border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <div class="flex items-center gap-2 mb-6">
+                <svg class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                </svg>
+                <h2 class="text-lg font-semibold text-foreground">Anexos</h2>
+                <span class="text-xs text-muted-foreground">(opcional)</span>
+            </div>
+
+            <div class="space-y-4">
+                <div class="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer" onclick="document.getElementById('attachments').click()">
+                    <svg class="mx-auto h-12 w-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                    <p class="mt-2 text-sm text-foreground">Clique para selecionar arquivos</p>
+                    <p class="text-xs text-muted-foreground mt-1">ou arraste e solte aqui</p>
+                    <input type="file" name="attachments" id="attachments" multiple class="hidden" onchange="updateFileList(this)">
+                </div>
+                <div id="file-list" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end gap-3 pt-4">
+            <a href="{% url 'ticket-new' %}" class="px-5 py-2.5 border border-input rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">Cancelar</a>
+            <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>Abrir Chamado</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function updateFileList(input) {
+        const fileList = document.getElementById('file-list');
+        fileList.innerHTML = '';
+
+        if (input.files.length > 0) {
+            for (let i = 0; i < input.files.length; i++) {
+                const file = input.files[i];
+                const fileSize = formatFileSize(file.size);
+
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between bg-muted/50 rounded-lg px-4 py-3';
+                div.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <svg class="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <div>
+                        <p class="text-sm font-medium text-foreground">${file.name}</p>
+                        <p class="text-xs text-muted-foreground">${fileSize}</p>
+                    </div>
+                </div>
+            `;
+                fileList.appendChild(div);
+            }
+        }
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+</script>
+{% endblock %}

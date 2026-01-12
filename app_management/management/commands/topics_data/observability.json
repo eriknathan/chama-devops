@@ -1,0 +1,47 @@
+{
+    "name": "Observabilidade e Monitoramento (Grafana)",
+    "template": "Solicitação para criação de dashboards, alertas ou acessos no Grafana.",
+    "form_fields": [
+        {
+            "name": "service_name",
+            "label": "Serviço/Aplicação",
+            "type": "text",
+            "required": true,
+            "help_text": "Nome do serviço que será monitorado."
+        },
+        {
+            "name": "category",
+            "label": "Categoria da Solicitação",
+            "type": "select",
+            "options": [
+                "Criação de Dashboard",
+                "Criação de Alerta",
+                "Acesso ao Grafana",
+                "Ajuste em Dashboard/Alerta Existente",
+                "Outro"
+            ],
+            "required": true
+        },
+        {
+            "name": "data_source",
+            "label": "Fonte de Dados",
+            "type": "select",
+            "options": [
+                "Prometheus (Métricas)",
+                "Loki (Logs)",
+                "CloudWatch (AWS)",
+                "Elasticsearch",
+                "Não sei/Outro"
+            ],
+            "required": true
+        },
+        {
+            "name": "requirements",
+            "label": "Descrição da Necessidade",
+            "type": "textarea",
+            "required": true,
+            "help_text": "Descreva quais métricas, gráficos ou regras de alerta você precisa.",
+            "placeholder": "Ex: Preciso de um painel mostrando RPM, Latência e Taxa de Erros dos endpoints principais."
+        }
+    ]
+}

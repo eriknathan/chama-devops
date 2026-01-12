@@ -1,0 +1,43 @@
+{
+    "name": "Acesso a Bucket AWS S3",
+    "template": "Criar usuário/credenciais para acesso a um bucket existente.",
+    "form_fields": [
+        {
+            "name": "bucket_name",
+            "label": "Nome do Bucket",
+            "type": "text",
+            "required": true,
+            "help_text": "Nome exato do bucket na AWS."
+        },
+        {
+            "name": "username",
+            "label": "Nome do Usuário/Aplicação",
+            "type": "text",
+            "required": true,
+            "help_text": "Ex: app-financeiro-prod"
+        },
+        {
+            "name": "access_level",
+            "label": "Nível de Acesso",
+            "type": "select",
+            "options": [
+                "Leitura (Read-Only)",
+                "Escrita (Write-Only)",
+                "Leitura e Escrita (R/W)"
+            ],
+            "required": true
+        },
+        {
+            "name": "expiration",
+            "label": "Tempo de Acesso",
+            "type": "select",
+            "options": [
+                "Permanente (Service Account)",
+                "Temporário (30 dias)",
+                "Temporário (7 dias)"
+            ],
+            "default": "Permanente (Service Account)",
+            "required": true
+        }
+    ]
+}

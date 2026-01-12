@@ -9,118 +9,101 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {% for topic in topics %}
-        {% if topic.name == 'Solicitação de Novo Repositório' %}
-        <a href="{% url 'ticket-form-repository' %}"
-            class="group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
-            {% elif topic.name == 'Gerenciamento de Acesso ao GitHub' %}
-            <a href="{% url 'ticket-form-github-access' %}"
-                class="group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
-                {% elif topic.name == 'Intake de Projeto' %}
-                <a href="{% url 'ticket-form-project-intake' %}"
-                    class="group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1">
-                    {% elif topic.name == 'Reporte de Indisponibilidade' %}
-                    <a href="{% url 'ticket-form-downtime' %}"
-                        class="group bg-card border border-border rounded-xl p-6 hover:border-status-red/50 hover:shadow-lg hover:shadow-status-red/5 transition-all duration-300 hover:-translate-y-1">
-                        {% else %}
-                        <div class="group bg-card border border-border rounded-xl p-6 opacity-60 cursor-not-allowed">
-                            {% endif %}
-                            <div class="flex items-start gap-4">
-                                <div
-                                    class="shrink-0 h-12 w-12 rounded-lg {% if topic.name == 'Reporte de Indisponibilidade' %}bg-status-red/10 text-status-red{% else %}bg-primary/10 text-primary{% endif %} flex items-center justify-center group-hover:bg-opacity-100 transition-colors">
-                                    {% if 'GitHub' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                                    </svg>
-                                    {% elif 'Intake' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-                                    </svg>
-                                    {% elif 'Servidor' in topic.name or 'VM' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
-                                    </svg>
-                                    {% elif 'Deploy' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                    </svg>
-                                    {% elif 'Incidente' in topic.name or 'Indisponibilidade' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                    </svg>
-                                    {% elif 'Firewall' in topic.name or 'Porta' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                    </svg>
-                                    {% elif 'Pipeline' in topic.name or 'CI/CD' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                    </svg>
-                                    {% elif 'Backup' in topic.name or 'Restore' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                                    </svg>
-                                    {% elif 'Monitoramento' in topic.name or 'Alertas' in topic.name %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                    </svg>
-                                    {% else %}
-                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    {% endif %}
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3
-                                        class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                                        {{ topic.name }}</h3>
-                                    {% if topic.template %}
-                                    <p class="text-sm text-muted-foreground mt-1 line-clamp-2">{{ topic.template|truncatewords:20 }}</p>
-                                    {% endif %}
-                                    {% if topic.name != 'Solicitação de Novo Repositório' and topic.name != 'Gerenciamento de Acesso ao GitHub' and topic.name != 'Reporte de Indisponibilidade' and topic.name != 'Intake de Projeto' %}
-                                    <span
-                                        class="inline-flex items-center mt-2 px-2 py-0.5 rounded text-xs font-medium bg-muted text-muted-foreground">Em
-                                        breve</span>
-                                    {% endif %}
-                                </div>
-                                <div class="shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
-                                    {% if topic.name == 'Solicitação de Novo Repositório' or topic.name == 'Gerenciamento de Acesso ao GitHub' or topic.name == 'Reporte de Indisponibilidade' or topic.name == 'Intake de Projeto' %}
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7" />
-                                    </svg>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {% if topic.name == 'Solicitação de Novo Repositório' or topic.name == 'Gerenciamento de Acesso ao GitHub' or topic.name == 'Reporte de Indisponibilidade' or topic.name == 'Intake de Projeto' %}
-                    </a>
-                    {% else %}
-    </div>
-    {% endif %}
-    {% empty %}
-    <div class="col-span-2 text-center py-12 bg-card border border-border rounded-xl">
-        <svg class="mx-auto h-12 w-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-        </svg>
-        <h3 class="mt-4 text-lg font-medium text-foreground">Nenhum tópico disponível</h3>
-        <p class="mt-2 text-sm text-muted-foreground">Entre em contato com o administrador.</p>
-    </div>
-    {% endfor %}
-</div>
 
-<div class="mt-8 text-center">
-    <a href="{% url 'ticket-list' %}" class="text-sm text-muted-foreground hover:text-foreground transition-colors">←
-        Voltar para lista de chamados</a>
-</div>
+        {% url 'ticket-form-dynamic' topic.pk as topic_url %}
+
+        <a href="{{ topic_url }}"
+            class="group bg-card border border-border rounded-xl p-6 {% if topic.name == 'Reporte de Indisponibilidade' %}hover:border-status-red/50 hover:shadow-lg hover:shadow-status-red/5{% else %}hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5{% endif %} transition-all duration-300 hover:-translate-y-1">
+
+            <div class="flex items-start gap-4">
+                <div
+                    class="shrink-0 h-12 w-12 rounded-lg {% if topic.name == 'Reporte de Indisponibilidade' %}bg-status-red/25 text-status-red{% else %}bg-primary/10 text-primary{% endif %} flex items-center justify-center group-hover:bg-opacity-100 transition-colors">
+
+
+                    {% if 'GitHub' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                    {% elif 'Intake' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                    </svg>
+                    {% elif 'Servidor' in topic.name or 'VM' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                    </svg>
+                    {% elif 'Deploy' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    {% elif 'Incidente' in topic.name or 'Indisponibilidade' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    {% elif 'Firewall' in topic.name or 'Porta' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    {% elif 'Pipeline' in topic.name or 'CI/CD' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    {% elif 'Backup' in topic.name or 'Restore' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                    {% elif 'Monitoramento' in topic.name or 'Alertas' in topic.name %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    {% else %}
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {% endif %}
+
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                        {{ topic.name }}
+                    </h3>
+                    {% if topic.template %}
+                    <p class="text-sm text-muted-foreground mt-1 line-clamp-2">{{ topic.template|truncatewords:20 }}</p>
+                    {% endif %}
+                </div>
+                <div class="shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <div class="col-span-2 text-center py-12 bg-card border border-border rounded-xl">
+            <svg class="mx-auto h-12 w-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <h3 class="mt-4 text-lg font-medium text-foreground">Nenhum tópico disponível</h3>
+            <p class="mt-2 text-sm text-muted-foreground">Entre em contato com o administrador.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-8 text-center">
+        <a href="{% url 'ticket-list' %}"
+            class="text-sm text-muted-foreground hover:text-foreground transition-colors">←
+            Voltar para lista de chamados</a>
+    </div>
 </div>
 {% endblock %}

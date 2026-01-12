@@ -1,0 +1,42 @@
+{
+    "name": "Criação de Bucket AWS S3",
+    "template": "Criar um novo bucket S3 para armazenamento de objetos.",
+    "form_fields": [
+        {
+            "name": "bucket_name",
+            "label": "Nome do Bucket",
+            "type": "text",
+            "required": true,
+            "help_text": "Nome único globalmente na AWS (sem espaços, apenas minúsculas, números e hifens)."
+        },
+        {
+            "name": "environment",
+            "label": "Ambiente",
+            "type": "select",
+            "options": [
+                "dev",
+                "staging",
+                "prod"
+            ],
+            "required": true
+        },
+        {
+            "name": "visibility",
+            "label": "Visibilidade",
+            "type": "select",
+            "options": [
+                "private",
+                "public-read"
+            ],
+            "default": "private",
+            "required": true,
+            "help_text": "Cuidado ao selecionar 'public-read'."
+        },
+        {
+            "name": "versioning",
+            "label": "Ativar Versionamento?",
+            "type": "checkbox",
+            "default": false
+        }
+    ]
+}

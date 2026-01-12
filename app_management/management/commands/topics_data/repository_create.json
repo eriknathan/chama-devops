@@ -1,0 +1,90 @@
+{
+    "name": "Solicitação de Novo Repositório",
+    "template": "Use este tópico para solicitar um novo repositório!",
+    "form_fields": [
+        {
+            "name": "repository_name",
+            "label": "Nome sugerido para o repositório",
+            "type": "textarea",
+            "required": true,
+            "placeholder": "minha-api-backend",
+            "help_text": "Use letras minúsculas, números e hífens. Ex: minha-api-backend"
+        },
+        {
+            "name": "description",
+            "label": "Breve descrição do projeto",
+            "type": "textarea",
+            "required": true,
+            "placeholder": "Descreva brevemente o propósito deste repositório...",
+            "help_text": "Esta descrição será utilizada no README do repositório"
+        },
+        {
+            "name": "squad",
+            "label": "Squad ou time responsável",
+            "type": "textarea",
+            "required": true,
+            "placeholder": "Ex: Squad Pagamentos, Time Backend"
+        },
+        {
+            "name": "visibility",
+            "label": "Visibilidade",
+            "type": "select",
+            "options": [
+                "Privado",
+                "Internal (uso interno da empresa)",
+                "Público (requer aprovação prévia)"
+            ],
+            "required": true
+        },
+        {
+            "name": "language",
+            "label": "Linguagem principal",
+            "type": "select",
+            "options": [
+                "Python",
+                "JavaScript",
+                "TypeScript",
+                "Java",
+                "Go",
+                "Rust",
+                "C#",
+                "PHP",
+                "Ruby",
+                "Kotlin",
+                "Swift",
+                "Terraform",
+                "Shell",
+                "Outro"
+            ],
+            "required": true,
+            "help_text": "Será usado para gerar o .gitignore automaticamente"
+        },
+        {
+            "name": "template_repo",
+            "label": "Usar template existente?",
+            "type": "text",
+            "required": false,
+            "placeholder": "Ex: backend-api-template (opcional)",
+            "help_text": "Nome do repositório template na organização (opcional)"
+        },
+        {
+            "name": "access_teams",
+            "label": "Times ou usuários com permissão de escrita (Write)",
+            "type": "textarea",
+            "required": true,
+            "placeholder": "Ex:\n- @squad-pagamentos\n- @joao.silva",
+            "help_text": "Liste os times ou usernames do GitHub."
+        },
+        {
+            "name": "grafana_access",
+            "label": "Liberar acesso ao Grafana?",
+            "type": "select",
+            "options": [
+                "Não",
+                "Sim"
+            ],
+            "default": "Não",
+            "required": true
+        }
+    ]
+}

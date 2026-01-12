@@ -1,0 +1,64 @@
+{
+    "name": "Gerenciamento de Acesso ao GitHub",
+    "template": "Solicite o acesso a um repositório no GitHub",
+    "form_fields": [
+        {
+            "name": "request_type",
+            "label": "Tipo de Solicitação",
+            "type": "select",
+            "options": [
+                "Adicionar Acesso",
+                "Remover Acesso"
+            ],
+            "required": true
+        },
+        {
+            "name": "full_name",
+            "label": "Nome Completo",
+            "type": "text",
+            "required": true,
+            "placeholder": "João da Silva"
+        },
+        {
+            "name": "email",
+            "label": "E-mail Corporativo",
+            "type": "text",
+            "required": true,
+            "placeholder": "joao.silva@empresa.com.br"
+        },
+        {
+            "name": "github_username",
+            "label": "Username do GitHub",
+            "type": "text",
+            "required": true,
+            "placeholder": "joaosilva",
+            "help_text": "Não inclua o @."
+        },
+        {
+            "name": "repositories",
+            "label": "Link do(s) repositório(s)",
+            "type": "textarea",
+            "required": true,
+            "help_text": "Informe um repositório por linha.",
+            "placeholder": "https://github.com/empresa/repo-1\nhttps://github.com/empresa/repo-2"
+        },
+        {
+            "name": "permission_level",
+            "label": "Nível de permissão desejado",
+            "type": "select",
+            "options": [
+                "Leitura (Read) - Apenas visualização",
+                "Escrita (Write) - Pode fazer push",
+                "Administrador (Admin) - Controle total"
+            ],
+            "required": true
+        },
+        {
+            "name": "justification",
+            "label": "Motivo da solicitação",
+            "type": "textarea",
+            "required": true,
+            "placeholder": "Descreva o motivo pelo qual o acesso precisa ser adicionado ou removido..."
+        }
+    ]
+}

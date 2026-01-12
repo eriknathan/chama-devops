@@ -1,0 +1,77 @@
+{
+    "name": "Reporte de Indisponibilidade",
+    "template": "Responda esse formulário sempre que um serviço ou projeto esteja off.",
+    "form_fields": [
+        {
+            "name": "service_name",
+            "label": "Nome do sistema ou serviço",
+            "type": "text",
+            "required": true,
+            "placeholder": "Ex: API de Pagamentos, Site Institucional"
+        },
+        {
+            "name": "error_url",
+            "label": "URL onde o erro ocorre",
+            "type": "url",
+            "required": true,
+            "placeholder": "https://..."
+        },
+        {
+            "name": "environment",
+            "label": "Ambiente afetado",
+            "type": "select",
+            "options": [
+                "Produção",
+                "Homologação",
+                "Desenvolvimento",
+                "Outro"
+            ],
+            "required": true
+        },
+        {
+            "name": "symptom",
+            "label": "O que está acontecendo?",
+            "type": "select",
+            "options": [
+                "Site não carrega",
+                "Lentidão extrema",
+                "Erros 404 (Não encontrado)",
+                "Erros 500 (Erro interno)",
+                "Funcionalidade quebrada",
+                "Outro comportamento inesperado"
+            ],
+            "required": true
+        },
+        {
+            "name": "description",
+            "label": "Descrição detalhada",
+            "type": "textarea",
+            "required": true,
+            "placeholder": "Descreva com detalhes o comportamento observado..."
+        },
+        {
+            "name": "error_message",
+            "label": "Mensagem de erro exibida",
+            "type": "textarea",
+            "required": false,
+            "placeholder": "Cole aqui a mensagem de erro exata, se houver..."
+        },
+        {
+            "name": "impact",
+            "label": "Quem está sendo afetado?",
+            "type": "select",
+            "options": [
+                "Apenas eu",
+                "Vários usuários",
+                "Todos os usuários (parada total)"
+            ],
+            "required": true
+        },
+        {
+            "name": "start_time",
+            "label": "Desde quando ocorre?",
+            "type": "datetime-local",
+            "required": true
+        }
+    ]
+}

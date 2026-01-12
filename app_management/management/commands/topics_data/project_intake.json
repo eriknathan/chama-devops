@@ -1,0 +1,281 @@
+{
+    "name": "Intake de Projeto",
+    "template": "Este formulário deve ser preenchido pelo time solicitante antes de iniciar qualquer provisionamento. Todas as informações são necessárias para dimensionar corretamente a infraestrutura.",
+    "form_fields": [
+        {
+            "name": "nome_projeto",
+            "label": "Nome do Projeto/Serviço",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "centro_custo",
+            "label": "Centro de Custo / Squad",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "tech_lead",
+            "label": "Tech Lead Responsável",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "email_contato",
+            "label": "E-mail de Contato",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "data_golive",
+            "label": "Data de Go-Live Prevista",
+            "type": "date",
+            "required": true
+        },
+        {
+            "name": "criticidade_negocio",
+            "label": "Criticidade do Negócio",
+            "type": "select",
+            "options": [
+                "Crítico (Revenue Impact)",
+                "Alto",
+                "Médio",
+                "Baixo"
+            ],
+            "required": true
+        },
+        {
+            "name": "tipo_aplicacao",
+            "label": "Tipo de Aplicação",
+            "type": "multiselect",
+            "options": [
+                "Web Frontend",
+                "API/Backend",
+                "Worker/Job",
+                "Monolito",
+                "BFF",
+                "Outro"
+            ],
+            "required": true
+        },
+        {
+            "name": "stack",
+            "label": "Stack Tecnológica",
+            "type": "multiselect",
+            "options": [
+                "Node.js",
+                "Java/Spring",
+                "Python",
+                ".NET",
+                "Go",
+                "PHP",
+                "Ruby",
+                "Outro"
+            ],
+            "required": true
+        },
+        {
+            "name": "deploy_model",
+            "label": "Modelo de Deploy",
+            "type": "select",
+            "options": [
+                "Container (ECS/EKS)",
+                "Serverless (Lambda)",
+                "EC2 (VM)",
+                "Elastic Beanstalk"
+            ],
+            "required": true
+        },
+        {
+            "name": "repositorio_tipo",
+            "label": "Onde está o código?",
+            "type": "select",
+            "options": [
+                "GitHub",
+                "GitLab",
+                "Bitbucket",
+                "CodeCommit"
+            ],
+            "required": true
+        },
+        {
+            "name": "repositorio_url",
+            "label": "URL do Repositório",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "exposicao",
+            "label": "Exposição da Aplicação",
+            "type": "select",
+            "options": [
+                "Internet (pública)",
+                "Interna (VPN/VPC)",
+                "Ambas"
+            ],
+            "required": true
+        },
+        {
+            "name": "vpn",
+            "label": "Requer VPN para acesso?",
+            "type": "select",
+            "options": [
+                "Não",
+                "Sim"
+            ],
+            "required": true
+        },
+        {
+            "name": "vpn_perfil",
+            "label": "Qual perfil de VPN? (Se sim)",
+            "type": "text",
+            "required": false
+        },
+        {
+            "name": "dominio",
+            "label": "Domínio DNS desejado",
+            "type": "text",
+            "required": false,
+            "placeholder": "app.empresa.com"
+        },
+        {
+            "name": "certificado",
+            "label": "Certificado SSL",
+            "type": "select",
+            "options": [
+                "ACM (AWS)",
+                "Certificado próprio",
+                "Let's Encrypt",
+                "N/A"
+            ],
+            "required": true
+        },
+        {
+            "name": "waf",
+            "label": "Necessita WAF?",
+            "type": "select",
+            "options": [
+                "AWS WAF",
+                "CloudFlare",
+                "Não necessário"
+            ],
+            "required": true
+        },
+        {
+            "name": "aws_db",
+            "label": "Banco de Dados",
+            "type": "multiselect",
+            "options": [
+                "RDS PostgreSQL",
+                "RDS MySQL",
+                "Aurora",
+                "DynamoDB",
+                "DocumentDB",
+                "Nenhum"
+            ],
+            "required": false
+        },
+        {
+            "name": "aws_cache",
+            "label": "Cache e Mensageria",
+            "type": "multiselect",
+            "options": [
+                "Redis",
+                "Memcached",
+                "SQS",
+                "SNS",
+                "EventBridge",
+                "Kafka/MSK"
+            ],
+            "required": false
+        },
+        {
+            "name": "aws_storage",
+            "label": "Storage",
+            "type": "multiselect",
+            "options": [
+                "S3",
+                "EFS",
+                "EBS (Extra)"
+            ],
+            "required": false
+        },
+        {
+            "name": "sla",
+            "label": "SLA Esperado",
+            "type": "select",
+            "options": [
+                "99.9%",
+                "99.95%",
+                "99.99%",
+                "Não crítico"
+            ],
+            "required": true
+        },
+        {
+            "name": "multiaz",
+            "label": "Alta Disponibilidade (Multi-AZ)?",
+            "type": "select",
+            "options": [
+                "Sim",
+                "Não"
+            ],
+            "required": true
+        },
+        {
+            "name": "asg_min",
+            "label": "AutoScaling Min",
+            "type": "text",
+            "required": false,
+            "placeholder": "1"
+        },
+        {
+            "name": "asg_max",
+            "label": "AutoScaling Max",
+            "type": "text",
+            "required": false,
+            "placeholder": "10"
+        },
+        {
+            "name": "rps",
+            "label": "RPS Estimado (Pico)",
+            "type": "select",
+            "options": [
+                "< 100",
+                "100-1000",
+                "1000-10000",
+                "> 10000"
+            ],
+            "required": true
+        },
+        {
+            "name": "obs_logs",
+            "label": "Logs",
+            "type": "multiselect",
+            "options": [
+                "CloudWatch Logs",
+                "Grafana Loki",
+                "Datadog",
+                "Outro"
+            ],
+            "required": false
+        },
+        {
+            "name": "obs_metrics",
+            "label": "Métricas",
+            "type": "multiselect",
+            "options": [
+                "CloudWatch Metrics",
+                "Prometheus",
+                "Datadog"
+            ],
+            "required": false
+        },
+        {
+            "name": "observacoes",
+            "label": "Observações Adicionais",
+            "type": "textarea",
+            "required": false
+        }
+    ]
+}
