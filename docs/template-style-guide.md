@@ -104,7 +104,3 @@ sed -i '' "s/==/ == /g" templates/app_tickets/forms/*.html
 ```
 
 ---
-
-## Data da Correção
-
-**09 de Janeiro de 2026**
