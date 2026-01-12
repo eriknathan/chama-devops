@@ -70,9 +70,9 @@
     --destructive: var(--status-error);
     --destructive-foreground: 0 0% 100%;
 
-    --border: 226 232 240;
+    --border: 214 32% 91%;
     /* Gray-200 aprox */
-    --input: 226 232 240;
+    --input: 214 32% 91%;
     --ring: var(--color-primary);
 
     --radius: var(--card-radius);

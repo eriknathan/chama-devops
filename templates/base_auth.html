@@ -43,16 +43,18 @@
             {% block content %}{% endblock %}
 
             <!-- Footer (Unified) -->
+            {% block footer %}
             <footer class="py-8 text-center">
                 <p class="text-muted-foreground text-xs">
                     &copy; {% now "Y" %} ChamaDevOps.
                 </p>
             </footer>
+            {% endblock %}
         </div>
     </main>
     <script>
         // Initialize Lucide Icons
-        if (typeof lucide ! ==  'undefined') {
+        if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
     </script>
