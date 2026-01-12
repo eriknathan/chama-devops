@@ -47,28 +47,7 @@ services:
     depends_on:
       - web
 
-  minio:
-    container_name: chama-devops-minio
-    image: minio/minio
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - minio_data:/data
-    command: server /data --console-address ":9001"
-
-  createbuckets:
-    image: minio/mc
-    depends_on:
-      - minio
-    entrypoint: >
-      /bin/sh -c " /usr/bin/mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER:-minioadmin} ${MINIO_ROOT_PASSWORD:-minioadmin}; /usr/bin/mc mb myminio/${AWS_STORAGE_BUCKET_NAME:-chama-devops-media}; /usr/bin/mc anonymous set public myminio/${AWS_STORAGE_BUCKET_NAME:-chama-devops-media}; exit 0; "
-
 volumes:
   postgres_data:
   static_volume:
   media_volume:
-  minio_data:
